@@ -1,0 +1,61 @@
+{
+  "name": "jisty",
+  "version": "1.0.0",
+  "description": "Schema Based OXM (ORM + ODM) RESTful Client Library",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Webfreshener/jisty.git"
+  },
+  "keywords": [
+    "ORM",
+    "ODM",
+    "REST",
+    "Model",
+    "Collection",
+    "Data",
+    "API",
+    "Client"
+  ],
+  "author": "Van Schroeder <van@webfreshener.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Webfreshener/jisty/issues"
+  },
+  "homepage": "https://github.com/Webfreshener/jisty#readme",
+  "dependencies": {
+    "jsd": "git+https://github.com/webfreshener/jsd.git",
+    "lodash.assign": "^4.2.0",
+    "lodash.assignin": "^4.2.0",
+    "lodash.map": "^4.6.0",
+    "lodash.pairs": "^3.0.1",
+    "rxjs": "^5.5.6"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^7.1.3",
+    "babel-plugin-transform-remove-strict-mode": "0.0.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.18.0",
+    "chai": "^4.1.2",
+    "es6-weak-map": "^2.0.1",
+    "esdoc": "^1.0.4",
+    "esdoc-accessor-plugin": "^1.0.0",
+    "esdoc-exclude-source-plugin": "^1.0.0",
+    "esdoc-standard-plugin": "^1.0.0",
+    "eslint": "^4.19.0",
+    "jest": "^22.1.4",
+    "jest-babel-istanbul": "^0.1.0",
+    "jest-each": "^0.3.1",
+    "jshint": "^2.9.4",
+    "mocha": "^5.0.0",
+    "mocha-lcov-reporter": "^1.3.0",
+    "weakmap": "0.0.6",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.10"
+  }
+}
