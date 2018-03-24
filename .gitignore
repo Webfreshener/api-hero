@@ -63,3 +63,4 @@ typings/
 .idea/*
 .project
 *.iml
+packages/
