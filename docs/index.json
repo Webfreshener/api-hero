@@ -566,49 +566,6 @@
   {
     "__docId__": 48,
     "kind": "file",
-    "name": "src/_extends.js",
-    "content": "// the extends function is not already defined within the current\n// context; therefore, define it\nexport default function (child, parent) {\n\n    // mixin pattern for copying parent constructor function properties\n    // as static properties to the child constructor function\n    // properties on constructor function are commonly known as static\n    // properties\n    for (var parentPropertyName in parent) {\n\n        // only copy properties specifically defined on the parent\n        if (parent.hasOwnProperty(parentPropertyName)) {\n            // for primitive types, this will copy the value,\n            // for object types, this will copy the reference only\n            child[parentPropertyName] = parent[parentPropertyName];\n        }\n    }\n\n    // constructor function for the object that instantiated child objects\n    // will inherit from\n    // this function is unique within the context of each call to extend\n\n    function __() {\n        this.constructor = child;\n    }\n\n    if (parent === null) {\n\n        // objects instantiated with the child constructor function will\n        // inherit from an object that inherits from nothing, not even\n        // the built-in JavaScript Object\n        child.prototype = Object.create(parent);\n\n    } else {\n\n        // assign the prototype property of the parent constructor function\n        // to the prototype property of the constructor function defined\n        // above\n        __.prototype = parent.prototype;\n\n        // create the object that all instances of the child will inherit\n        // from, and assign it to the prototype property of the child\n        // constructor function\n        child.prototype = new __();\n    }\n\n};",
-    "static": true,
-    "longname": "/Users/van/IdeaProjects/jisty/src/_extends.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 49,
-    "kind": "function",
-    "name": "_extends",
-    "memberof": "src/_extends.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/_extends.js~_extends",
-    "access": "private",
-    "export": true,
-    "importPath": "jisty/src/_extends.js",
-    "importStyle": "_extends",
-    "description": null,
-    "lineNumber": 3,
-    "undocument": true,
-    "params": [
-      {
-        "name": "child",
-        "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "parent",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": null
-  },
-  {
-    "__docId__": 50,
-    "kind": "file",
     "name": "src/_references.js",
     "content": "export const _namespaces = new WeakMap();\nexport const _nsCollections = new WeakMap();\nexport const _cids = new WeakMap();",
     "static": true,
@@ -618,7 +575,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 51,
+    "__docId__": 49,
     "kind": "variable",
     "name": "_namespaces",
     "memberof": "src/_references.js",
@@ -638,7 +595,7 @@
     }
   },
   {
-    "__docId__": 52,
+    "__docId__": 50,
     "kind": "variable",
     "name": "_nsCollections",
     "memberof": "src/_references.js",
@@ -658,7 +615,7 @@
     }
   },
   {
-    "__docId__": 53,
+    "__docId__": 51,
     "kind": "variable",
     "name": "_cids",
     "memberof": "src/_references.js",
@@ -678,7 +635,7 @@
     }
   },
   {
-    "__docId__": 54,
+    "__docId__": 52,
     "kind": "file",
     "name": "src/collection.js",
     "content": "import Model from \"./model\";\nimport {JSD} from \"jsd\";\nimport Query from \"./query\";\nimport foreach from \"lodash.foreach\";\nimport map from \"lodash.map\";\nimport uniqueid from \"lodash.uniqueid\";\nimport {_cids} from \"./_references\";\n\nconst _models = new WeakMap();\nconst _queries = new WeakMap();\n\n/**\n *\n */\nclass Collection {\n    constructor(schema) {\n        const _self = this;\n        const _q = new Query();\n\n        // define read-only $collection property on Query\n        Object.defineProperty(_q, \"$collection\", {\n            get: () => _self,\n        });\n\n        // stores Query Object to Weakmap\n        _queries.set(this, _q);\n\n        // defines Query property on this Collection\n        Object.defineProperty(this, \"query\", {\n            get: () => _queries.get(_self),\n        });\n\n        // defines schema getter on Collection\n        Object.defineProperty(this, \"$schema\", {\n            get: () => schema,\n        });\n\n        // creates JSD and subscribes to events on root\n        try {\n            const _jsd = new JSD([{\n                type: \"Object\",\n                elements: schema.properties\n            }]);\n            _jsd.document.subscribe({\n                next: (d) => {\n                    foreach(d.models, (m) => {\n                        const _model = new this.modelClass(m);\n                        _cids.get(this)[_model.$cid] = m;\n                        Object.defineProperty(m.$ref, \"$model\", {\n                            value: _model,\n                            enumerable: false,\n                            writable: false,\n                        });\n                    });\n                },\n                error: (e) => {\n                },\n            });\n\n            // stores JSD ref to WeakMap\n            _models.set(this, _jsd);\n        } catch (e) {\n            console.error(`${this.$classname}: invalid schema: ${e}`);\n            return false;\n        }\n\n        _cids.set(this, {});\n        // set timeout to allow subclasses to construct before sealing\n        setTimeout((() => Object.seal(this)), 0);\n    }\n\n    /**\n     *\n     * @returns {*}\n     */\n    get models() {\n        return _models.get(this).document.model;\n        // return map(_models.get(this).document.model, (m) => {\n        //     return m.$model;\n        // });\n    }\n\n    /**\n     *\n     * @param models\n     * @returns {Collection}\n     */\n    set models(data) {\n        const _create = (m) => {\n            // creates new Model Class to point to JSD weak-reference\n            const _mC = new (this.modelClass)();\n            // sets JSD weak-reference / is referenced by Collection UID\n            _cids.get(this)[_mC.$cid] = m;\n            // sets back-ref to the Model on the JSD data element\n            Object.defineProperty(m, \"$model\", {\n                get: () => _mC,\n                enumerable: false,\n            });\n        };\n        // helper to determine how to handle incoming data elements\n        const _derive = (m) => {\n            return (m instanceof Model ? m.data : m);\n        };\n        // tests for array and maps or wraps single element into an array\n        const _m = Array.isArray(data) ? map(data, _derive) : [_derive(data)];\n        _models.get(this).document.model = _m;\n        // applies the Model back-refs onto the dataset\n        foreach(_models.get(this).document.model, (m) => _create(m));\n        return this;\n    }\n\n    // Get an iterator of all models in this collection.\n    values() {\n        return new CollectionIterator(this, ITERATOR_VALUES);\n    }\n\n    // Get an iterator of all model IDs in this collection.\n    keys() {\n        return new CollectionIterator(this, ITERATOR_KEYS);\n    }\n\n    // Get an iterator of all [ID, model] tuples in this collection.\n    entries() {\n        return new CollectionIterator(this, ITERATOR_KEYSVALUES);\n    }\n\n    /**\n     * Returns current `models` length\n     * @returns {*}\n     */\n    count() {\n        return this.models.length;\n    }\n\n    get length() {\n        return this.models.length;\n    }\n\n    /**\n     * returns uri encoded Query String\n     * @returns {string}\n     */\n    url() {\n        let q = `${this.$scope.getAPIUrl()}/${this.$className}`;\n        if (this.__method === \"read\") {\n            let p = this.$scope.querify(this.__params);\n            if (p.length) {\n                q = `${q}?${p}`;\n            }\n        }\n        return encodeURI(q);\n    }\n\n    reset() {\n        this.models = [];\n    }\n\n    fetch() {\n\n    }\n\n    /**\n     * Adds model to collection and saves to remote collection\n     * @param data\n     * @returns {*}\n     */\n    create(data) {\n        return new this._modelClass(data);\n    }\n\n    /**\n     * Adds Object to Model without updating remote collection\n     * @param data\n     * @returns {Collection}\n     */\n    add(data) {\n        this.models.document.addItem(data);\n        return this;\n    }\n\n    /**\n     * Get the model at the given index\n     * @param idx\n     * @returns {*}\n     */\n    at(idx) {\n        if (idx < 0) idx += this.length;\n        return this.models[idx];\n    }\n\n    // Define how to uniquely identify models in the collection.\n    modelId(attrs) {\n        return attrs[\"name\"];\n    }\n\n    /**\n     *\n     * @returns {Class}\n     */\n    get modelClass() {\n        const _self = this;\n        return class extends Model {\n            constructor() {\n                super(_self);\n                const _cid = uniqueid(_self.$className);\n                // defined getter for private cid attribute\n                Object.defineProperty(this, \"$cid\", {\n                    get: () => _cid,\n                    enumerable: false,\n                });\n            }\n        };\n    }\n\n    /**\n     * Batch saves Objects that are new or need updating\n     * @param options\n     * @returns {*}\n     */\n    save(options) {\n        const batch = new Batch(_.compact(\n            _.map(this.models, function (v, k) {\n                if (v.isNew() || v.dirty()) {\n                    return v;\n                }\n            })));\n        // loops on `models` and maps array of items that need to be saved\n        return batch.exec(options);\n    }\n\n    /**\n     * should be oberservable\n     */\n    subscribe() {\n        //TODO: implement this or something to this effect\n    }\n}\n\nlet $$iterator = typeof Symbol === \"function\" && Symbol.iterator;\n\nif ($$iterator) {\n    Collection.prototype[$$iterator] = Collection.prototype.values;\n}\n\n// /**\n//  * CollectionIterator\n//  * implementation of BackBoneJS CollectionIterator\n//  * @param collection\n//  * @param kind\n//  * @constructor\n//  */\nclass CollectionIterator {\n    constructor(collection, kind) {\n        this._collection = collection;\n        this._kind = kind;\n        this._index = 0;\n    }\n\n    next() {\n        if (this._collection) {\n            // Only continue iterating if the iterated collection is long enough.\n            if (this._index < this._collection.length) {\n                let model = this._collection.at(this._index);\n                this._index++;\n\n                // Construct a value depending on what kind of values should be iterated.\n                let value;\n                if (this._kind === ITERATOR_VALUES) {\n                    value = model;\n                } else {\n                    let id = this._collection.modelId(model.$model.data);\n                    if (this._kind === ITERATOR_KEYS) {\n                        value = id;\n                    } else { // ITERATOR_KEYSVALUES\n                        value = [id, model];\n                    }\n                }\n                return {value: value, done: false};\n            }\n            // Once exhausted, remove the reference to the collection so future\n            // calls to the next method always return done.\n            this._collection = void 0;\n        }\n\n        return {value: void 0, done: true};\n    };\n};\n\nconst ITERATOR_VALUES = 1;\nconst ITERATOR_KEYS = 2;\nconst ITERATOR_KEYSVALUES = 3;\n\n// All Iterators should themselves be Iterable.\nif ($$iterator) {\n    CollectionIterator.prototype[$$iterator] = function () {\n        return this;\n    };\n}\n\nexport default Collection;\n",
@@ -689,7 +646,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 55,
+    "__docId__": 53,
     "kind": "variable",
     "name": "_models",
     "memberof": "src/collection.js",
@@ -710,7 +667,7 @@
     "ignore": true
   },
   {
-    "__docId__": 56,
+    "__docId__": 54,
     "kind": "variable",
     "name": "_queries",
     "memberof": "src/collection.js",
@@ -731,7 +688,7 @@
     "ignore": true
   },
   {
-    "__docId__": 57,
+    "__docId__": 55,
     "kind": "variable",
     "name": "$$iterator",
     "memberof": "src/collection.js",
@@ -752,7 +709,7 @@
     "ignore": true
   },
   {
-    "__docId__": 58,
+    "__docId__": 56,
     "kind": "class",
     "name": "CollectionIterator",
     "memberof": "src/collection.js",
@@ -769,7 +726,7 @@
     "ignore": true
   },
   {
-    "__docId__": 59,
+    "__docId__": 57,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/collection.js~CollectionIterator",
@@ -783,7 +740,7 @@
     "undocument": true
   },
   {
-    "__docId__": 60,
+    "__docId__": 58,
     "kind": "member",
     "name": "_collection",
     "memberof": "src/collection.js~CollectionIterator",
@@ -800,7 +757,7 @@
     }
   },
   {
-    "__docId__": 61,
+    "__docId__": 59,
     "kind": "member",
     "name": "_kind",
     "memberof": "src/collection.js~CollectionIterator",
@@ -817,7 +774,7 @@
     }
   },
   {
-    "__docId__": 62,
+    "__docId__": 60,
     "kind": "member",
     "name": "_index",
     "memberof": "src/collection.js~CollectionIterator",
@@ -834,7 +791,7 @@
     }
   },
   {
-    "__docId__": 63,
+    "__docId__": 61,
     "kind": "method",
     "name": "next",
     "memberof": "src/collection.js~CollectionIterator",
@@ -854,7 +811,7 @@
     }
   },
   {
-    "__docId__": 65,
+    "__docId__": 63,
     "kind": "variable",
     "name": "ITERATOR_VALUES",
     "memberof": "src/collection.js",
@@ -875,7 +832,7 @@
     "ignore": true
   },
   {
-    "__docId__": 66,
+    "__docId__": 64,
     "kind": "variable",
     "name": "ITERATOR_KEYS",
     "memberof": "src/collection.js",
@@ -896,7 +853,7 @@
     "ignore": true
   },
   {
-    "__docId__": 67,
+    "__docId__": 65,
     "kind": "variable",
     "name": "ITERATOR_KEYSVALUES",
     "memberof": "src/collection.js",
@@ -917,7 +874,7 @@
     "ignore": true
   },
   {
-    "__docId__": 68,
+    "__docId__": 66,
     "kind": "class",
     "name": "Collection",
     "memberof": "src/collection.js",
@@ -932,7 +889,7 @@
     "interface": false
   },
   {
-    "__docId__": 69,
+    "__docId__": 67,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/collection.js~Collection",
@@ -946,7 +903,7 @@
     "undocument": true
   },
   {
-    "__docId__": 70,
+    "__docId__": 68,
     "kind": "get",
     "name": "models",
     "memberof": "src/collection.js~Collection",
@@ -978,7 +935,7 @@
     }
   },
   {
-    "__docId__": 71,
+    "__docId__": 69,
     "kind": "set",
     "name": "models",
     "memberof": "src/collection.js~Collection",
@@ -1017,7 +974,7 @@
     }
   },
   {
-    "__docId__": 72,
+    "__docId__": 70,
     "kind": "method",
     "name": "values",
     "memberof": "src/collection.js~Collection",
@@ -1037,7 +994,7 @@
     }
   },
   {
-    "__docId__": 73,
+    "__docId__": 71,
     "kind": "method",
     "name": "keys",
     "memberof": "src/collection.js~Collection",
@@ -1057,7 +1014,7 @@
     }
   },
   {
-    "__docId__": 74,
+    "__docId__": 72,
     "kind": "method",
     "name": "entries",
     "memberof": "src/collection.js~Collection",
@@ -1077,7 +1034,7 @@
     }
   },
   {
-    "__docId__": 75,
+    "__docId__": 73,
     "kind": "method",
     "name": "count",
     "memberof": "src/collection.js~Collection",
@@ -1105,7 +1062,7 @@
     "params": []
   },
   {
-    "__docId__": 76,
+    "__docId__": 74,
     "kind": "get",
     "name": "length",
     "memberof": "src/collection.js~Collection",
@@ -1124,7 +1081,7 @@
     }
   },
   {
-    "__docId__": 77,
+    "__docId__": 75,
     "kind": "method",
     "name": "url",
     "memberof": "src/collection.js~Collection",
@@ -1152,7 +1109,7 @@
     "params": []
   },
   {
-    "__docId__": 78,
+    "__docId__": 76,
     "kind": "method",
     "name": "reset",
     "memberof": "src/collection.js~Collection",
@@ -1168,7 +1125,7 @@
     "return": null
   },
   {
-    "__docId__": 80,
+    "__docId__": 78,
     "kind": "method",
     "name": "fetch",
     "memberof": "src/collection.js~Collection",
@@ -1184,7 +1141,7 @@
     "return": null
   },
   {
-    "__docId__": 81,
+    "__docId__": 79,
     "kind": "method",
     "name": "create",
     "memberof": "src/collection.js~Collection",
@@ -1223,7 +1180,7 @@
     }
   },
   {
-    "__docId__": 82,
+    "__docId__": 80,
     "kind": "method",
     "name": "add",
     "memberof": "src/collection.js~Collection",
@@ -1262,7 +1219,7 @@
     }
   },
   {
-    "__docId__": 83,
+    "__docId__": 81,
     "kind": "method",
     "name": "at",
     "memberof": "src/collection.js~Collection",
@@ -1301,7 +1258,7 @@
     }
   },
   {
-    "__docId__": 84,
+    "__docId__": 82,
     "kind": "method",
     "name": "modelId",
     "memberof": "src/collection.js~Collection",
@@ -1328,7 +1285,7 @@
     }
   },
   {
-    "__docId__": 85,
+    "__docId__": 83,
     "kind": "get",
     "name": "modelClass",
     "memberof": "src/collection.js~Collection",
@@ -1360,7 +1317,7 @@
     }
   },
   {
-    "__docId__": 86,
+    "__docId__": 84,
     "kind": "method",
     "name": "save",
     "memberof": "src/collection.js~Collection",
@@ -1399,7 +1356,7 @@
     }
   },
   {
-    "__docId__": 87,
+    "__docId__": 85,
     "kind": "method",
     "name": "subscribe",
     "memberof": "src/collection.js~Collection",
@@ -1414,7 +1371,7 @@
     "return": null
   },
   {
-    "__docId__": 88,
+    "__docId__": 86,
     "kind": "file",
     "name": "src/defaults.js",
     "content": "export default {\n    // __COLLECTIONS__\n    // Placeholder for Schemas\n    collections: {},\n    options: {\n        ALLOWED: [\n            \"APP_ID\", \"REST_KEY\", \"HOST\",\n            \"PORT\", \"BASE_PATH\", \"MAX_BATCH_SIZE\",\n            \"DEFAULT_FETCH_LIMIT_OVERRIDE\", \"UNDEFINED_CLASSNAME\",\n        ],\n        // VERSION\n        // The current APIHero Version Number\n        VERSION: \"1.0.0\",\n        // APP_ID\n        // The Parse API Application Identifier\n        APP_ID: null,\n        APP_ID_PARAM_NAME: \"APP_ID\",\n        // REST_KEY\n        // The Parse API REST Access Key\n        REST_KEY: null,\n        REST_KEY_PARAM_NAME: \"REST_KEY\",\n        // SESSION_TOKEN\n        // The User's Session Token if signed in\n        SESSION_TOKEN: \"null\",\n        SESSION_KEY: \"AUTHORIZATION\",\n        // SESSION_TOKEN\n        // The User\"s CSRF Authentication Token for anti-forgery\n        CSRF_TOKEN: \"null\",\n        // API_VERSION\n        // The supported Parse API Version Number\n        API_VERSION: \"1\",\n        // MAX_BATCH_SIZE\n        // The `APIHero.Batch `request object length\n        // Can be set to -1 to disable sub-batching\n        //\n        // **Note**: Changing this may cause `APIHero.Batch` requests to fail\n        MAX_BATCH_SIZE: 50,\n        // DEFAULT_FETCH_LIMIT_OVERRIDE\n        // Stores maximum number of records to retrieve in a `fetch` operation.\n        // **Note**: Parse limits fetch requests to 100 records and provides no pagination. To circumvent this, we override the Fetch Limit to attempt to pull all records set this to a lower or higher amount to suit your needs\n        // **See also**: REST API Queries\n        DEFAULT_FETCH_LIMIT_OVERRIDE: 200000,\n        // UNDEFINED_CLASSNAME\n        // Default ClassName to use for Models and Collections if none provided or detected\n        UNDEFINED_CLASSNAME: \"__UNDEFINED_CLASSNAME__\",\n        // API_URI\n        // Base URI for the Parse API\n        API_URI: \"null\",\n        CORS: true,\n        PROTOCOL: \"HTTP\",\n        HOST: \"0.0.0.0\",\n        PORT: 80,\n        BASE_PATH: \"/api\",\n        CAPITALIZE_CLASSNAMES: false,\n        CRUD_METHODS: {\n            create: \"POST\",\n            read: \"GET\",\n            update: \"PUT\",\n            destroy: \"DELETE\"\n        },\n        QUERY_PARAM: \"filter\"\n    }\n};\n",
@@ -1425,7 +1382,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 89,
+    "__docId__": 87,
     "kind": "file",
     "name": "src/index.js",
     "content": "import __defaults__ from \"./defaults\";\nimport createNS from \"./namespace\";\nimport assign from \"lodash.assign\";\n\nlet app;\nlet $extend = {};\nconst _local = {};\nconst _ns = {};\nconst _scopes = new WeakMap();\n/**\n *\n * @returns {*}\n * @private\n */\nconst __init = (() => {\n    /**\n     *\n     * @param ns\n     * @private\n     */\n    const _appLayer = (ns, config) => {\n        const nsItm = createNS(assign(__defaults__, config));\n        return (_ns[ns] = nsItm);\n    };\n    /**\n     *\n     * @param ns\n     * @param config\n     * @returns {*}\n     */\n    const createScope = (ns, config = {}) => {\n        if (_ns.hasOwnProperty(ns)) {\n            return _ns[ns];\n        }\n\n        _ns[ns] = _appLayer(ns, config);\n        return _ns[ns];\n    };\n\n    return app = {\n        init(config) {\n            Object.keys(config).forEach((nsName) => {\n                createScope(nsName, config[nsName]);\n                Object.defineProperty(this, nsName, {\n                    get: () => _ns[nsName],\n                    enumerable: true,\n                });\n            });\n            return this;\n        },\n        extend(schema) {\n            assign($extend, schema);\n        }\n    };\n})();\n\nexport {__init as Jisty};\n",
@@ -1436,7 +1393,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 90,
+    "__docId__": 88,
     "kind": "variable",
     "name": "$extend",
     "memberof": "src/index.js",
@@ -1457,7 +1414,7 @@
     "ignore": true
   },
   {
-    "__docId__": 91,
+    "__docId__": 89,
     "kind": "variable",
     "name": "_local",
     "memberof": "src/index.js",
@@ -1478,7 +1435,7 @@
     "ignore": true
   },
   {
-    "__docId__": 92,
+    "__docId__": 90,
     "kind": "variable",
     "name": "_ns",
     "memberof": "src/index.js",
@@ -1499,7 +1456,7 @@
     "ignore": true
   },
   {
-    "__docId__": 93,
+    "__docId__": 91,
     "kind": "variable",
     "name": "_scopes",
     "memberof": "src/index.js",
@@ -1520,7 +1477,7 @@
     "ignore": true
   },
   {
-    "__docId__": 94,
+    "__docId__": 92,
     "kind": "variable",
     "name": "__init",
     "memberof": "src/index.js",
@@ -1554,7 +1511,7 @@
     "ignore": true
   },
   {
-    "__docId__": 95,
+    "__docId__": 93,
     "kind": "file",
     "name": "src/inflections.js",
     "content": "// String Inflection utility used to convert Class Names\nexport default ($scope) => {\n    $scope.Inflection = new (() => {\n        // __uncountable_words\n        // Holder for array of words that can not be pluralized\n        return {\n            __uncountable_words: [\n                \"equipment\", \"information\", \"rice\", \"money\", \"species\",\n                \"series\", \"fish\", \"sheep\", \"moose\", \"deer\", \"news\"],\n            // __plural_rules\n            // Holder for RegExp pluralization rules\n            __plural_rules: [\n                [/(m)an$/gi, \"$1en\"],\n                [/(pe)rson$/gi, \"$1ople\"],\n                [/(child)$/gi, \"$1ren\"],\n                [/^(ox)$/gi, \"$1en\"],\n                [/(ax|test)is$/gi, \"$1es\"],\n                [/(octop|vir)us$/gi, \"$1i\"],\n                [/(alias|status)$/gi, \"$1es\"],\n                [/(bu)s$/gi, \"$1ses\"],\n                [/(buffal|tomat|potat)o$/gi, \"$1oes\"],\n                [/([ti])um$/gi, \"$1a\"],\n                [/sis$/gi, \"ses\"],\n                [/(?:([^f])fe|([lr])f)$/gi, \"$1$2ves\"],\n                [/(hive)$/gi, \"$1s\"],\n                [/([^aeiouy]|qu)y$/gi, \"$1ies\"],\n                [/(x|ch|ss|sh|lens)$/gi, \"$1es\"],\n                [/(matr|vert|ind)ix|ex$/gi, \"$1ices\"],\n                [/([m|l])ouse$/gi, \"$1ice\"],\n                [/(quiz)$/gi, \"$1zes\"],\n                [/s$/gi, \"s\"],\n                [/$/gi, \"s\"]\n            ],\n            // apply_rules(string, rules, skip)\n            // Applies the appropriate RegExp for the provided string\n            apply_rules(str, rules, skip) {\n                // skips any string that is detected on `skip` array\n                if ((skip.indexOf(str.toLowerCase())) === -1) {\n                    // returns string with `rules` applied\n                    let rx;\n                    if ((rx = _.find(rules, itm => str.match(itm[0]))) != null) {\n                        return str.replace(rx[0], rx[1]);\n                    }\n                }\n                // returns inoperable string\n                return str;\n            },\n            // pluralize(string)\n            // pluralizes the provided string\n            pluralize(str) {\n                // returns results of `apply_rules`\n                return this.apply_rules(str, this.__plural_rules, this.__uncountable_words);\n            }\n        };\n    });\n}",
@@ -1565,7 +1522,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 96,
+    "__docId__": 94,
     "kind": "function",
     "name": "inflections",
     "memberof": "src/inflections.js",
@@ -1591,7 +1548,7 @@
     "return": null
   },
   {
-    "__docId__": 97,
+    "__docId__": 95,
     "kind": "file",
     "name": "src/metadata.js",
     "content": "const _metaObjects = new WeakMap();\n/**\n *\n */\nexport default class {\n    /**\n     *\n     * @param observableModel\n     */\n    constructor(observableModel) {\n        _metaObjects.set(this, {\n            createdOn: Date.now(),\n            updatedOn: null,\n            currentData: observableModel.data,\n            cached: [],\n        });\n        const _self = this;\n        observableModel.subscribe({\n            next: (data) => {\n                const o = _metaObjects.get(_self);\n                o.updatedOn = Date.now();\n                o.cached.splice(-1, 0, o.currentData);\n                o.currentData = data;\n            },\n        });\n    }\n\n    /**\n     *\n     * @returns {number | *}\n     */\n    get createdOn() {\n        return _metaObjects.get(this).createdOn;\n    }\n\n    /**\n     *\n     * @returns {null | number |*}\n     */\n    get updatedOn() {\n        return _metaObjects.get(this).updatedOn;\n    }\n\n}",
@@ -1602,7 +1559,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 98,
+    "__docId__": 96,
     "kind": "variable",
     "name": "_metaObjects",
     "memberof": "src/metadata.js",
@@ -1623,7 +1580,7 @@
     "ignore": true
   },
   {
-    "__docId__": 99,
+    "__docId__": 97,
     "kind": "class",
     "name": "metadata",
     "memberof": "src/metadata.js",
@@ -1638,7 +1595,7 @@
     "interface": false
   },
   {
-    "__docId__": 100,
+    "__docId__": 98,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/metadata.js~metadata",
@@ -1663,7 +1620,7 @@
     ]
   },
   {
-    "__docId__": 101,
+    "__docId__": 99,
     "kind": "get",
     "name": "createdOn",
     "memberof": "src/metadata.js~metadata",
@@ -1696,7 +1653,7 @@
     }
   },
   {
-    "__docId__": 102,
+    "__docId__": 100,
     "kind": "get",
     "name": "updatedOn",
     "memberof": "src/metadata.js~metadata",
@@ -1730,7 +1687,7 @@
     }
   },
   {
-    "__docId__": 103,
+    "__docId__": 101,
     "kind": "file",
     "name": "src/model.js",
     "content": "import {JSD} from \"jsd\";\nimport MetaData from \"./metadata\";\nimport {_cids} from \"./_references\";\n\nconst _modelRefs = new WeakMap();\n\nexport default class {\n    constructor(collection) {\n        // defines getter for owner Collection reference\n        Object.defineProperty(this, \"$collection\", {\n            get: () => collection,\n            enumerable: false,\n        });\n        const _mdRef = new MetaData(this);\n        Object.defineProperty(this, \"$metadata\", {\n            get: () => _mdRef,\n            enumerable: false,\n        });\n    }\n\n    //\n    // Accessor Methods\n    //\n\n    /**\n     * returns data from JSD Document\n     */\n    get data() {\n        return _cids.get(this.$collection)[this.$cid];\n    }\n\n    /**\n     * sets data to JSD Document\n     * @param d\n     */\n    set data(d) {\n        this.data.$ref.model = d;\n        return this;\n    }\n\n    /**\n     * alias for data getter\n     * @returns {*}\n     */\n    get attrs() {\n        return this.data;\n    }\n\n    /**\n     * alias for data setter\n     * @param d\n     * @returns {*}\n     */\n    set attrs(d) {\n        return this.data = d;\n    }\n\n    /**\n     * retrieves data at key\n     * @param key\n     */\n    get(key) {\n        return this.data[key];\n    }\n\n    /**\n     * sets value upon key\n     * @param key\n     * @param val\n     */\n    set(key, val) {\n        this.data.$ref.set(key, val);\n        return this;\n    }\n\n    //\n    // MetaData Accessors\n    //\n\n    /**\n     * returns creation time of Model in Application\n     * @returns {*}\n     */\n    get modelCreatedOn() {\n        return this.$metadata.createdOn;\n    }\n\n    /**\n     * returns last updated time of Model in Application\n     * @returns {null|*}\n     */\n    get modelUpdatedOn() {\n        return this.$metadata.updatedOn;\n    }\n\n\n    //\n    // RXJS\n    //\n\n    /**\n     *\n     * @param handler\n     */\n    subscribe(handler) {\n        // return this.data.$ref.subscribe(handler);\n    }\n\n    //\n    // Validation Methods\n    //\n\n    /**\n     * @returns {boolean|string}\n     */\n    validate() {\n        return this.data.$ref.validate();\n    }\n\n    /**\n     *\n     * @returns {boolean}\n     */\n    get isValid() {\n        return this.data.$ref.isValid();\n    }\n\n    /**\n     *\n     * @returns {string}\n     */\n    get url() {\n        // const base    = $scope.getAPIUrl();\n        // const ref     = !$scope.CAPITALIZE_CLASSNAMES ? this.className.toLowerCase() : this.className;\n        // const item    = !this.isNew() ? `/${this.get(this.idAttribute)}` : '';\n        // // search  = if (p=$scope.querify @__op).length then \"?#{p}\" else ''\n        // const _preQ  = (this.params != null) ? this.params : '?';\n        // const _query = $scope.querify(this.__op);\n        // const search = _query.length ? `${_preQ}&${_query}` : _preQ;\n        // return `${base}/${ref}${item}${search}`;\n        return \"\";\n    }\n\n    //\n    // REST Life-Cycle\n    //\n\n    /**\n     *\n     */\n    fetch() {\n\n    }\n\n    /**\n     *\n     */\n    save() {\n\n    }\n\n    /**\n     *\n     */\n    sync() {\n\n    }\n\n    /**\n     *\n     */\n    destroy() {\n\n    }\n\n    /**\n     *\n     */\n    reset() {\n\n    }\n\n    //\n    // translation\n    //\n\n    /**\n     *\n     * @returns {string}\n     */\n    valueOf() {\n        return this.data.$ref.valueOf();\n    }\n\n    /**\n     *\n     * @returns {string}\n     */\n    toString() {\n        return this.data.$ref.toString();\n    }\n\n    /**\n     * @returns {JSON}\n     */\n    toJSON() {\n        return this.data.$ref.toJSON();\n    }\n}\n",
@@ -1741,7 +1698,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 104,
+    "__docId__": 102,
     "kind": "variable",
     "name": "_modelRefs",
     "memberof": "src/model.js",
@@ -1762,7 +1719,7 @@
     "ignore": true
   },
   {
-    "__docId__": 105,
+    "__docId__": 103,
     "kind": "class",
     "name": "model",
     "memberof": "src/model.js",
@@ -1778,7 +1735,7 @@
     "interface": false
   },
   {
-    "__docId__": 106,
+    "__docId__": 104,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/model.js~model",
@@ -1792,7 +1749,7 @@
     "undocument": true
   },
   {
-    "__docId__": 107,
+    "__docId__": 105,
     "kind": "get",
     "name": "data",
     "memberof": "src/model.js~model",
@@ -1810,7 +1767,7 @@
     }
   },
   {
-    "__docId__": 108,
+    "__docId__": 106,
     "kind": "set",
     "name": "data",
     "memberof": "src/model.js~model",
@@ -1835,7 +1792,7 @@
     ]
   },
   {
-    "__docId__": 109,
+    "__docId__": 107,
     "kind": "get",
     "name": "attrs",
     "memberof": "src/model.js~model",
@@ -1867,7 +1824,7 @@
     }
   },
   {
-    "__docId__": 110,
+    "__docId__": 108,
     "kind": "set",
     "name": "attrs",
     "memberof": "src/model.js~model",
@@ -1906,7 +1863,7 @@
     }
   },
   {
-    "__docId__": 111,
+    "__docId__": 109,
     "kind": "method",
     "name": "get",
     "memberof": "src/model.js~model",
@@ -1936,7 +1893,7 @@
     }
   },
   {
-    "__docId__": 112,
+    "__docId__": 110,
     "kind": "method",
     "name": "set",
     "memberof": "src/model.js~model",
@@ -1976,7 +1933,7 @@
     }
   },
   {
-    "__docId__": 113,
+    "__docId__": 111,
     "kind": "get",
     "name": "modelCreatedOn",
     "memberof": "src/model.js~model",
@@ -2008,7 +1965,7 @@
     }
   },
   {
-    "__docId__": 114,
+    "__docId__": 112,
     "kind": "get",
     "name": "modelUpdatedOn",
     "memberof": "src/model.js~model",
@@ -2041,7 +1998,7 @@
     }
   },
   {
-    "__docId__": 115,
+    "__docId__": 113,
     "kind": "method",
     "name": "subscribe",
     "memberof": "src/model.js~model",
@@ -2067,7 +2024,7 @@
     "return": null
   },
   {
-    "__docId__": 116,
+    "__docId__": 114,
     "kind": "method",
     "name": "validate",
     "memberof": "src/model.js~model",
@@ -2096,7 +2053,7 @@
     "params": []
   },
   {
-    "__docId__": 117,
+    "__docId__": 115,
     "kind": "get",
     "name": "isValid",
     "memberof": "src/model.js~model",
@@ -2128,7 +2085,7 @@
     }
   },
   {
-    "__docId__": 118,
+    "__docId__": 116,
     "kind": "get",
     "name": "url",
     "memberof": "src/model.js~model",
@@ -2160,7 +2117,7 @@
     }
   },
   {
-    "__docId__": 119,
+    "__docId__": 117,
     "kind": "method",
     "name": "fetch",
     "memberof": "src/model.js~model",
@@ -2175,7 +2132,7 @@
     "return": null
   },
   {
-    "__docId__": 120,
+    "__docId__": 118,
     "kind": "method",
     "name": "save",
     "memberof": "src/model.js~model",
@@ -2190,7 +2147,7 @@
     "return": null
   },
   {
-    "__docId__": 121,
+    "__docId__": 119,
     "kind": "method",
     "name": "sync",
     "memberof": "src/model.js~model",
@@ -2205,7 +2162,7 @@
     "return": null
   },
   {
-    "__docId__": 122,
+    "__docId__": 120,
     "kind": "method",
     "name": "destroy",
     "memberof": "src/model.js~model",
@@ -2220,7 +2177,7 @@
     "return": null
   },
   {
-    "__docId__": 123,
+    "__docId__": 121,
     "kind": "method",
     "name": "reset",
     "memberof": "src/model.js~model",
@@ -2235,7 +2192,7 @@
     "return": null
   },
   {
-    "__docId__": 124,
+    "__docId__": 122,
     "kind": "method",
     "name": "valueOf",
     "memberof": "src/model.js~model",
@@ -2263,7 +2220,7 @@
     "params": []
   },
   {
-    "__docId__": 125,
+    "__docId__": 123,
     "kind": "method",
     "name": "toString",
     "memberof": "src/model.js~model",
@@ -2291,7 +2248,7 @@
     "params": []
   },
   {
-    "__docId__": 126,
+    "__docId__": 124,
     "kind": "method",
     "name": "toJSON",
     "memberof": "src/model.js~model",
@@ -2319,7 +2276,7 @@
     "params": []
   },
   {
-    "__docId__": 127,
+    "__docId__": 125,
     "kind": "file",
     "name": "src/namespace.js",
     "content": "import {_namespaces, _nsCollections} from \"./_references\";\nimport ns_schema from \"./ns_schema\";\nimport map from \"lodash.map\";\nimport pairs from \"lodash.pairs\";\nimport {JSD} from \"jsd\";\nimport Collection from \"./collection\";\n/**\n *\n */\nclass NS {\n    /**\n     *\n     * @param name\n     * @param config\n     */\n    constructor(config) {\n        const _schema = new JSD(ns_schema);\n        _schema.document.model = config;\n        _namespaces.set(this, _schema);\n        let _cols = {};\n        const _self = this;\n\n        Object.defineProperty(this, \"$utils\", {\n            value: new Utils(this),\n            enumerable: false,\n            writable: false,\n        });\n\n        let o = {};\n        Object.keys(_schema.document.model.collections).forEach((col) => {\n            o[col] = class extends Collection {\n                constructor() {\n                    super(_schema.document.model.collections[col]);\n                    Object.defineProperty(this, \"$className\", {\n                        get: () => col,\n                        enumerable: false,\n                    });\n                    Object.defineProperty(this, \"$scope\", {\n                        get: () => _self,\n                        enumerable: false,\n                    });\n                }\n            };\n            this.addCollection(col, o[col]);\n        });\n\n        _nsCollections.set(this, _cols);\n    }\n\n    /**\n     *\n     */\n    get options() {\n        return _namespaces.get(this).document.model.options;\n    }\n\n    /**\n     *\n     * @param value\n     * @returns {NS}\n     */\n    set options(value) {\n        _namespaces.get(this).document.model.options = value;\n        return this;\n    }\n\n    /**\n     *\n     * @param key\n     */\n    getOption(key) {\n        return _namespaces.get(this).document.model.options[key];\n    }\n\n    /**\n     *\n     * @param key\n     * @param value\n     * @returns {NS}\n     */\n    setOption(key, value) {\n        _namespaces.get(this).document.model.options[key] = value;\n        return this;\n    }\n\n    /**\n     *\n     */\n    get collections() {\n        return _nsCollections.get(this);\n    }\n\n    listCollections() {\n        return Object.keys(_namespaces.get(this));\n    }\n\n    /**\n     *\n     * @param name\n     * @param col\n     * @returns {NS}\n     */\n    addCollection(name, col) {\n        if (!this.hasOwnProperty(name)) {\n            Object.defineProperty(this, name, {\n                get: () => {\n                    let _s = _namespaces.get(this).document;\n                    return new col(_s.model.collections[name]);\n                    },\n                enumerable: true,\n            });\n        }\n        return this;\n    }\n\n    /**\n     *\n     * @param name\n     * @returns {NS}\n     */\n    removeCollection(name) {\n        if (_namespaces.get(this).hasOwnProperty(name)) {\n            Object.defineProperty(_namespaces.get(this), name, {\n                get: () => null,\n                writable: false,\n            });\n        }\n        return this;\n    }\n};\n\nclass Utils {\n    constructor($scope) {\n        Object.defineProperty(this, \"$scope\", {\n            get: () => $scope,\n            enumerable: false,\n        });\n    }\n    get apiOptions() {\n        let o;\n        (o = {\n                contentType: \"application/json\",\n                processData: false,\n                dataType: \"json\",\n                data: null,\n                headers: {\n                    \"Content-Type\": \"application/json\",\n                    \"X-Application-Id\": this.$scope.options.APP_ID || null,\n                    \"X-REST-API-Key\": this.$scope.options.REST_KEY || null,\n                    \"X-CSRF-Token\": this.$scope.options.CSRF_TOKEN || null,\n                    \"X-User-Email\": this.$scope.options.USER_EMAIL || null,\n                },\n            }\n        );\n\n        if (this.$scope.options.SESSION_KEY) {\n            o.headers[this.$scope.options.SESSION_KEY] = this.$scope.options.SESSION_TOKEN;\n        }\n\n        return o;\n    }\n    /**\n     *\n     * @returns {string}\n     */\n    get apiUrl() {\n        const _pcl  = this.$scope.options.PROTOCOL.toLowerCase();\n        const _host = this.$scope.options.HOST;\n        const _port = this.$scope.options.PORT;\n        const _path = this.$scope.options.BASE_PATH.replace(/^\\//, \"\");\n        const _vers = this.$scope.options.API_VERSION;\n        return `${_pcl}://${_host}${_port !== 80 ? `:${_port}` : \"\"}/${_path}/${_vers}`;\n    }\n\n    /**\n     *\n     * @param route\n     * @returns {boolean}\n     */\n    validateRoute(route) {\n        const Rx = `^(${this.$scope.regEscape(this.getAPIUrl())}\\/)+`;\n        // throws error if route does not pass validation\n        if (!route.match(new RegExp(Rx))) {\n            throw `Bad route: ${route}`;\n        }\n        // returns true if no error thrown\n        return true;\n    }\n\n    /**\n     * Implementation of Parse._parseDate used to parse iso8601 UTC formatted `datetime`\n     * @param iso8601\n     * @returns {*}\n     */\n    parseDate(iso8601) {\n        // returns null if `iso8601` argument fails `RegExp`\n        let t;\n        let Rx = /^([\\+-]?\\d{4}(?!\\d{2}\\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?$/;\n        if ((t = `${iso8601}`.match(Rx)) === null) {\n            return null;\n        }\n        t = t.map((i) =>  i && i.match(/^[\\d]+$/) !== null ? parseInt(i, 10) : null )\n            .filter((i) => i !== null);\n        t[1] = t[1] - 1;\n        return new Date(Date.UTC.apply(this, t));\n    }\n\n    /**\n     * Returns passes object as Key/Value paired string\n     * @param obj\n     * @returns {string}\n     */\n    querify(obj) {\n        return (map(pairs(obj || {}), (v, k) => v.join(\"=\"))).join(\"&\");\n    }\n}\n\nexport default (config) => {\n    return new NS(config);\n};",
@@ -2330,7 +2287,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 128,
+    "__docId__": 126,
     "kind": "class",
     "name": "NS",
     "memberof": "src/namespace.js",
@@ -2346,7 +2303,7 @@
     "ignore": true
   },
   {
-    "__docId__": 129,
+    "__docId__": 127,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/namespace.js~NS",
@@ -2381,7 +2338,7 @@
     ]
   },
   {
-    "__docId__": 130,
+    "__docId__": 128,
     "kind": "get",
     "name": "options",
     "memberof": "src/namespace.js~NS",
@@ -2399,7 +2356,7 @@
     }
   },
   {
-    "__docId__": 131,
+    "__docId__": 129,
     "kind": "set",
     "name": "options",
     "memberof": "src/namespace.js~NS",
@@ -2438,7 +2395,7 @@
     }
   },
   {
-    "__docId__": 132,
+    "__docId__": 130,
     "kind": "method",
     "name": "getOption",
     "memberof": "src/namespace.js~NS",
@@ -2468,7 +2425,7 @@
     }
   },
   {
-    "__docId__": 133,
+    "__docId__": 131,
     "kind": "method",
     "name": "setOption",
     "memberof": "src/namespace.js~NS",
@@ -2517,7 +2474,7 @@
     }
   },
   {
-    "__docId__": 134,
+    "__docId__": 132,
     "kind": "get",
     "name": "collections",
     "memberof": "src/namespace.js~NS",
@@ -2535,7 +2492,7 @@
     }
   },
   {
-    "__docId__": 135,
+    "__docId__": 133,
     "kind": "method",
     "name": "listCollections",
     "memberof": "src/namespace.js~NS",
@@ -2555,7 +2512,7 @@
     }
   },
   {
-    "__docId__": 136,
+    "__docId__": 134,
     "kind": "method",
     "name": "addCollection",
     "memberof": "src/namespace.js~NS",
@@ -2604,7 +2561,7 @@
     }
   },
   {
-    "__docId__": 137,
+    "__docId__": 135,
     "kind": "method",
     "name": "removeCollection",
     "memberof": "src/namespace.js~NS",
@@ -2643,7 +2600,7 @@
     }
   },
   {
-    "__docId__": 138,
+    "__docId__": 136,
     "kind": "class",
     "name": "Utils",
     "memberof": "src/namespace.js",
@@ -2660,7 +2617,7 @@
     "ignore": true
   },
   {
-    "__docId__": 139,
+    "__docId__": 137,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/namespace.js~Utils",
@@ -2674,7 +2631,7 @@
     "undocument": true
   },
   {
-    "__docId__": 140,
+    "__docId__": 138,
     "kind": "get",
     "name": "apiOptions",
     "memberof": "src/namespace.js~Utils",
@@ -2693,7 +2650,7 @@
     }
   },
   {
-    "__docId__": 141,
+    "__docId__": 139,
     "kind": "get",
     "name": "apiUrl",
     "memberof": "src/namespace.js~Utils",
@@ -2725,7 +2682,7 @@
     }
   },
   {
-    "__docId__": 142,
+    "__docId__": 140,
     "kind": "method",
     "name": "validateRoute",
     "memberof": "src/namespace.js~Utils",
@@ -2764,7 +2721,7 @@
     }
   },
   {
-    "__docId__": 143,
+    "__docId__": 141,
     "kind": "method",
     "name": "parseDate",
     "memberof": "src/namespace.js~Utils",
@@ -2803,7 +2760,7 @@
     }
   },
   {
-    "__docId__": 144,
+    "__docId__": 142,
     "kind": "method",
     "name": "querify",
     "memberof": "src/namespace.js~Utils",
@@ -2842,7 +2799,7 @@
     }
   },
   {
-    "__docId__": 145,
+    "__docId__": 143,
     "kind": "function",
     "name": "namespace",
     "memberof": "src/namespace.js",
@@ -2872,7 +2829,7 @@
     }
   },
   {
-    "__docId__": 146,
+    "__docId__": 144,
     "kind": "file",
     "name": "src/ns_schema.js",
     "content": "export default {\n    type: \"Object\",\n    extensible: false,\n    elements: {\n        collections: {\n            type: \"Object\",\n            required: true,\n            elements: {\n                \"*\": {\n                    type: \"Object\",\n                    elements: {\n                        name: {\n                            type: \"String\",\n                            required: true,\n                            restrict: \"^[a-zA-Z0-9_]+$\",\n                        },\n                        description: {\n                            type: \"String\",\n                            required: false,\n                            default: \" \",\n                            restrict: \"^[\\\\w\\\\s\\\\W]+$\",\n                        },\n                        plural: {\n                            type: \"String\",\n                            required: false,\n                            restrict: \"^[a-zA-Z0-9_]+$\",\n                        },\n                        properties: {\n                            type: \"Object\",\n                            required: true,\n                            extensible: false,\n                            elements: {\n                                \"*\": {\n                                    type: \"Object\",\n                                    elements: {\n                                        default: {\n                                            type: \"*\",\n                                            required: false,\n                                        },\n                                        defaultFn: {\n                                            type: \"String\",\n                                            required: false,\n                                            restrict: \"^(guid|uuid|uuidv4|now)+$\",\n                                        },\n                                        description: {\n                                            type: \"String\",\n                                            required: false,\n                                            restrict: \"^((?!\\\"|\\\\b|\\\\f|\\\\n|\\\\r|\\\\t|\\\\u).)*$\",\n                                        },\n                                        id: {\n                                            required: false,\n                                            polymorphic: [\n                                                {\n                                                    type: \"Boolean\",\n                                                },\n                                                {\n                                                    type: \"Object\",\n                                                    elements: {\n                                                        type: {\n                                                            type: \"String\",\n                                                            required: true,\n                                                            restrict: \"^(String|Number)+$\",\n                                                        },\n                                                        id: {\n                                                            type: \"Boolean\",\n                                                            required: true,\n                                                        },\n                                                        generated: {\n                                                            type: \"Boolean\",\n                                                            required: false,\n                                                        },\n                                                    },\n                                                },\n                                            ],\n                                        },\n                                        index: {\n                                            type: \"Boolean\",\n                                            required: false,\n                                        },\n                                        type: {\n                                            type: \"String\",\n                                            required: true,\n                                            restrict: \"^(any|Array|Boolean|Buffer|Date|GeoPoint|Number|Object|String)+$\",\n                                        },\n                                        required: {\n                                            type: \"Boolean\",\n                                            required: false,\n                                            default: false,\n                                        },\n                                        length: {\n                                            type: \"Number\",\n                                            required: false,\n                                            default: null,\n                                        },\n                                        precision: {\n                                            type: \"Number\",\n                                            required: false,\n                                            default: null,\n                                        },\n                                        scale: {\n                                            type: \"Number\",\n                                            required: false,\n                                            default: null,\n                                        },\n                                    },\n                                },\n                            },\n                        },\n                    },\n                },\n            },\n        },\n        options: {\n            type: \"Object\",\n            required: true,\n            elements: {\n                ALLOWED: {\n                    type: \"Array\",\n                    required: true,\n                    elements: [{\n                        type: \"String\",\n                        required: false,\n                    }],\n                },\n                VERSION: {\n                    type: \"String\",\n                    required: false,\n                    restrict: [\"\\\\\\\\bv?(?:0|[1-9]\\\\\\\\d*)\\\\\\\\.(?:0|[1-9]\\\\\\\\d*)\\\\\\\\.(?:0|[1-9]\\\\\\\\d*)(?:-[\\\\\\\\da-z\\\\\\\\-]+(?:\\\\\\\\.[\\\\\\\\da-z\\\\\\\\-]+)*)?(?:\\\\\\\\+[\\\\\\\\da-z\\\\\\\\-]+(?:\\\\\\\\.[\\\\\\\\da-z\\\\\\\\-]+)*)?\\\\\\\\b\", \"ig\"],\n                },\n                APP_ID: {\n                    type: \"String\",\n                    required: true,\n                    restrict: \"^[a-zA-Z0-9]{16,32}$\"\n                },\n                APP_ID_PARAM_NAME: {\n                    type: \"String\",\n                    required: false,\n                },\n                REST_KEY: {\n                    type: \"String\",\n                    required: true,\n                    restrict: \"^[a-zA-Z0-9]{16,32}$\",\n                },\n                REST_KEY_PARAM_NAME: {\n                    type: \"String\",\n                    required: false,\n                },\n                SESSION_TOKEN: {\n                    type: \"String\",\n                    required: false,\n                },\n                SESSION_KEY: {\n                    type: \"String\",\n                    required: true,\n                    restrict: \"^[a-zA-Z0-9]{16,32}$\",\n                },\n                CSRF_TOKEN: {\n                    type: \"String\",\n                    required: false,\n                    restrict: \"^[a-zA-Z0-9]{16,32}$\",\n                },\n                API_VERSION: {\n                    type: \"String\",\n                    required: true,\n                },\n                MAX_BATCH_SIZE: {\n                    type: \"Number\",\n                    required: false,\n                    default: 50,\n                },\n                DEFAULT_FETCH_LIMIT_OVERRIDE: {\n                    type: \"Number\",\n                    required: false,\n                    default: 50000,\n                },\n                UNDEFINED_CLASSNAME: {\n                    type: \"String\",\n                    required: false,\n                    default: \"__UNDEFINED_CLASSNAME__\",\n                    restrict: \"^[a-zA-Z0-9_]+$\",\n                },\n                API_URI: {\n                    type: \"String\",\n                    required: false,\n                    default: \"/api\",\n                    restrict: \"^[a-zA-Z0-9_]+$\",\n                },\n                CORS: {\n                    type: \"Boolean\",\n                    required: false,\n                    default: false,\n                },\n                PROTOCOL: {\n                    type: \"String\",\n                    required: false,\n                    default: \"http\",\n                    restrict: \"^(HTTP|http)+(S|s)?$\",\n                },\n                HOST: {\n                    type: \"String\",\n                    required: false,\n                    default: \"127.0.0.1\",\n                    restrict: \"^(?:[0-9]{1,3}\\\\\\\\.){3}[0-9]{1,3}$\",\n                },\n                PORT: {\n                    type: \"Number\",\n                    required: false,\n                    default: 3000,\n                },\n                BASE_PATH: {\n                    type: \"String\",\n                    required: false,\n                    default: \"/api\",\n                    restrict: \"^\\\\\\\\/+[a-zA-Z0-9_\\\\\\\\/\\\\\\\\.\\\\\\\\-]+$\",\n                },\n                CAPITALIZE_CLASSNAMES: {\n                    type: \"Boolean\",\n                    required: false,\n                    default: true,\n                },\n                CRUD_METHODS: {\n                    type: \"Object\",\n                    required: true,\n                    extensible: true,\n                    elements: {\n                        create: {\n                            type: \"String\",\n                            required: false,\n                            restrict: \"^POST+$\",\n                        },\n                        read: {\n                            type: \"String\",\n                            required: false,\n                            restrict: \"^GET+$\",\n                        },\n                        update: {\n                            type: \"String\",\n                            required: false,\n                            restrict: \"^PUT+$\",\n                        },\n                        destroy: {\n                            type: \"String\",\n                            required: false,\n                            restrict: \"^DELETE+$\",\n                        },\n                    },\n                },\n                QUERY_PARAM: {\n                    type: \"String\",\n                    required: false,\n                    restrict: \"^[a-zA-Z0-9_]+$\",\n                },\n            },\n        },\n    },\n};\n",
@@ -2883,7 +2840,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 147,
+    "__docId__": 145,
     "kind": "file",
     "name": "src/query.js",
     "content": "import forEach from \"lodash.foreach\";\nimport flatten from \"lodash.flatten\";\nimport map from \"lodash.map\";\nconst __q = new WeakMap();\nconst __meta = new WeakMap();\n\nexport default class {\n    constructor() {\n        // TODO: review this for necessity or alternative solutions\n        this.or = this._or;\n        this.in = this._in;\n        this.clear();\n    }\n\n    /**\n     *\n     */\n    clear() {\n        __meta.set(this, {\n            include: [],\n            limit: -1,\n            skip: 0,\n            extraOpts: {},\n        })\n        __q.set(this, {});\n    }\n\n    /**\n     * Executes query and returns all results\n     * @param opts\n     * @returns {PromiseLike<T> | Promise<T>}\n     */\n    find(opts = {}) {\n        if (typeof this.objectClass !== \"function\") {\n            throw \"valid Class required\";\n        }\n        let crud = this.$scope.options.CRUD_METHODS.read;\n        return (new this.objectClass).sync(crud, [], _.extend(opts, {where:this.__q})\n        ).then((s, r, o)=> {\n            return forEach(r.results, (v, k)=> {\n                let obj = v.className ?\n                    new (this.$scope[v.className])() :\n                    (new this.objectClass())._finishFetch(v, true);\n                return obj;\n            });\n        });\n    }\n\n    /**\n     * Executes query and returns only the first result\n     * @param opts\n     * @returns {PromiseLike<T>|Promise<T>}\n     */\n    first(opts = {}) {\n        return this.find(_.extend(opts, {skip:0, limit:1}));\n    }\n\n    /**\n     *\n     * @param col\n     * @param key\n     * @param val\n     * @returns {Query}\n     */\n    set(col, key, val){\n        if (col != null) {\n            if (this.__q[col] == null) {\n                this.__q[col] = {};\n            }\n        }\n        (__q.get(this)[col] || __q.get(this))[key] = val;\n        return this;\n    }\n\n    /**\n     *\n     * @returns {string}\n     */\n    getParams() {\n        return (_.map(_.pairs(__q.get(this), (v,k)=> v.join(\"=\"))) ).join(\"&\");\n    }\n\n    /**\n     *\n     * @returns {*}\n     */\n    toJSON() {\n        return __q.get(this);\n    }\n\n    /**\n     *\n     * @returns {string}\n     */\n    toString() {\n        return JSON.stringify(this.toJSON());\n    }\n\n    /**\n     *\n     * @param col\n     * @param value\n     * @returns {Query}\n     */\n    equalTo(col, value){\n        return this.set(null, col, value);\n    }\n\n    /**\n     *\n     * @param col\n     * @param value\n     * @returns {Query}\n     */\n    notEqualTo(col, value){\n        return this.set(col, \"$ne\", value);\n    }\n\n    /**\n     *\n     * @param query\n     * @returns {Query}\n     */\n    dontSelect(query) {\n        return this.set(null, \"$dontSelect\", {query});\n    }\n\n    /**\n     * Sets condition that column must exist\n     * @param col\n     * @returns {Query}\n     */\n    exists(col) {\n        return this.set(col, \"$exists\", true);\n    }\n\n    /**\n     * Sets condition that column must not exist\n     * @param col\n     * @returns {Query}\n     */\n    doesNotExist(col) {\n        return this.set(col, \"$exists\", false);\n    }\n\n    /**\n     * Sets condition that column value must be greater than given value\n     * @param col\n     * @param val\n     * @returns {Query}\n     */\n    greaterThan(col, val) {\n        return this.set(col, \"$gt\", val);\n    }\n\n    /**\n     * Sets condition that column value must be greater than or equal to the given value\n     * @param col\n     * @param val\n     * @returns {Query}\n     */\n    greaterThanOrEqualTo(col, val) {\n        return this.set(col, \"$gte\", val);\n    }\n\n    /**\n     * Sets condition that column value must be less than given value\n     * @param col\n     * @param value\n     * @returns {Query}\n     */\n    lessThan(col, value) {\n        return this.set(col, \"$lt\", value);\n    }\n\n    /**\n     * Sets condition that column value must be less than or equal to the given value\n     * @param col\n     * @param value\n     * @returns {Query}\n     */\n    lessThanOrEqualTo(col, value) {\n        return this.set(col, \"$lte\", value);\n    }\n\n    /**\n     *\n     * @param col\n     * @param val\n     * @returns {Query}\n     */\n    contains(col, val) {\n        return this.set(col, \"$regex\", val); //\"#{$scope.Query._quote val}\"\n    }\n\n    /**\n     * Sets condition that column value must be an array containing all items in given array\n     * @param col\n     * @param array\n     * @returns {Query}\n     */\n    containsAll(col,array) {\n        return this.set(null, \"$all\");\n    }\n\n    /**\n     *\n     * @param col\n     * @param value\n     * @returns {Query}\n     */\n    containedIn(col, value) {\n        return this.set(col, \"$in\", array);\n    }\n\n    /**\n     *\n     * @param col\n     * @param array\n     * @returns {Query}\n     */\n    notContainedIn(col, array) {\n        return this.set(col, \"$nin\", array);\n    }\n\n    /**\n     *\n     * @param col\n     * @param query\n     * @returns {Query}\n     */\n    select(col, query) {\n        return this.set(col, \"$select\", {query});\n    }\n\n    /**\n     *\n     * @param col\n     * @param query\n     * @returns {Query}\n     */\n    inQuery(col,query) {\n        return this.set(col, \"$inQuery\", {where:query});\n    }\n\n    /**\n     *\n     * @param col\n     * @param query\n     * @returns {Query}\n     */\n    notInQuery(col,query) {\n        return this.set(col, \"$notInQuery\", {where:query});\n    }\n\n    /**\n     *\n     * @param queries\n     * @returns {*[]}\n     * @private\n     */\n    _or(...queries) {\n        const _q = __q.get(this);\n        const _or = (_q[\"$or\"] != null ? _q[\"$or\"] : (_q[\"$or\"] = []));\n        return _q[\"$or\"] = _or.concat(this.$scope.Query.or(queries));\n    }\n\n    /**\n     *\n     * @param object\n     * @param key\n     * @returns {Query}\n     */\n    relatedTo(object, key) {\n        if ((!(object instanceof this.$scope.Model)) ||\n            (object.$className === null)) {\n            const eMsg = `${namespace}.Query.$relatedTo required object be of Type ${namespace}.Object`;\n            throw new Error();\n        }\n        return this.set(null, \"$relatedTo\", {\n                object: {\n                    __type: \"Pointer\",\n                    objectId: object.get(\"objectId\"),\n                    className: object.className\n                },\n                key:`${key}`\n            }\n        );\n    }\n\n    /**\n     *\n     * @param value\n     * @returns {Query}\n     */\n    include(value) {\n        return this.set(null, \"include\", `${value}`);\n    }\n\n    /**\n     *\n     * @param val\n     * @returns {Query}\n     */\n    keys(val) {\n        return this.set(null, \"keys\", `${value}`);\n    }\n\n    /**\n     *\n     * @param value\n     * @returns {Query}\n     */\n    count(value) {\n        return this.set(null, \"count\", `${value}`);\n    }\n\n    /**\n     *\n     * @param value\n     * @returns {Query}\n     */\n    order(value) {\n        return this.set(null, \"order\", `${value}`);\n    }\n\n    /**\n     *\n     * @param value\n     * @returns {Query}\n     */\n    limit(value) {\n        return this.set(null, \"limit\", `${value}`);\n    }\n\n    /**\n     *\n     * @param value\n     * @returns {Query}\n     */\n    skip(value) {\n        return this.set(null, \"skip\", `${value}`);\n    }\n\n    /**\n     *\n     * @param col\n     * @param value\n     * @returns {Query}\n     */\n    arrayKey(col,value) {\n        return this.set(null, col, `${value}`);\n    }\n\n    ///\n    // Static Methods\n    //\n\n    /**\n     *\n     * @param queries\n     * @returns {Array}\n     */\n    static or(...queries) {\n        return map(flatten(queries), (v, k) => {\n            if (v.query !== null) {\n                return v.query().__q || v;\n            }\n            return null;\n        });\n    }\n\n    /**\n     * Implementation of Parse _quote to create RegExp from string value\n     * @param string\n     * @returns {string}\n     * @private\n     */\n    static _quote(string) {\n        return `\\\\Q${s}\\\\E`;\n    };\n};\n",
@@ -2894,7 +2851,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 148,
+    "__docId__": 146,
     "kind": "variable",
     "name": "__q",
     "memberof": "src/query.js",
@@ -2915,7 +2872,7 @@
     "ignore": true
   },
   {
-    "__docId__": 149,
+    "__docId__": 147,
     "kind": "variable",
     "name": "__meta",
     "memberof": "src/query.js",
@@ -2936,7 +2893,7 @@
     "ignore": true
   },
   {
-    "__docId__": 150,
+    "__docId__": 148,
     "kind": "class",
     "name": "query",
     "memberof": "src/query.js",
@@ -2952,7 +2909,7 @@
     "interface": false
   },
   {
-    "__docId__": 151,
+    "__docId__": 149,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/query.js~query",
@@ -2966,7 +2923,7 @@
     "undocument": true
   },
   {
-    "__docId__": 152,
+    "__docId__": 150,
     "kind": "member",
     "name": "or",
     "memberof": "src/query.js~query",
@@ -2983,7 +2940,7 @@
     }
   },
   {
-    "__docId__": 153,
+    "__docId__": 151,
     "kind": "member",
     "name": "in",
     "memberof": "src/query.js~query",
@@ -3000,7 +2957,7 @@
     }
   },
   {
-    "__docId__": 154,
+    "__docId__": 152,
     "kind": "method",
     "name": "clear",
     "memberof": "src/query.js~query",
@@ -3015,7 +2972,7 @@
     "return": null
   },
   {
-    "__docId__": 155,
+    "__docId__": 153,
     "kind": "method",
     "name": "find",
     "memberof": "src/query.js~query",
@@ -3054,7 +3011,7 @@
     }
   },
   {
-    "__docId__": 156,
+    "__docId__": 154,
     "kind": "method",
     "name": "first",
     "memberof": "src/query.js~query",
@@ -3093,7 +3050,7 @@
     }
   },
   {
-    "__docId__": 157,
+    "__docId__": 155,
     "kind": "method",
     "name": "set",
     "memberof": "src/query.js~query",
@@ -3152,7 +3109,7 @@
     }
   },
   {
-    "__docId__": 158,
+    "__docId__": 156,
     "kind": "method",
     "name": "getParams",
     "memberof": "src/query.js~query",
@@ -3180,7 +3137,7 @@
     "params": []
   },
   {
-    "__docId__": 159,
+    "__docId__": 157,
     "kind": "method",
     "name": "toJSON",
     "memberof": "src/query.js~query",
@@ -3208,7 +3165,7 @@
     "params": []
   },
   {
-    "__docId__": 160,
+    "__docId__": 158,
     "kind": "method",
     "name": "toString",
     "memberof": "src/query.js~query",
@@ -3236,7 +3193,7 @@
     "params": []
   },
   {
-    "__docId__": 161,
+    "__docId__": 159,
     "kind": "method",
     "name": "equalTo",
     "memberof": "src/query.js~query",
@@ -3285,7 +3242,7 @@
     }
   },
   {
-    "__docId__": 162,
+    "__docId__": 160,
     "kind": "method",
     "name": "notEqualTo",
     "memberof": "src/query.js~query",
@@ -3334,7 +3291,7 @@
     }
   },
   {
-    "__docId__": 163,
+    "__docId__": 161,
     "kind": "method",
     "name": "dontSelect",
     "memberof": "src/query.js~query",
@@ -3373,7 +3330,7 @@
     }
   },
   {
-    "__docId__": 164,
+    "__docId__": 162,
     "kind": "method",
     "name": "exists",
     "memberof": "src/query.js~query",
@@ -3412,7 +3369,7 @@
     }
   },
   {
-    "__docId__": 165,
+    "__docId__": 163,
     "kind": "method",
     "name": "doesNotExist",
     "memberof": "src/query.js~query",
@@ -3451,7 +3408,7 @@
     }
   },
   {
-    "__docId__": 166,
+    "__docId__": 164,
     "kind": "method",
     "name": "greaterThan",
     "memberof": "src/query.js~query",
@@ -3500,7 +3457,7 @@
     }
   },
   {
-    "__docId__": 167,
+    "__docId__": 165,
     "kind": "method",
     "name": "greaterThanOrEqualTo",
     "memberof": "src/query.js~query",
@@ -3549,7 +3506,7 @@
     }
   },
   {
-    "__docId__": 168,
+    "__docId__": 166,
     "kind": "method",
     "name": "lessThan",
     "memberof": "src/query.js~query",
@@ -3598,7 +3555,7 @@
     }
   },
   {
-    "__docId__": 169,
+    "__docId__": 167,
     "kind": "method",
     "name": "lessThanOrEqualTo",
     "memberof": "src/query.js~query",
@@ -3647,7 +3604,7 @@
     }
   },
   {
-    "__docId__": 170,
+    "__docId__": 168,
     "kind": "method",
     "name": "contains",
     "memberof": "src/query.js~query",
@@ -3696,7 +3653,7 @@
     }
   },
   {
-    "__docId__": 171,
+    "__docId__": 169,
     "kind": "method",
     "name": "containsAll",
     "memberof": "src/query.js~query",
@@ -3745,7 +3702,7 @@
     }
   },
   {
-    "__docId__": 172,
+    "__docId__": 170,
     "kind": "method",
     "name": "containedIn",
     "memberof": "src/query.js~query",
@@ -3794,7 +3751,7 @@
     }
   },
   {
-    "__docId__": 173,
+    "__docId__": 171,
     "kind": "method",
     "name": "notContainedIn",
     "memberof": "src/query.js~query",
@@ -3843,7 +3800,7 @@
     }
   },
   {
-    "__docId__": 174,
+    "__docId__": 172,
     "kind": "method",
     "name": "select",
     "memberof": "src/query.js~query",
@@ -3892,7 +3849,7 @@
     }
   },
   {
-    "__docId__": 175,
+    "__docId__": 173,
     "kind": "method",
     "name": "inQuery",
     "memberof": "src/query.js~query",
@@ -3941,7 +3898,7 @@
     }
   },
   {
-    "__docId__": 176,
+    "__docId__": 174,
     "kind": "method",
     "name": "notInQuery",
     "memberof": "src/query.js~query",
@@ -3990,7 +3947,7 @@
     }
   },
   {
-    "__docId__": 177,
+    "__docId__": 175,
     "kind": "method",
     "name": "_or",
     "memberof": "src/query.js~query",
@@ -4029,7 +3986,7 @@
     }
   },
   {
-    "__docId__": 178,
+    "__docId__": 176,
     "kind": "method",
     "name": "relatedTo",
     "memberof": "src/query.js~query",
@@ -4078,7 +4035,7 @@
     }
   },
   {
-    "__docId__": 179,
+    "__docId__": 177,
     "kind": "method",
     "name": "include",
     "memberof": "src/query.js~query",
@@ -4117,7 +4074,7 @@
     }
   },
   {
-    "__docId__": 180,
+    "__docId__": 178,
     "kind": "method",
     "name": "keys",
     "memberof": "src/query.js~query",
@@ -4156,7 +4113,7 @@
     }
   },
   {
-    "__docId__": 181,
+    "__docId__": 179,
     "kind": "method",
     "name": "count",
     "memberof": "src/query.js~query",
@@ -4195,7 +4152,7 @@
     }
   },
   {
-    "__docId__": 182,
+    "__docId__": 180,
     "kind": "method",
     "name": "order",
     "memberof": "src/query.js~query",
@@ -4234,7 +4191,7 @@
     }
   },
   {
-    "__docId__": 183,
+    "__docId__": 181,
     "kind": "method",
     "name": "limit",
     "memberof": "src/query.js~query",
@@ -4273,7 +4230,7 @@
     }
   },
   {
-    "__docId__": 184,
+    "__docId__": 182,
     "kind": "method",
     "name": "skip",
     "memberof": "src/query.js~query",
@@ -4312,7 +4269,7 @@
     }
   },
   {
-    "__docId__": 185,
+    "__docId__": 183,
     "kind": "method",
     "name": "arrayKey",
     "memberof": "src/query.js~query",
@@ -4361,7 +4318,7 @@
     }
   },
   {
-    "__docId__": 186,
+    "__docId__": 184,
     "kind": "method",
     "name": "or",
     "memberof": "src/query.js~query",
@@ -4400,7 +4357,7 @@
     }
   },
   {
-    "__docId__": 187,
+    "__docId__": 185,
     "kind": "method",
     "name": "_quote",
     "memberof": "src/query.js~query",

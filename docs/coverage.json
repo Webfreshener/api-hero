@@ -1,15 +1,8 @@
 {
-  "coverage": "65.35%",
-  "expectCount": 127,
+  "coverage": "65.87%",
+  "expectCount": 126,
   "actualCount": 83,
   "files": {
-    "src/_extends.js": {
-      "expectCount": 1,
-      "actualCount": 0,
-      "undocumentLines": [
-        3
-      ]
-    },
     "src/_references.js": {
       "expectCount": 3,
       "actualCount": 0,

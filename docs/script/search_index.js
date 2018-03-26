@@ -12,12 +12,6 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "jisty/src/_extends.js~_extends",
-    "function/index.html#static-function-_extends",
-    "<span>_extends</span> <span class=\"search-result-import-path\">jisty/src/_extends.js</span>",
-    "function"
-  ],
-  [
     "jisty/src/_references.js~_namespaces",
     "variable/index.html#static-variable-_namespaces",
     "<span>_namespaces</span> <span class=\"search-result-import-path\">jisty/src/_references.js</span>",
@@ -342,12 +336,6 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
-    "src/_extends.js",
-    "file/src/_extends.js.html",
-    "src/_extends.js",
-    "file"
-  ],
-  [
     "src/_references.js",
     "file/src/_references.js.html",
     "src/_references.js",
@@ -517,13 +505,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/model.js~model#attrs",
-    "class/src/model.js~model.html#instance-get-attrs",
+    "class/src/model.js~model.html#instance-set-attrs",
     "src/model.js~model#attrs",
     "member"
   ],
   [
     "src/model.js~model#attrs",
-    "class/src/model.js~model.html#instance-set-attrs",
+    "class/src/model.js~model.html#instance-get-attrs",
     "src/model.js~model#attrs",
     "member"
   ],
@@ -535,13 +523,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/model.js~model#data",
-    "class/src/model.js~model.html#instance-get-data",
+    "class/src/model.js~model.html#instance-set-data",
     "src/model.js~model#data",
     "member"
   ],
   [
     "src/model.js~model#data",
-    "class/src/model.js~model.html#instance-set-data",
+    "class/src/model.js~model.html#instance-get-data",
     "src/model.js~model#data",
     "member"
   ],
