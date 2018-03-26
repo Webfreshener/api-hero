@@ -1,27 +1,106 @@
 import Model from "./model";
 import {JSD} from "jsd";
-
-const _schemas = new WeakMap();
+import Query from "./query";
+import foreach from "lodash.foreach";
+import map from "lodash.map";
+import uniqueid from "lodash.uniqueid";
+import {_cids} from "./_references";
 const _models = new WeakMap();
 const _queries = new WeakMap();
 
+/**
+ *
+ */
 class Collection {
-    constructor(models, opts = {}) {
-        _models.set(this, new JSD([{
-            type: "Object",
-            elements: opts.properties || {
-                "*": {
-                    type: "*"
-                }
-            }
-        }]));
-        _queries.set(this, {});
-        // lets subclasses construct before sealing
-        setTimeout((() => Object.seal(this)), 0);
+    constructor(schema) {
+        const _self = this;
+        const _q = new Query();
+
+        // define read-only $collection property on Query
+        Object.defineProperty(_q, "$collection", {
+            get: () => _self,
+        });
+
+        // stores Query Object to Weakmap
+        _queries.set(this, _q);
+
+        // defines Query property on this Collection
+        Object.defineProperty(this, "query", {
+            get: () => _queries.get(_self),
+        });
+
+        // defines schema getter on Collection
+        Object.defineProperty(this, "$schema", {
+            get: () => schema,
+        });
+
+        // creates JSD and subscribes to events on root
+        try {
+            const _jsd = new JSD([{
+                type: "Object",
+                elements: schema.properties
+            }]);
+            _jsd.document.subscribe({
+                next: (d) => {
+                    foreach(d.models, (m) => {
+                        const _model = new this.modelClass(m);
+                        _cids.get(this)[_model.$cid] = m;
+                        Object.defineProperty(m.$ref, "$model", {
+                            value: _model,
+                            enumerable: false,
+                            writable: false,
+                        });
+                    });
+                },
+                error: (e) => {
+                },
+            });
+
+            // stores JSD ref to WeakMap
+            _models.set(this, _jsd);
+        } catch (e) {
+            console.error(`${this.$classname}: invalid schema: ${e}`);
+            return false;
+        }
+
+        _cids.set(this, {});
+        // set timeout to allow subclasses to construct before sealing
+        // setTimeout((() => Object.seal(this)), 0);
     }
 
+    /**
+     *
+     * @returns {*}
+     */
     get models() {
-        return _models.get(this).document.model;
+        return map(_models.get(this).document.model, (m) => m.$model);
+    }
+
+    /**
+     *
+     * @param models
+     * @returns {Collection}
+     */
+    set models(data) {
+        const _derive = (m) => m instanceof Model ? m.data : m;
+        const _m = Array.isArray(data) ? map(data, _derive) : [_derive(data)];
+        _models.get(this).document.model = _m;
+        return this;
+    }
+
+    // Get an iterator of all models in this collection.
+    values() {
+        return new CollectionIterator(this.models, ITERATOR_VALUES);
+    }
+
+    // Get an iterator of all model IDs in this collection.
+    keys() {
+        return new CollectionIterator(this.models, ITERATOR_KEYS);
+    }
+
+    // Get an iterator of all [ID, model] tuples in this collection.
+    entries() {
+        return new CollectionIterator(this.models, ITERATOR_KEYSVALUES);
     }
 
     /**
@@ -29,6 +108,10 @@ class Collection {
      * @returns {*}
      */
     count() {
+        return this.models.length;
+    }
+
+    get length() {
         return this.models.length;
     }
 
@@ -47,104 +130,51 @@ class Collection {
         return encodeURI(q);
     }
 
+    reset() {
+        this.models = [];
+    }
+
+    fetch() {
+
+    }
 
     /**
-     *
-     * @param obj
-     * @param prefix
+     * Adds model to collection and saves to remote collection
+     * @param data
      * @returns {*}
      */
-    schemaAdd(obj, prefix) {
-        return this.__schema.add(obj, prefix);
+    create(data) {
+        return new this._modelClass(data);
+    }
+
+    /**
+     * Adds Object to Model without updating remote collection
+     * @param data
+     * @returns {Collection}
+     */
+    add(data) {
+        this.models.document.addItem(data);
+        return this;
     }
 
     /**
      *
-     * @param key
-     * @returns {*}
+     * @returns {Class}
      */
-    schemaGet(key) {
-        return this.__schema.get(key);
-    }
-
-    /**
-     *
-     * @param key
-     * @param value
-     * @param _tags
-     * @returns {*}
-     */
-    schemaSet(key, value, _tags) {
-        return this.__schema.set(key, value, _tags);
-    }
-
-    /**
-     *
-     * @param fields
-     * @param opts
-     * @returns {*}
-     */
-    schemaIndex(fields, opts) {
-        return this.__schema(fields, opts);
-    }
-
-    /**
-     *
-     * @param name
-     * @param fn
-     */
-    schemaMethod(name, fn) {
-        return this.__schema.method(name, fn);
-    }
-
-    /**
-     *
-     * @param name
-     * @param fn
-     * @returns {*|{init, get, set}}
-     */
-    schemaStatic(name, fn) {
-        return this.__schema.static(name, fn);
-    }
-
-    /**
-     *
-     * @param name
-     * @param fn
-     * @returns {*}
-     */
-    schemaVirtual(name, fn) {
-        return this.__schema.virtuals(name, fn);
-    }
-
-    /**
-     *
-     * @returns {*}
-     */
-    schemaReserved() {
-        return $scope.Schema.reserved();
-    }
-
-    /**
-     * Applies `Query` to collection and fetches result
-     * ```
-     * query : (query, options={})=> this.fetch(assign(options, where:query))
-     * ```
-     * @returns {$scope.Query|*}
-     */
-    query() {
-        if (_queries.get(this) === null) {
-            _queries.set(this, new Query(this.className));
-        }
-        return _queries.get(this);
-    }
-
-    /**
-     *
-     * @returns {*}
-     */
-    findAll() {
-        return this.query().limit();
+    get modelClass() {
+        const _self = this;
+        return class extends Model {
+            constructor(data = null) {
+                super(data, _self);
+                const _cid = uniqueid(_self.$className);
+                console.log(`_self.$className: ${_self.$className}`);
+                // defined getter for private cid attribute
+                Object.defineProperty(this, "$cid", {
+                    get: () => _cid,
+                    enumerable: false,
+                });
+            }
+        };
     }
 
     /**
@@ -163,393 +193,38 @@ class Collection {
         return batch.exec(options);
     }
 
-    // Query Methods
-
     /**
-     *
-     * @param queries
-     * @returns {Collection}
+     * should be oberservable
      */
-    or(...queries) {
-        this.query().or($scope.Query.or(queries));
-        return this;
+    subscribe() {
+        //TODO: implement this
     }
-
-    /**
-     *
-     * @param col
-     * @param value
-     * @returns {Collection}
-     */
-    equalTo(col, value) {
-        (!this.__query ? this.query() : this.__query).equalTo(col, value);
-        return this;
-    }
-
-    /**
-     *
-     * @param col
-     * @param value
-     * @returns {Collection}
-     */
-    notEqualTo(col, value) {
-        (!this.__query ? this.query() : this.__query).notEqualTo(col, value);
-        return this;
-    }
-
-    /**
-     *
-     * @param col
-     * @param value
-     * @returns {Collection}
-     */
-    greaterThan(col, value) {
-        (!this.__query ? this.query() : this.__query).greaterThan(col, value);
-        return this;
-    }
-
-    /**
-     *
-     * @param col
-     * @param value
-     * @returns {Collection}
-     */
-    greaterThanOrEqualTo(col, value) {
-        (!this.__query ? this.query() : this.__query).greaterThanOrEqualTo(col, value);
-        return this;
-    }
-
-    /**
-     *
-     * @param col
-     * @param value
-     * @returns {Collection}
-     */
-    lessThan(col, value) {
-        (!this.__query ? this.query() : this.__query).lessThan(col, value);
-        return this;
-    }
-
-    /**
-     *
-     * @param col
-     * @param value
-     * @returns {Collection}
-     */
-    lessThanOrEqualTo(col, value) {
-        (!this.__query ? this.query() : this.__query).lessThanOrEqualTo(col, value);
-        return this;
-    }
-
-    /**
-     *
-     * @param col
-     * @param value
-     * @returns {Collection}
-     */
-    contains(col, value) {
-        (!this.__query ? this.query() : this.__query).contains(col, value);
-        return this;
-    }
-
-    /**
-     * Sets condition that column value must be an array containing all items in given array
-     * @param col
-     * @param array
-     * @returns {Collection}
-     */
-    containsAll(col, array) {
-        (!this.__query ? this.query() : this.__query).containsAll(col, array);
-        return this;
-    }
-
-    /**
-     * Sets condition that column value must be an array containing
-     * any of the items in given array
-     * @param col
-     * @param array
-     * @returns {Collection}
-     */
-    containedIn(col, array) {
-        (!this.__query ? this.query() : this.__query).containedIn(col, array);
-        return this;
-    }
-
-    /**
-     * Sets condition that column value must be an array containing
-     * none of the items in given array
-     * @param col
-     * @param array
-     * @returns {Collection}
-     */
-    notContainedIn(col, array) {
-        (!this.__query ? this.query() : this.__query).notContainedIn(col, array);
-        return this;
-    }
-
-    /**
-     *
-     * @param col
-     * @param query
-     * @returns {Collection}
-     */
-    inQuery(col, query) {
-        (!this.__query ? this.query() : this.__query).inQuery(col, query);
-        return this;
-    }
-
-    /**
-     *
-     * @param col
-     * @param query
-     * @returns {Collection}
-     */
-    notInQuery(col, query) {
-        (!this.__query ? this.query() : this.__query).notInQuery(col, query);
-        return this;
-    }
-
-    /**
-     *
-     * @param value
-     * @returns {*}
-     */
-    include(value) {
-        if (!(value instanceof String)) {
-            return (() => {
-                throw new Error("limit requires String value was {typeof value}");
-            })();
-        }
-        return this.__params.include = `${value}`;
-    }
-
-    /**
-     *
-     * @param value
-     * @returns {*}
-     */
-    keys(value) {
-        if (!(value instanceof Array)) {
-            return (() => {
-                throw new Error("keys requires Array value was {typeof value}");
-            })();
-        }
-        return this.__params.keys = `${value}`;
-    }
-
-    /**
-     *
-     * @param value
-     * @returns {*}
-     */
-    count(value) {
-        if (!(value instanceof Boolean)) {
-            return (() => {
-                throw new Error("count requires Boolean value was {typeof value}");
-            })();
-        }
-        return this.__params.count = value || true;
-    }
-
-    /**
-     *
-     * @param value
-     * @returns {string}
-     */
-    order(value) {
-        return this.__params.order = `${value}`;
-    }
-
-    /**
-     *
-     * @param value
-     * @returns {*}
-     */
-    limit(value) {
-        if (!(value instanceof Number)) {
-            return (() => {
-                throw new Error("limit requires Number value was {typeof value}");
-            })();
-        }
-        return this.__params.limit = value;
-    }
-
-    /**
-     *
-     * @param value
-     * @returns {*}
-     */
-    skip(value) {
-        if (!(value instanceof Number)) {
-            return (() => {
-                throw new Error("skip requires Number value was {typeof value}");
-            })();
-        }
-        return this.__params.skip = value;
-    }
-
-    //# Static (ActiveRecord Style) Query Methods
-//### equalTo:(col, value)
-    static equalTo(col, value) {
-        return (new (this)).equalTo(col, value);
-    };
-
-//### equalTo:(col, value)
-    static notEqualTo(col, value) {
-        return (new (this)).notEqualTo(col, value);
-    };
-
-//### greaterThan:(col, value)
-    static greaterThan(col, value) {
-        return (new (this)).greaterThan(col, value);
-    };
-
-//### greaterThanOrEqualTo:(col, value)
-    static greaterThanOrEqualTo(col, value) {
-        return (new (this)).greaterThanOrEqualTo(col, value);
-    };
-
-//### greaterThan:(col, value)
-    static lessThan(col, value) {
-        return (new (this)).lessThan(col, value);
-    };
-
-//### greaterThanOrEqualTo:(col, value)
-    static lessThanOrEqualTo(col, value) {
-        return (new (this)).lessThanOrEqualTo(col, value);
-    };
-
-//### contains:(col, value)
-    static contains(col, value) {
-        return (new (this)).contains(col, value);
-    };
-
-//### contains:(col, array)
-    static containsAll(col, array) {
-        return (new (this)).containsAll(col, array);
-    };
-
-//### containedIn:(col, array)
-    static containedIn(col, array) {
-        return (new (this)).containedIn(col, array);
-    };
-
-    /**
-     *
-     * @param col
-     * @param array
-     * @returns {Collection}
-     */
-    static notContainedIn(col, array) {
-        return (new (this)).notContainedIn(col, array);
-    };
-
-    /**
-     *
-     * @param col
-     * @param query
-     * @returns {Collection}
-     */
-    static inQuery(col, query) {
-        return (new (this)).inQuery(col, query);
-    };
-
-    /**
-     *
-     * @param col
-     * @param query
-     * @returns {Collection}
-     */
-    static notInQuery(col, query) {
-        return (new (this)).notInQuery(col, query);
-    };
-
-    /**
-     *
-     * @param queries
-     * @returns {void|*}
-     */
-    static orQuery(...queries) {
-        return (new (this)).orQuery(queries);
-    };
-
-    /**
-     *
-     * @param value
-     * @returns {*}
-     */
-    static include(value) {
-        return (new (this)).include = value;
-    };
-
-    /**
-     *
-     * @param array
-     * @returns {*}
-     */
-    static keys(array) {
-        return (new (this)).keys = value;
-    };
-
-    /**
-     *
-     * @param bool
-     * @returns {*}
-     */
-    static count(bool) {
-        return (new (this)).count = bool;
-    };
-
-    /**
-     *
-     * @param value
-     * @returns {*}
-     */
-    static order(value) {
-        return (new (this)).order = value;
-    };
-
-    /**
-     *
-     * @param value
-     * @returns {*}
-     */
-    static limit(value) {
-        return (new (this)).limit = value;
-    };
-
-    /**
-     *
-     * @param value
-     * @returns {*}
-     */
-    static skip(value) {
-        return (new (this)).skip = value;
-    };
 }
 
-
 let $$iterator = typeof Symbol === "function" && Symbol.iterator;
+
 if ($$iterator) {
     Collection.prototype[$$iterator] = Collection.prototype.values;
 }
 
-/**
- * CollectionIterator
- * implementation of BackBoneJS CollectionIterator
- * @param collection
- * @param kind
- * @constructor
- */
-const CollectionIterator = function (collection, kind) {
-    this._collection = collection;
-    this._kind = kind;
-    this._index = 0;
+// /**
+//  * CollectionIterator
+//  * implementation of BackBoneJS CollectionIterator
+//  * @param collection
+//  * @param kind
+//  * @constructor
+//  */
+class CollectionIterator {
+    constructor(collection, kind) {
+        this._collection = collection;
+        this._kind = kind;
+        this._index = 0;
+    }
 };
 
-let ITERATOR_VALUES = 1;
-let ITERATOR_KEYS = 2;
-let ITERATOR_KEYSVALUES = 3;
+const ITERATOR_VALUES = 1;
+const ITERATOR_KEYS = 2;
+const ITERATOR_KEYSVALUES = 3;
 
 // All Iterators should themselves be Iterable.
 if ($$iterator) {
@@ -560,7 +235,6 @@ if ($$iterator) {
 
 CollectionIterator.prototype.next = function () {
     if (this._collection) {
-
         // Only continue iterating if the iterated collection is long enough.
         if (this._index < this._collection.length) {
             let model = this._collection.at(this._index);
@@ -580,7 +254,6 @@ CollectionIterator.prototype.next = function () {
             }
             return {value: value, done: false};
         }
-
         // Once exhausted, remove the reference to the collection so future
         // calls to the next method always return done.
         this._collection = void 0;
@@ -588,6 +261,5 @@ CollectionIterator.prototype.next = function () {
 
     return {value: void 0, done: true};
 };
-
 
 export default Collection;

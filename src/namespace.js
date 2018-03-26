@@ -30,17 +30,13 @@ class NS {
         Object.keys(_schema.document.model.collections).forEach((col) => {
             o[col] = class extends Collection {
                 constructor() {
-                    super([], _schema.document.model.collections[col].properties);
+                    super(_schema.document.model.collections[col]);
                     Object.defineProperty(this, "$className", {
                         get: () => col,
                         enumerable: false,
                     });
                     Object.defineProperty(this, "$scope", {
                         get: () => _self,
-                        enumerable: false,
-                    });
-                    Object.defineProperty(this, "$schema", {
-                        get: () => _schema.document.model.collections[col],
                         enumerable: false,
                     });
                 }
@@ -131,8 +127,6 @@ class NS {
         }
         return this;
     }
-
-
 };
 
 class Utils {

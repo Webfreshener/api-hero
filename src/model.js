@@ -1,41 +1,120 @@
 import {JSD} from "jsd";
+import MetaData from "./metadata";
+import {_cids} from "./_references";
 
 const _modelRefs = new WeakMap();
 
 export default class {
-    constructor(attrs, opts = {}) {
-        _modelRefs.set(this, new JSD(this.$schema));
+    constructor(data, collection) {
+        // defines getter for owner Collection reference
+        Object.defineProperty(this, "$collection", {
+            get: () => collection,
+            enumerable: false,
+        });
+        const _mdRef = new MetaData(this);
+        Object.defineProperty(this, "$metadata", {
+            get: () => _mdRef,
+            enumerable: false,
+        });
+    }
+
+    //
+    // Accessor Methods
+    //
+
+    /**
+     * returns data from JSD Document
+     */
+    get data() {
+        console.log(_cids.get(this.$collection));
+        return _cids.get(this.$collection)[this.$cid];
     }
 
     /**
-     *
+     * sets data to JSD Document
+     * @param d
      */
-    get() {
-        return _modelRefs.get(this).document.model;
-    }
-
-    /**
-     *
-     * @param data
-     */
-    set(data) {
-        _modelRefs.get(this).document.model = data;
+    set data(d) {
+        this.data.$ref.model = d;
         return this;
     }
+
+    /**
+     * alias for data getter
+     * @returns {*}
+     */
+    get attrs() {
+        return this.data;
+    }
+
+    /**
+     * alias for data setter
+     * @param d
+     * @returns {*}
+     */
+    set attrs(d) {
+        return this.data = d;
+    }
+
+    /**
+     * retrieves data at key
+     * @param key
+     */
+    get(key) {
+        return this.data[key];
+    }
+
+    /**
+     * sets data upon key
+     * @param data
+     */
+    set(key, val) {
+        this.data.$ref.set(key, val);
+        return this;
+    }
+
+    //
+    // MetaData Accessors
+    //
+
+    /**
+     * returns creation time of Model in Application
+     * @returns {*}
+     */
+    get modelCreatedOn() {
+        return this.$metadata.createdOn;
+    }
+
+    /**
+     * returns last updated time of Model in Application
+     * @returns {null|*}
+     */
+    get modelUpdatedOn() {
+        return this.$metadata.updatedOn;
+    }
+
+
+    //
+    // RXJS
+    //
 
     /**
      *
      * @param handler
      */
     subscribe(handler) {
-        return _modelRefs.get(this).document.subscribe(handler);
+        // return this.data.$ref.subscribe(handler);
     }
+
+    //
+    // Validation Methods
+    //
 
     /**
      * @returns {boolean|string}
      */
     validate() {
-        return _modelRefs.get(this).document.validate();
+        return this.data.$ref.validate();
     }
 
     /**
@@ -43,7 +122,7 @@ export default class {
      * @returns {boolean}
      */
     get isValid() {
-        return _modelRefs.get(this).document.isValid();
+        return this.data.$ref.isValid();
     }
 
     /**
@@ -62,10 +141,69 @@ export default class {
         return "";
     }
 
+    //
+    // REST Life-Cycle
+    //
+
+    /**
+     *
+     */
+    fetch() {
+
+    }
+
+    /**
+     *
+     */
+    save() {
+
+    }
+
     /**
      *
      */
     sync() {
 
+    }
+
+    /**
+     *
+     */
+    destroy() {
+
+    }
+
+    /**
+     *
+     */
+    reset() {
+
+    }
+
+    //
+    // translation
+    //
+
+    /**
+     *
+     * @returns {string}
+     */
+    valueOf() {
+        return this.data.$ref.valueOf();
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
+    toString() {
+        return this.data.$ref.toString();
+    }
+
+    /**
+     * @returns {JSON}
+     */
+    toJSON() {
+        return this.data.$ref.toJSON();
     }
 }
