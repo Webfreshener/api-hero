@@ -1,6 +1,8 @@
 import Namespace from "./namespace";
+import Model from "./model";
 import {_nsSchema, _collectionSchema} from "../fixtures/_schemas";
 import deepEqual from "deep-equal";
+
 describe("Collection Class Tests", () => {
     const ns = Namespace(_nsSchema);
     const _col = ns.TestCol1;
@@ -24,6 +26,12 @@ describe("Collection Class Tests", () => {
             },
         ];
         expect(_col.length).toBe(3);
+    });
+
+    it("should return Models attached to JSD Docs", () => {
+        // console.log(_col.keys().next());
+        expect(_col.models[0].$model instanceof Model).toBe(true);
+        expect(_col.models[0].$model.save).toBeDefined();
     });
 
     it("should reset it's contents", () => {

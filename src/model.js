@@ -5,7 +5,7 @@ import {_cids} from "./_references";
 const _modelRefs = new WeakMap();
 
 export default class {
-    constructor(data, collection) {
+    constructor(collection) {
         // defines getter for owner Collection reference
         Object.defineProperty(this, "$collection", {
             get: () => collection,
@@ -26,7 +26,6 @@ export default class {
      * returns data from JSD Document
      */
     get data() {
-        console.log(_cids.get(this.$collection));
         return _cids.get(this.$collection)[this.$cid];
     }
 

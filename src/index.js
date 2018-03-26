@@ -19,18 +19,8 @@ const __init = (() => {
      * @private
      */
     const _appLayer = (ns, config) => {
-        let type;
-        if (ns == null) {
-            throw new ReferenceError("Required argument 'ns' was not defined");
-        }
-
-        if ((type = typeof ns) !== "string") {
-            throw new TypeError(`Namespace required to be type 'String'. Type was '<${type}>'`);
-        }
-
         const nsItm = createNS(assign(__defaults__, config));
-        _ns[ns] = nsItm;
-        return nsItm;
+        return (_ns[ns] = nsItm);
     };
     /**
      *

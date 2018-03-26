@@ -5,6 +5,7 @@ import foreach from "lodash.foreach";
 import map from "lodash.map";
 import uniqueid from "lodash.uniqueid";
 import {_cids} from "./_references";
+
 const _models = new WeakMap();
 const _queries = new WeakMap();
 
@@ -65,7 +66,7 @@ class Collection {
 
         _cids.set(this, {});
         // set timeout to allow subclasses to construct before sealing
-        // setTimeout((() => Object.seal(this)), 0);
+        setTimeout((() => Object.seal(this)), 0);
     }
 
     /**
@@ -73,7 +74,10 @@ class Collection {
      * @returns {*}
      */
     get models() {
-        return map(_models.get(this).document.model, (m) => m.$model);
+        return _models.get(this).document.model;
+        // return map(_models.get(this).document.model, (m) => {
+        //     return m.$model;
+        // });
     }
 
     /**
@@ -82,25 +86,36 @@ class Collection {
      * @returns {Collection}
      */
     set models(data) {
-        const _derive = (m) => m instanceof Model ? m.data : m;
+        const _create = (m) => {
+            const _mC = new this.modelClass;
+            _cids.get(this)[_mC.$cid] = m;
+            Object.defineProperty(m, "$model", {
+                get: () => _mC,
+                enumerable: false,
+            });
+        };
+        const _derive = (m) => {
+            return (m instanceof Model ? m.data : m);
+        };
         const _m = Array.isArray(data) ? map(data, _derive) : [_derive(data)];
         _models.get(this).document.model = _m;
+        foreach(_models.get(this).document.model, (m) => _create(m));
         return this;
     }
 
     // Get an iterator of all models in this collection.
     values() {
-        return new CollectionIterator(this.models, ITERATOR_VALUES);
+        return new CollectionIterator(this, ITERATOR_VALUES);
     }
 
     // Get an iterator of all model IDs in this collection.
     keys() {
-        return new CollectionIterator(this.models, ITERATOR_KEYS);
+        return new CollectionIterator(this, ITERATOR_KEYS);
     }
 
     // Get an iterator of all [ID, model] tuples in this collection.
     entries() {
-        return new CollectionIterator(this.models, ITERATOR_KEYSVALUES);
+        return new CollectionIterator(this, ITERATOR_KEYSVALUES);
     }
 
     /**
@@ -158,16 +173,30 @@ class Collection {
     }
 
     /**
+     * Get the model at the given index
+     * @param index
+     * @returns {*}
+     */
+    at(idx) {
+        if (idx < 0) idx += this.length;
+        return this.models[idx];
+    }
+
+    // Define how to uniquely identify models in the collection.
+    modelId(attrs) {
+        return attrs["name"];
+    }
+
+    /**
      *
      * @returns {Class}
      */
     get modelClass() {
         const _self = this;
         return class extends Model {
-            constructor(data = null) {
-                super(data, _self);
+            constructor() {
+                super(_self);
                 const _cid = uniqueid(_self.$className);
-                console.log(`_self.$className: ${_self.$className}`);
                 // defined getter for private cid attribute
                 Object.defineProperty(this, "$cid", {
                     get: () => _cid,
@@ -197,7 +226,7 @@ class Collection {
      * should be oberservable
      */
     subscribe() {
-        //TODO: implement this
+        //TODO: implement this or something to this effect
     }
 }
 
@@ -220,6 +249,35 @@ class CollectionIterator {
         this._kind = kind;
         this._index = 0;
     }
+
+    next() {
+        if (this._collection) {
+            // Only continue iterating if the iterated collection is long enough.
+            if (this._index < this._collection.length) {
+                let model = this._collection.at(this._index);
+                this._index++;
+
+                // Construct a value depending on what kind of values should be iterated.
+                let value;
+                if (this._kind === ITERATOR_VALUES) {
+                    value = model;
+                } else {
+                    let id = this._collection.modelId(model.$model.data);
+                    if (this._kind === ITERATOR_KEYS) {
+                        value = id;
+                    } else { // ITERATOR_KEYSVALUES
+                        value = [id, model];
+                    }
+                }
+                return {value: value, done: false};
+            }
+            // Once exhausted, remove the reference to the collection so future
+            // calls to the next method always return done.
+            this._collection = void 0;
+        }
+
+        return {value: void 0, done: true};
+    };
 };
 
 const ITERATOR_VALUES = 1;
@@ -232,34 +290,5 @@ if ($$iterator) {
         return this;
     };
 }
-
-CollectionIterator.prototype.next = function () {
-    if (this._collection) {
-        // Only continue iterating if the iterated collection is long enough.
-        if (this._index < this._collection.length) {
-            let model = this._collection.at(this._index);
-            this._index++;
-
-            // Construct a value depending on what kind of values should be iterated.
-            let value;
-            if (this._kind === ITERATOR_VALUES) {
-                value = model;
-            } else {
-                let id = this._collection.modelId(model.attributes);
-                if (this._kind === ITERATOR_KEYS) {
-                    value = id;
-                } else { // ITERATOR_KEYSVALUES
-                    value = [id, model];
-                }
-            }
-            return {value: value, done: false};
-        }
-        // Once exhausted, remove the reference to the collection so future
-        // calls to the next method always return done.
-        this._collection = void 0;
-    }
-
-    return {value: void 0, done: true};
-};
 
 export default Collection;
