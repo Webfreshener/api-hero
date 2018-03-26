@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/defaults.js | jisty</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="jisty"><meta property="twitter:description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/jisty"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/model.js~model.html">model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-_extends">_extends</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-inflections">inflections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsCollections">_nsCollections</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/defaults.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default {
+    // __COLLECTIONS__
+    // Placeholder for Schemas
+    collections: {},
+    options: {
+        ALLOWED: [
+            &quot;APP_ID&quot;, &quot;REST_KEY&quot;, &quot;HOST&quot;,
+            &quot;PORT&quot;, &quot;BASE_PATH&quot;, &quot;MAX_BATCH_SIZE&quot;,
+            &quot;DEFAULT_FETCH_LIMIT_OVERRIDE&quot;, &quot;UNDEFINED_CLASSNAME&quot;,
+        ],
+        // VERSION
+        // The current APIHero Version Number
+        VERSION: &quot;1.0.0&quot;,
+        // APP_ID
+        // The Parse API Application Identifier
+        APP_ID: null,
+        APP_ID_PARAM_NAME: &quot;APP_ID&quot;,
+        // REST_KEY
+        // The Parse API REST Access Key
+        REST_KEY: null,
+        REST_KEY_PARAM_NAME: &quot;REST_KEY&quot;,
+        // SESSION_TOKEN
+        // The User&apos;s Session Token if signed in
+        SESSION_TOKEN: &quot;null&quot;,
+        SESSION_KEY: &quot;AUTHORIZATION&quot;,
+        // SESSION_TOKEN
+        // The User&quot;s CSRF Authentication Token for anti-forgery
+        CSRF_TOKEN: &quot;null&quot;,
+        // API_VERSION
+        // The supported Parse API Version Number
+        API_VERSION: &quot;1&quot;,
+        // MAX_BATCH_SIZE
+        // The `APIHero.Batch `request object length
+        // Can be set to -1 to disable sub-batching
+        //
+        // **Note**: Changing this may cause `APIHero.Batch` requests to fail
+        MAX_BATCH_SIZE: 50,
+        // DEFAULT_FETCH_LIMIT_OVERRIDE
+        // Stores maximum number of records to retrieve in a `fetch` operation.
+        // **Note**: Parse limits fetch requests to 100 records and provides no pagination. To circumvent this, we override the Fetch Limit to attempt to pull all records set this to a lower or higher amount to suit your needs
+        // **See also**: REST API Queries
+        DEFAULT_FETCH_LIMIT_OVERRIDE: 200000,
+        // UNDEFINED_CLASSNAME
+        // Default ClassName to use for Models and Collections if none provided or detected
+        UNDEFINED_CLASSNAME: &quot;__UNDEFINED_CLASSNAME__&quot;,
+        // API_URI
+        // Base URI for the Parse API
+        API_URI: &quot;null&quot;,
+        CORS: true,
+        PROTOCOL: &quot;HTTP&quot;,
+        HOST: &quot;0.0.0.0&quot;,
+        PORT: 80,
+        BASE_PATH: &quot;/api&quot;,
+        CAPITALIZE_CLASSNAMES: false,
+        CRUD_METHODS: {
+            create: &quot;POST&quot;,
+            read: &quot;GET&quot;,
+            update: &quot;PUT&quot;,
+            destroy: &quot;DELETE&quot;
+        },
+        QUERY_PARAM: &quot;filter&quot;
+    }
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

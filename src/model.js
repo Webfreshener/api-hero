@@ -64,8 +64,9 @@ export default class {
     }
 
     /**
-     * sets data upon key
-     * @param data
+     * sets value upon key
+     * @param key
+     * @param val
      */
     set(key, val) {
         this.data.$ref.set(key, val);

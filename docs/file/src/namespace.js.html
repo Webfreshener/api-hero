@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/namespace.js | jisty</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="jisty"><meta property="twitter:description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/jisty"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/model.js~model.html">model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-_extends">_extends</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-inflections">inflections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsCollections">_nsCollections</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/namespace.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {_namespaces, _nsCollections} from &quot;./_references&quot;;
+import ns_schema from &quot;./ns_schema&quot;;
+import map from &quot;lodash.map&quot;;
+import pairs from &quot;lodash.pairs&quot;;
+import {JSD} from &quot;jsd&quot;;
+import Collection from &quot;./collection&quot;;
+/**
+ *
+ */
+class NS {
+    /**
+     *
+     * @param name
+     * @param config
+     */
+    constructor(config) {
+        const _schema = new JSD(ns_schema);
+        _schema.document.model = config;
+        _namespaces.set(this, _schema);
+        let _cols = {};
+        const _self = this;
+
+        Object.defineProperty(this, &quot;$utils&quot;, {
+            value: new Utils(this),
+            enumerable: false,
+            writable: false,
+        });
+
+        let o = {};
+        Object.keys(_schema.document.model.collections).forEach((col) =&gt; {
+            o[col] = class extends Collection {
+                constructor() {
+                    super(_schema.document.model.collections[col]);
+                    Object.defineProperty(this, &quot;$className&quot;, {
+                        get: () =&gt; col,
+                        enumerable: false,
+                    });
+                    Object.defineProperty(this, &quot;$scope&quot;, {
+                        get: () =&gt; _self,
+                        enumerable: false,
+                    });
+                }
+            };
+            this.addCollection(col, o[col]);
+        });
+
+        _nsCollections.set(this, _cols);
+    }
+
+    /**
+     *
+     */
+    get options() {
+        return _namespaces.get(this).document.model.options;
+    }
+
+    /**
+     *
+     * @param value
+     * @returns {NS}
+     */
+    set options(value) {
+        _namespaces.get(this).document.model.options = value;
+        return this;
+    }
+
+    /**
+     *
+     * @param key
+     */
+    getOption(key) {
+        return _namespaces.get(this).document.model.options[key];
+    }
+
+    /**
+     *
+     * @param key
+     * @param value
+     * @returns {NS}
+     */
+    setOption(key, value) {
+        _namespaces.get(this).document.model.options[key] = value;
+        return this;
+    }
+
+    /**
+     *
+     */
+    get collections() {
+        return _nsCollections.get(this);
+    }
+
+    listCollections() {
+        return Object.keys(_namespaces.get(this));
+    }
+
+    /**
+     *
+     * @param name
+     * @param col
+     * @returns {NS}
+     */
+    addCollection(name, col) {
+        if (!this.hasOwnProperty(name)) {
+            Object.defineProperty(this, name, {
+                get: () =&gt; {
+                    let _s = _namespaces.get(this).document;
+                    return new col(_s.model.collections[name]);
+                    },
+                enumerable: true,
+            });
+        }
+        return this;
+    }
+
+    /**
+     *
+     * @param name
+     * @returns {NS}
+     */
+    removeCollection(name) {
+        if (_namespaces.get(this).hasOwnProperty(name)) {
+            Object.defineProperty(_namespaces.get(this), name, {
+                get: () =&gt; null,
+                writable: false,
+            });
+        }
+        return this;
+    }
+};
+
+class Utils {
+    constructor($scope) {
+        Object.defineProperty(this, &quot;$scope&quot;, {
+            get: () =&gt; $scope,
+            enumerable: false,
+        });
+    }
+    get apiOptions() {
+        let o;
+        (o = {
+                contentType: &quot;application/json&quot;,
+                processData: false,
+                dataType: &quot;json&quot;,
+                data: null,
+                headers: {
+                    &quot;Content-Type&quot;: &quot;application/json&quot;,
+                    &quot;X-Application-Id&quot;: this.$scope.options.APP_ID || null,
+                    &quot;X-REST-API-Key&quot;: this.$scope.options.REST_KEY || null,
+                    &quot;X-CSRF-Token&quot;: this.$scope.options.CSRF_TOKEN || null,
+                    &quot;X-User-Email&quot;: this.$scope.options.USER_EMAIL || null,
+                },
+            }
+        );
+
+        if (this.$scope.options.SESSION_KEY) {
+            o.headers[this.$scope.options.SESSION_KEY] = this.$scope.options.SESSION_TOKEN;
+        }
+
+        return o;
+    }
+    /**
+     *
+     * @returns {string}
+     */
+    get apiUrl() {
+        const _pcl  = this.$scope.options.PROTOCOL.toLowerCase();
+        const _host = this.$scope.options.HOST;
+        const _port = this.$scope.options.PORT;
+        const _path = this.$scope.options.BASE_PATH.replace(/^\//, &quot;&quot;);
+        const _vers = this.$scope.options.API_VERSION;
+        return `${_pcl}://${_host}${_port !== 80 ? `:${_port}` : &quot;&quot;}/${_path}/${_vers}`;
+    }
+
+    /**
+     *
+     * @param route
+     * @returns {boolean}
+     */
+    validateRoute(route) {
+        const Rx = `^(${this.$scope.regEscape(this.getAPIUrl())}\/)+`;
+        // throws error if route does not pass validation
+        if (!route.match(new RegExp(Rx))) {
+            throw `Bad route: ${route}`;
+        }
+        // returns true if no error thrown
+        return true;
+    }
+
+    /**
+     * Implementation of Parse._parseDate used to parse iso8601 UTC formatted `datetime`
+     * @param iso8601
+     * @returns {*}
+     */
+    parseDate(iso8601) {
+        // returns null if `iso8601` argument fails `RegExp`
+        let t;
+        let Rx = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
+        if ((t = `${iso8601}`.match(Rx)) === null) {
+            return null;
+        }
+        t = t.map((i) =&gt;  i &amp;&amp; i.match(/^[\d]+$/) !== null ? parseInt(i, 10) : null )
+            .filter((i) =&gt; i !== null);
+        t[1] = t[1] - 1;
+        return new Date(Date.UTC.apply(this, t));
+    }
+
+    /**
+     * Returns passes object as Key/Value paired string
+     * @param obj
+     * @returns {string}
+     */
+    querify(obj) {
+        return (map(pairs(obj || {}), (v, k) =&gt; v.join(&quot;=&quot;))).join(&quot;&amp;&quot;);
+    }
+}
+
+export default (config) =&gt; {
+    return new NS(config);
+};</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

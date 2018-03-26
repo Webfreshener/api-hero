@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/ns_schema.js | jisty</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="jisty"><meta property="twitter:description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/jisty"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/model.js~model.html">model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-_extends">_extends</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-inflections">inflections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsCollections">_nsCollections</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/ns_schema.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default {
+    type: &quot;Object&quot;,
+    extensible: false,
+    elements: {
+        collections: {
+            type: &quot;Object&quot;,
+            required: true,
+            elements: {
+                &quot;*&quot;: {
+                    type: &quot;Object&quot;,
+                    elements: {
+                        name: {
+                            type: &quot;String&quot;,
+                            required: true,
+                            restrict: &quot;^[a-zA-Z0-9_]+$&quot;,
+                        },
+                        description: {
+                            type: &quot;String&quot;,
+                            required: false,
+                            default: &quot; &quot;,
+                            restrict: &quot;^[\\w\\s\\W]+$&quot;,
+                        },
+                        plural: {
+                            type: &quot;String&quot;,
+                            required: false,
+                            restrict: &quot;^[a-zA-Z0-9_]+$&quot;,
+                        },
+                        properties: {
+                            type: &quot;Object&quot;,
+                            required: true,
+                            extensible: false,
+                            elements: {
+                                &quot;*&quot;: {
+                                    type: &quot;Object&quot;,
+                                    elements: {
+                                        default: {
+                                            type: &quot;*&quot;,
+                                            required: false,
+                                        },
+                                        defaultFn: {
+                                            type: &quot;String&quot;,
+                                            required: false,
+                                            restrict: &quot;^(guid|uuid|uuidv4|now)+$&quot;,
+                                        },
+                                        description: {
+                                            type: &quot;String&quot;,
+                                            required: false,
+                                            restrict: &quot;^((?!\&quot;|\\b|\\f|\\n|\\r|\\t|\\u).)*$&quot;,
+                                        },
+                                        id: {
+                                            required: false,
+                                            polymorphic: [
+                                                {
+                                                    type: &quot;Boolean&quot;,
+                                                },
+                                                {
+                                                    type: &quot;Object&quot;,
+                                                    elements: {
+                                                        type: {
+                                                            type: &quot;String&quot;,
+                                                            required: true,
+                                                            restrict: &quot;^(String|Number)+$&quot;,
+                                                        },
+                                                        id: {
+                                                            type: &quot;Boolean&quot;,
+                                                            required: true,
+                                                        },
+                                                        generated: {
+                                                            type: &quot;Boolean&quot;,
+                                                            required: false,
+                                                        },
+                                                    },
+                                                },
+                                            ],
+                                        },
+                                        index: {
+                                            type: &quot;Boolean&quot;,
+                                            required: false,
+                                        },
+                                        type: {
+                                            type: &quot;String&quot;,
+                                            required: true,
+                                            restrict: &quot;^(any|Array|Boolean|Buffer|Date|GeoPoint|Number|Object|String)+$&quot;,
+                                        },
+                                        required: {
+                                            type: &quot;Boolean&quot;,
+                                            required: false,
+                                            default: false,
+                                        },
+                                        length: {
+                                            type: &quot;Number&quot;,
+                                            required: false,
+                                            default: null,
+                                        },
+                                        precision: {
+                                            type: &quot;Number&quot;,
+                                            required: false,
+                                            default: null,
+                                        },
+                                        scale: {
+                                            type: &quot;Number&quot;,
+                                            required: false,
+                                            default: null,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        options: {
+            type: &quot;Object&quot;,
+            required: true,
+            elements: {
+                ALLOWED: {
+                    type: &quot;Array&quot;,
+                    required: true,
+                    elements: [{
+                        type: &quot;String&quot;,
+                        required: false,
+                    }],
+                },
+                VERSION: {
+                    type: &quot;String&quot;,
+                    required: false,
+                    restrict: [&quot;\\\\bv?(?:0|[1-9]\\\\d*)\\\\.(?:0|[1-9]\\\\d*)\\\\.(?:0|[1-9]\\\\d*)(?:-[\\\\da-z\\\\-]+(?:\\\\.[\\\\da-z\\\\-]+)*)?(?:\\\\+[\\\\da-z\\\\-]+(?:\\\\.[\\\\da-z\\\\-]+)*)?\\\\b&quot;, &quot;ig&quot;],
+                },
+                APP_ID: {
+                    type: &quot;String&quot;,
+                    required: true,
+                    restrict: &quot;^[a-zA-Z0-9]{16,32}$&quot;
+                },
+                APP_ID_PARAM_NAME: {
+                    type: &quot;String&quot;,
+                    required: false,
+                },
+                REST_KEY: {
+                    type: &quot;String&quot;,
+                    required: true,
+                    restrict: &quot;^[a-zA-Z0-9]{16,32}$&quot;,
+                },
+                REST_KEY_PARAM_NAME: {
+                    type: &quot;String&quot;,
+                    required: false,
+                },
+                SESSION_TOKEN: {
+                    type: &quot;String&quot;,
+                    required: false,
+                },
+                SESSION_KEY: {
+                    type: &quot;String&quot;,
+                    required: true,
+                    restrict: &quot;^[a-zA-Z0-9]{16,32}$&quot;,
+                },
+                CSRF_TOKEN: {
+                    type: &quot;String&quot;,
+                    required: false,
+                    restrict: &quot;^[a-zA-Z0-9]{16,32}$&quot;,
+                },
+                API_VERSION: {
+                    type: &quot;String&quot;,
+                    required: true,
+                },
+                MAX_BATCH_SIZE: {
+                    type: &quot;Number&quot;,
+                    required: false,
+                    default: 50,
+                },
+                DEFAULT_FETCH_LIMIT_OVERRIDE: {
+                    type: &quot;Number&quot;,
+                    required: false,
+                    default: 50000,
+                },
+                UNDEFINED_CLASSNAME: {
+                    type: &quot;String&quot;,
+                    required: false,
+                    default: &quot;__UNDEFINED_CLASSNAME__&quot;,
+                    restrict: &quot;^[a-zA-Z0-9_]+$&quot;,
+                },
+                API_URI: {
+                    type: &quot;String&quot;,
+                    required: false,
+                    default: &quot;/api&quot;,
+                    restrict: &quot;^[a-zA-Z0-9_]+$&quot;,
+                },
+                CORS: {
+                    type: &quot;Boolean&quot;,
+                    required: false,
+                    default: false,
+                },
+                PROTOCOL: {
+                    type: &quot;String&quot;,
+                    required: false,
+                    default: &quot;http&quot;,
+                    restrict: &quot;^(HTTP|http)+(S|s)?$&quot;,
+                },
+                HOST: {
+                    type: &quot;String&quot;,
+                    required: false,
+                    default: &quot;127.0.0.1&quot;,
+                    restrict: &quot;^(?:[0-9]{1,3}\\\\.){3}[0-9]{1,3}$&quot;,
+                },
+                PORT: {
+                    type: &quot;Number&quot;,
+                    required: false,
+                    default: 3000,
+                },
+                BASE_PATH: {
+                    type: &quot;String&quot;,
+                    required: false,
+                    default: &quot;/api&quot;,
+                    restrict: &quot;^\\\\/+[a-zA-Z0-9_\\\\/\\\\.\\\\-]+$&quot;,
+                },
+                CAPITALIZE_CLASSNAMES: {
+                    type: &quot;Boolean&quot;,
+                    required: false,
+                    default: true,
+                },
+                CRUD_METHODS: {
+                    type: &quot;Object&quot;,
+                    required: true,
+                    extensible: true,
+                    elements: {
+                        create: {
+                            type: &quot;String&quot;,
+                            required: false,
+                            restrict: &quot;^POST+$&quot;,
+                        },
+                        read: {
+                            type: &quot;String&quot;,
+                            required: false,
+                            restrict: &quot;^GET+$&quot;,
+                        },
+                        update: {
+                            type: &quot;String&quot;,
+                            required: false,
+                            restrict: &quot;^PUT+$&quot;,
+                        },
+                        destroy: {
+                            type: &quot;String&quot;,
+                            required: false,
+                            restrict: &quot;^DELETE+$&quot;,
+                        },
+                    },
+                },
+                QUERY_PARAM: {
+                    type: &quot;String&quot;,
+                    required: false,
+                    restrict: &quot;^[a-zA-Z0-9_]+$&quot;,
+                },
+            },
+        },
+    },
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

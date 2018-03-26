@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/query.js | jisty</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="jisty"><meta property="twitter:description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/jisty"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/model.js~model.html">model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-_extends">_extends</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-inflections">inflections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsCollections">_nsCollections</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/query.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import forEach from &quot;lodash.foreach&quot;;
+import flatten from &quot;lodash.flatten&quot;;
+import map from &quot;lodash.map&quot;;
+const __q = new WeakMap();
+const __meta = new WeakMap();
+
+export default class {
+    constructor() {
+        // TODO: review this for necessity or alternative solutions
+        this.or = this._or;
+        this.in = this._in;
+        this.clear();
+    }
+
+    /**
+     *
+     */
+    clear() {
+        __meta.set(this, {
+            include: [],
+            limit: -1,
+            skip: 0,
+            extraOpts: {},
+        })
+        __q.set(this, {});
+    }
+
+    /**
+     * Executes query and returns all results
+     * @param opts
+     * @returns {PromiseLike&lt;T&gt; | Promise&lt;T&gt;}
+     */
+    find(opts = {}) {
+        if (typeof this.objectClass !== &quot;function&quot;) {
+            throw &quot;valid Class required&quot;;
+        }
+        let crud = this.$scope.options.CRUD_METHODS.read;
+        return (new this.objectClass).sync(crud, [], _.extend(opts, {where:this.__q})
+        ).then((s, r, o)=&gt; {
+            return forEach(r.results, (v, k)=&gt; {
+                let obj = v.className ?
+                    new (this.$scope[v.className])() :
+                    (new this.objectClass())._finishFetch(v, true);
+                return obj;
+            });
+        });
+    }
+
+    /**
+     * Executes query and returns only the first result
+     * @param opts
+     * @returns {PromiseLike&lt;T&gt;|Promise&lt;T&gt;}
+     */
+    first(opts = {}) {
+        return this.find(_.extend(opts, {skip:0, limit:1}));
+    }
+
+    /**
+     *
+     * @param col
+     * @param key
+     * @param val
+     * @returns {Query}
+     */
+    set(col, key, val){
+        if (col != null) {
+            if (this.__q[col] == null) {
+                this.__q[col] = {};
+            }
+        }
+        (__q.get(this)[col] || __q.get(this))[key] = val;
+        return this;
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
+    getParams() {
+        return (_.map(_.pairs(__q.get(this), (v,k)=&gt; v.join(&quot;=&quot;))) ).join(&quot;&amp;&quot;);
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    toJSON() {
+        return __q.get(this);
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
+    toString() {
+        return JSON.stringify(this.toJSON());
+    }
+
+    /**
+     *
+     * @param col
+     * @param value
+     * @returns {Query}
+     */
+    equalTo(col, value){
+        return this.set(null, col, value);
+    }
+
+    /**
+     *
+     * @param col
+     * @param value
+     * @returns {Query}
+     */
+    notEqualTo(col, value){
+        return this.set(col, &quot;$ne&quot;, value);
+    }
+
+    /**
+     *
+     * @param query
+     * @returns {Query}
+     */
+    dontSelect(query) {
+        return this.set(null, &quot;$dontSelect&quot;, {query});
+    }
+
+    /**
+     * Sets condition that column must exist
+     * @param col
+     * @returns {Query}
+     */
+    exists(col) {
+        return this.set(col, &quot;$exists&quot;, true);
+    }
+
+    /**
+     * Sets condition that column must not exist
+     * @param col
+     * @returns {Query}
+     */
+    doesNotExist(col) {
+        return this.set(col, &quot;$exists&quot;, false);
+    }
+
+    /**
+     * Sets condition that column value must be greater than given value
+     * @param col
+     * @param val
+     * @returns {Query}
+     */
+    greaterThan(col, val) {
+        return this.set(col, &quot;$gt&quot;, val);
+    }
+
+    /**
+     * Sets condition that column value must be greater than or equal to the given value
+     * @param col
+     * @param val
+     * @returns {Query}
+     */
+    greaterThanOrEqualTo(col, val) {
+        return this.set(col, &quot;$gte&quot;, val);
+    }
+
+    /**
+     * Sets condition that column value must be less than given value
+     * @param col
+     * @param value
+     * @returns {Query}
+     */
+    lessThan(col, value) {
+        return this.set(col, &quot;$lt&quot;, value);
+    }
+
+    /**
+     * Sets condition that column value must be less than or equal to the given value
+     * @param col
+     * @param value
+     * @returns {Query}
+     */
+    lessThanOrEqualTo(col, value) {
+        return this.set(col, &quot;$lte&quot;, value);
+    }
+
+    /**
+     *
+     * @param col
+     * @param val
+     * @returns {Query}
+     */
+    contains(col, val) {
+        return this.set(col, &quot;$regex&quot;, val); //&quot;#{$scope.Query._quote val}&quot;
+    }
+
+    /**
+     * Sets condition that column value must be an array containing all items in given array
+     * @param col
+     * @param array
+     * @returns {Query}
+     */
+    containsAll(col,array) {
+        return this.set(null, &quot;$all&quot;);
+    }
+
+    /**
+     *
+     * @param col
+     * @param value
+     * @returns {Query}
+     */
+    containedIn(col, value) {
+        return this.set(col, &quot;$in&quot;, array);
+    }
+
+    /**
+     *
+     * @param col
+     * @param array
+     * @returns {Query}
+     */
+    notContainedIn(col, array) {
+        return this.set(col, &quot;$nin&quot;, array);
+    }
+
+    /**
+     *
+     * @param col
+     * @param query
+     * @returns {Query}
+     */
+    select(col, query) {
+        return this.set(col, &quot;$select&quot;, {query});
+    }
+
+    /**
+     *
+     * @param col
+     * @param query
+     * @returns {Query}
+     */
+    inQuery(col,query) {
+        return this.set(col, &quot;$inQuery&quot;, {where:query});
+    }
+
+    /**
+     *
+     * @param col
+     * @param query
+     * @returns {Query}
+     */
+    notInQuery(col,query) {
+        return this.set(col, &quot;$notInQuery&quot;, {where:query});
+    }
+
+    /**
+     *
+     * @param queries
+     * @returns {*[]}
+     * @private
+     */
+    _or(...queries) {
+        const _q = __q.get(this);
+        const _or = (_q[&quot;$or&quot;] != null ? _q[&quot;$or&quot;] : (_q[&quot;$or&quot;] = []));
+        return _q[&quot;$or&quot;] = _or.concat(this.$scope.Query.or(queries));
+    }
+
+    /**
+     *
+     * @param object
+     * @param key
+     * @returns {Query}
+     */
+    relatedTo(object, key) {
+        if ((!(object instanceof this.$scope.Model)) ||
+            (object.$className === null)) {
+            const eMsg = `${namespace}.Query.$relatedTo required object be of Type ${namespace}.Object`;
+            throw new Error();
+        }
+        return this.set(null, &quot;$relatedTo&quot;, {
+                object: {
+                    __type: &quot;Pointer&quot;,
+                    objectId: object.get(&quot;objectId&quot;),
+                    className: object.className
+                },
+                key:`${key}`
+            }
+        );
+    }
+
+    /**
+     *
+     * @param value
+     * @returns {Query}
+     */
+    include(value) {
+        return this.set(null, &quot;include&quot;, `${value}`);
+    }
+
+    /**
+     *
+     * @param val
+     * @returns {Query}
+     */
+    keys(val) {
+        return this.set(null, &quot;keys&quot;, `${value}`);
+    }
+
+    /**
+     *
+     * @param value
+     * @returns {Query}
+     */
+    count(value) {
+        return this.set(null, &quot;count&quot;, `${value}`);
+    }
+
+    /**
+     *
+     * @param value
+     * @returns {Query}
+     */
+    order(value) {
+        return this.set(null, &quot;order&quot;, `${value}`);
+    }
+
+    /**
+     *
+     * @param value
+     * @returns {Query}
+     */
+    limit(value) {
+        return this.set(null, &quot;limit&quot;, `${value}`);
+    }
+
+    /**
+     *
+     * @param value
+     * @returns {Query}
+     */
+    skip(value) {
+        return this.set(null, &quot;skip&quot;, `${value}`);
+    }
+
+    /**
+     *
+     * @param col
+     * @param value
+     * @returns {Query}
+     */
+    arrayKey(col,value) {
+        return this.set(null, col, `${value}`);
+    }
+
+    ///
+    // Static Methods
+    //
+
+    /**
+     *
+     * @param queries
+     * @returns {Array}
+     */
+    static or(...queries) {
+        return map(flatten(queries), (v, k) =&gt; {
+            if (v.query !== null) {
+                return v.query().__q || v;
+            }
+            return null;
+        });
+    }
+
+    /**
+     * Implementation of Parse _quote to create RegExp from string value
+     * @param string
+     * @returns {string}
+     * @private
+     */
+    static _quote(string) {
+        return `\\Q${s}\\E`;
+    };
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

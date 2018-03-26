@@ -4,7 +4,8 @@
   "description": "Schema Based OXM (ORM + ODM) RESTful Client Library",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "docs": "./node_modules/.bin/esdoc"
   },
   "repository": {
     "type": "git",
