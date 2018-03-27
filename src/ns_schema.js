@@ -243,6 +243,16 @@ export default {
                             required: false,
                             restrict: "^DELETE+$",
                         },
+                        patch: {
+                            type: "String",
+                            required: false,
+                            restrict: "^PATCH+$",
+                        },
+                        options: {
+                            type: "String",
+                            required: false,
+                            restrict: "^OPTIONS+$",
+                        }
                     },
                 },
                 QUERY_PARAM: {

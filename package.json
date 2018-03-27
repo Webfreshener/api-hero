@@ -61,8 +61,17 @@
     "jshint": "^2.9.4",
     "mocha": "^5.0.0",
     "mocha-lcov-reporter": "^1.3.0",
+    "nock": "^9.2.3",
     "weakmap": "0.0.6",
     "webpack": "^4.0.1",
     "webpack-cli": "^2.0.10"
+  },
+  "jest": {
+    "transform": {
+      ".*": "<rootDir>/node_modules/babel-jest"
+    },
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/nock"
+    ]
   }
 }

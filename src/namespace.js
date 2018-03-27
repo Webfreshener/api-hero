@@ -2,10 +2,13 @@ import {_namespaces, _nsCollections} from "./_references";
 import ns_schema from "./ns_schema";
 import map from "lodash.map";
 import pairs from "lodash.pairs";
+import foreach from "lodash.foreach";
 import {JSD} from "jsd";
 import Collection from "./collection";
+
 /**
- *
+ * Namespace
+ * Defines and Manages Collections and initializes Options
  */
 class NS {
     /**
@@ -19,7 +22,7 @@ class NS {
         _namespaces.set(this, _schema);
         let _cols = {};
         const _self = this;
-
+        // defines utilies reference on Namespace
         Object.defineProperty(this, "$utils", {
             value: new Utils(this),
             enumerable: false,
@@ -27,20 +30,24 @@ class NS {
         });
 
         let o = {};
+        // iterates through collections on Schema and defined Collections on NS
         Object.keys(_schema.document.model.collections).forEach((col) => {
             o[col] = class extends Collection {
                 constructor() {
                     super(_schema.document.model.collections[col]);
+                    // defines className reference on Collection
                     Object.defineProperty(this, "$className", {
                         get: () => col,
                         enumerable: false,
                     });
+                    // defines Namespace reference on Collection
                     Object.defineProperty(this, "$scope", {
                         get: () => _self,
                         enumerable: false,
                     });
                 }
             };
+            // applies Collection instance to Namespace
             this.addCollection(col, o[col]);
         });
 
@@ -48,14 +55,15 @@ class NS {
     }
 
     /**
-     *
+     * Accessor for defined API Options for Namespace
+     * @returns {*}
      */
     get options() {
         return _namespaces.get(this).document.model.options;
     }
 
     /**
-     *
+     * Setter for Namespace API Options
      * @param value
      * @returns {NS}
      */
@@ -65,7 +73,7 @@ class NS {
     }
 
     /**
-     *
+     * Accessor for Option at Key
      * @param key
      */
     getOption(key) {
@@ -73,7 +81,7 @@ class NS {
     }
 
     /**
-     *
+     * Sets individual Option at Key
      * @param key
      * @param value
      * @returns {NS}
@@ -84,18 +92,23 @@ class NS {
     }
 
     /**
-     *
+     * Accessor for Schema Collections Map
+     * @returns {*}
      */
     get collections() {
         return _nsCollections.get(this);
     }
 
+    /**
+     * Retrieved list of registered Collection names
+     * @returns {string[]}
+     */
     listCollections() {
         return Object.keys(_namespaces.get(this));
     }
 
     /**
-     *
+     * Adds Collection to Namespace
      * @param name
      * @param col
      * @returns {NS}
@@ -106,7 +119,7 @@ class NS {
                 get: () => {
                     let _s = _namespaces.get(this).document;
                     return new col(_s.model.collections[name]);
-                    },
+                },
                 enumerable: true,
             });
         }
@@ -114,7 +127,7 @@ class NS {
     }
 
     /**
-     *
+     * Removes Collection from Namespace
      * @param name
      * @returns {NS}
      */
@@ -129,13 +142,25 @@ class NS {
     }
 };
 
+/**
+ * Utility Methods
+ */
 class Utils {
+    /**
+     *
+     * @param $scope
+     */
     constructor($scope) {
         Object.defineProperty(this, "$scope", {
             get: () => $scope,
             enumerable: false,
         });
     }
+
+    /**
+     * Helper Method returns REST Request Headers from Config
+     * @returns {*}
+     */
     get apiOptions() {
         let o;
         (o = {
@@ -159,12 +184,13 @@ class Utils {
 
         return o;
     }
+
     /**
-     *
+     * Helper Method generates URL for REST Requests
      * @returns {string}
      */
     get apiUrl() {
-        const _pcl  = this.$scope.options.PROTOCOL.toLowerCase();
+        const _pcl = this.$scope.options.PROTOCOL.toLowerCase();
         const _host = this.$scope.options.HOST;
         const _port = this.$scope.options.PORT;
         const _path = this.$scope.options.BASE_PATH.replace(/^\//, "");
@@ -199,7 +225,7 @@ class Utils {
         if ((t = `${iso8601}`.match(Rx)) === null) {
             return null;
         }
-        t = t.map((i) =>  i && i.match(/^[\d]+$/) !== null ? parseInt(i, 10) : null )
+        t = t.map((i) => i && i.match(/^[\d]+$/) !== null ? parseInt(i, 10) : null)
             .filter((i) => i !== null);
         t[1] = t[1] - 1;
         return new Date(Date.UTC.apply(this, t));
@@ -217,4 +243,4 @@ class Utils {
 
 export default (config) => {
     return new NS(config);
-};
+}
