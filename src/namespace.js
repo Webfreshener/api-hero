@@ -1,19 +1,21 @@
-import {_namespaces, _nsCollections} from "./_references";
-import ns_schema from "./ns_schema";
+import {JSD} from "jsd";
 import map from "lodash.map";
 import pairs from "lodash.pairs";
 import foreach from "lodash.foreach";
-import {JSD} from "jsd";
+import "cross-fetch/polyfill";
+import {_namespaces, _nsCollections} from "./_references";
 import Collection from "./collection";
+import ns_schema from "./ns_schema";
 
 /**
  * Namespace
- * Defines and Manages Collections and initializes Options
+ * * Defines and Manages Collections
+ * * Initializes Options
+ * * Provides utility methods
  */
 class NS {
     /**
-     *
-     * @param name
+     * @constructor
      * @param config
      */
     constructor(config) {
@@ -140,7 +142,15 @@ class NS {
         }
         return this;
     }
-};
+
+    sync(method, model, options = {}) {
+        let opts = this.$utils.apiOptions;
+        Object.assign(opts, {method: method});
+        return fetch(model.url, opts).then((res) => {
+            return res.json();
+        });
+    }
+}
 
 /**
  * Utility Methods
@@ -236,7 +246,7 @@ class Utils {
      * @param obj
      * @returns {string}
      */
-    querify(obj) {
+    static querify(obj) {
         return (map(pairs(obj || {}), (v, k) => v.join("="))).join("&");
     }
 }

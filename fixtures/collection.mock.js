@@ -1,0 +1,76 @@
+export const simpleReq = [{
+    name: "Alice",
+    value: 1,
+}, {
+    name: "Bob",
+    value: 2,
+}, {
+    name: "Charlie",
+    value: 3,
+}, {
+    name: "Dave",
+    value: 4,
+}, {
+    name: "Ed",
+    value: 5,
+}, {
+    name: "Frank",
+    value: 6,
+}, {
+    name: "Gary",
+    value: 7,
+}, {
+    name: "Helen",
+    value: 8,
+}, {
+    name: "Ike",
+    value: 9,
+}, {
+    name: "Janet",
+    value: 10,
+}, {
+    name: "Kim",
+    value: 11,
+}, {
+    name: "Larry",
+    value: 12,
+}, {
+    name: "Mike",
+    value: 13,
+}, {
+    name: "Nancy",
+    value: 14,
+}, {
+    name: "Oswald",
+    value: 15,
+}, {
+    name: "Paul",
+    value: 16,
+}, {
+    name: "Quincy",
+    value: 17,
+}, {
+    name: "Robert",
+    value: 18,
+}, {
+    name: "Susan",
+    value: 19,
+}, {
+    name: "Thomas",
+    value: 20,
+}, {
+    name: "Uma",
+    value: 21,
+}, {
+    name: "Vince",
+    value: 22,
+}, {
+    name: "Walter",
+    value: 23,
+}, {
+    name: "Yorrick",
+    value: 24,
+}, {
+    name: "Zed",
+    value: 25,
+}];

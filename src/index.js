@@ -1,8 +1,6 @@
 import __defaults__ from "./defaults";
 import createNS from "./namespace";
 import assign from "lodash.assign";
-import "cross-fetch/polyfill";
-
 
 let app;
 let $extend = {};

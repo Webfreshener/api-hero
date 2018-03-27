@@ -8,7 +8,7 @@ import {_cids} from "./_references";
 
 const _models = new WeakMap();
 const _queries = new WeakMap();
-
+const _requests = new WeakMap();
 /**
  *
  */
@@ -137,16 +137,17 @@ class Collection {
     }
 
     /**
-     * returns uri encoded Query String
+     * getter for API URI for Collection
      * @returns {string}
      */
-    url() {
-        let q = `${this.$scope.getAPIUrl()}/${this.$className}`;
-        if (this.__method === "read") {
-            let p = this.$scope.querify(this.__params);
-            if (p.length) {
-                q = `${q}?${p}`;
-            }
+    get url() {
+        let _req = _requests.get(this) || void(0);
+        let q = `${this.$scope.$utils.apiUrl}/${this.$className}`;
+        if (_req && _req.method === "read") {
+            // let p = this.$scope.querify(this.__params);
+            // if (p.length) {
+            //     q = `${q}?${p}`;
+            // }
         }
         return encodeURI(q);
     }
@@ -155,8 +156,18 @@ class Collection {
         this.models = [];
     }
 
+    /**
+     *
+     */
     fetch() {
-
+        let _req = {
+            method: this.$scope.options.CRUD_METHODS.read,
+            id: uniqueid(`${this.$collectionName}-read-`),
+        };
+        _requests.set(this, _req);
+        return this.$scope.sync(_req.method, this, {}).then((res) => {
+            this.models = res;
+        });
     }
 
     /**
@@ -233,6 +244,29 @@ class Collection {
      */
     subscribe() {
         //TODO: implement this or something to this effect
+    }
+
+    /**
+     *
+     * @returns {Object}
+     */
+    valueOf() {
+        return _models.get(this).document.valueOf();
+    }
+
+    /**
+     * @returns {*}
+     */
+    toJSON() {
+        return _models.get(this).document.toJSON();
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
+    toString() {
+        return _models.get(this).document.toString();
     }
 }
 
