@@ -4,15 +4,18 @@ import Query from "./query";
 import foreach from "lodash.foreach";
 import map from "lodash.map";
 import uniqueid from "lodash.uniqueid";
-import {_cids} from "./_references";
+import {_cids, _requests} from "./_references";
 
 const _models = new WeakMap();
 const _queries = new WeakMap();
-const _requests = new WeakMap();
 /**
- *
+ * RESTful Collection Management Class
  */
 class Collection {
+    /**
+     * @param schema Collection JSD Schema
+     * @returns {boolean}
+     */
     constructor(schema) {
         const _self = this;
         const _q = new Query();
@@ -43,17 +46,10 @@ class Collection {
             }]);
             _jsd.document.subscribe({
                 next: (d) => {
-                    foreach(d.models, (m) => {
-                        const _model = new this.modelClass(m);
-                        _cids.get(this)[_model.$cid] = m;
-                        Object.defineProperty(m.$ref, "$model", {
-                            value: _model,
-                            enumerable: false,
-                            writable: false,
-                        });
-                    });
+                    foreach(d.models, (m) => this.create(m));
                 },
                 error: (e) => {
+                    console.log(`e: ${e}`);
                 },
             });
 
@@ -67,6 +63,8 @@ class Collection {
         _cids.set(this, {});
         // set timeout to allow subclasses to construct before sealing
         setTimeout((() => Object.seal(this)), 0);
+        // returns
+        return;
     }
 
     /**
@@ -75,9 +73,6 @@ class Collection {
      */
     get models() {
         return _models.get(this).document.model;
-        // return map(_models.get(this).document.model, (m) => {
-        //     return m.$model;
-        // });
     }
 
     /**
@@ -97,19 +92,25 @@ class Collection {
                 enumerable: false,
             });
         };
+
         // helper to determine how to handle incoming data elements
         const _derive = (m) => {
             return (m instanceof Model ? m.data : m);
         };
+
         // tests for array and maps or wraps single element into an array
         const _m = Array.isArray(data) ? map(data, _derive) : [_derive(data)];
         _models.get(this).document.model = _m;
+
         // applies the Model back-refs onto the dataset
         foreach(_models.get(this).document.model, (m) => _create(m));
         return this;
     }
 
-    // Get an iterator of all models in this collection.
+    /**
+     * Get an iterator of all models in this collection
+     * @returns {CollectionIterator}
+     */
     values() {
         return new CollectionIterator(this, ITERATOR_VALUES);
     }
@@ -119,19 +120,26 @@ class Collection {
         return new CollectionIterator(this, ITERATOR_KEYS);
     }
 
-    // Get an iterator of all [ID, model] tuples in this collection.
+    /**
+     * Get an iterator of all [ID, model] tuples in this collection.
+     * @returns {CollectionIterator}
+     */
     entries() {
         return new CollectionIterator(this, ITERATOR_KEYSVALUES);
     }
 
     /**
-     * Returns current `models` length
-     * @returns {*}
+     * alias for `length`
+     * @returns {number}
      */
     count() {
-        return this.models.length;
+        return this.length;
     }
 
+    /**
+     * Returns current `models` length
+     * @returns {number}
+     */
     get length() {
         return this.models.length;
     }
@@ -152,12 +160,19 @@ class Collection {
         return encodeURI(q);
     }
 
+    /**
+     * Resets collection to empty `Array`
+     * @returns {Collection}
+     */
     reset() {
         this.models = [];
+        return this;
     }
 
     /**
-     *
+     * Performs REST::GET Operation to populate collection
+     * note: uses Query if present
+     * @returns {*|PromiseLike<T>|Promise<T>}
      */
     fetch() {
         let _req = {
@@ -165,18 +180,36 @@ class Collection {
             id: uniqueid(`${this.$collectionName}-read-`),
         };
         _requests.set(this, _req);
+
         return this.$scope.sync(_req.method, this, {}).then((res) => {
             this.models = res;
+            _requests.delete(this);
         });
     }
 
     /**
-     * Adds model to collection and saves to remote collection
+     * Adds Model to Collection and saves to remote collection by default
      * @param data
-     * @returns {*}
+     * @param immediate - set to `false` to add to collection without saving to remote
+     * @returns {Model}
      */
-    create(data) {
-        return new this._modelClass(data);
+    create(data, immediate = true) {
+        const _model = new (this.modelClass)(this);
+        // puts actual data on WeakMap reference
+        _cids.get(this)[_model.$cid] = new JSD(this.$schema.properties);
+        const _ref = _cids.get(this)[_model.$cid];
+        console.log(_ref);
+        Object.defineProperty(_ref, "$model", {
+            value: _model,
+            enumerable: false,
+            writable: false,
+        });
+        _ref.document.model = data;
+        if (immediate) {
+            return _model.save();
+        } else {
+            return _model;
+        }
     }
 
     /**
@@ -205,20 +238,27 @@ class Collection {
     }
 
     /**
-     *
+     * Getter for Model Class with embedded back-references to this NS::Collection
      * @returns {Class}
      */
     get modelClass() {
         const _self = this;
+        const _def = (ref) => {
+            Object.defineProperty(ref, "$cid", {
+                get: () => _cid,
+                enumerable: false,
+            });
+        }
         return class extends Model {
             constructor() {
                 super(_self);
                 const _cid = uniqueid(_self.$className);
+
                 // defined getter for private cid attribute
-                Object.defineProperty(this, "$cid", {
-                    get: () => _cid,
-                    enumerable: false,
-                });
+                // setTimeout(() => {
+                //     console.log( this );
+                //     // _def(this);
+                // }, 0);
             }
         };
     }
@@ -240,14 +280,14 @@ class Collection {
     }
 
     /**
-     * should be oberservable
+     * TODO: should be observable
      */
     subscribe() {
         //TODO: implement this or something to this effect
     }
 
     /**
-     *
+     * Accessor for Collection's Primitive Value
      * @returns {Object}
      */
     valueOf() {
@@ -255,6 +295,7 @@ class Collection {
     }
 
     /**
+     * Accessor for Collection's `JSON` representation
      * @returns {*}
      */
     toJSON() {
@@ -262,7 +303,7 @@ class Collection {
     }
 
     /**
-     *
+     * Accessor for Collection's `String` representation
      * @returns {string}
      */
     toString() {

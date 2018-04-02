@@ -43,19 +43,24 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/namespace.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {_namespaces, _nsCollections} from &quot;./_references&quot;;
-import ns_schema from &quot;./ns_schema&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {JSD} from &quot;jsd&quot;;
 import map from &quot;lodash.map&quot;;
 import pairs from &quot;lodash.pairs&quot;;
-import {JSD} from &quot;jsd&quot;;
+import foreach from &quot;lodash.foreach&quot;;
+import &quot;cross-fetch/polyfill&quot;;
+import {_namespaces, _nsCollections} from &quot;./_references&quot;;
 import Collection from &quot;./collection&quot;;
+import ns_schema from &quot;./ns_schema&quot;;
+
 /**
- *
+ * Namespace
+ * * Defines and Manages Collections
+ * * Initializes Options
+ * * Provides utility methods
  */
 class NS {
     /**
-     *
-     * @param name
+     * @constructor
      * @param config
      */
     constructor(config) {
@@ -64,7 +69,7 @@ class NS {
         _namespaces.set(this, _schema);
         let _cols = {};
         const _self = this;
-
+        // defines utilies reference on Namespace
         Object.defineProperty(this, &quot;$utils&quot;, {
             value: new Utils(this),
             enumerable: false,
@@ -72,20 +77,24 @@ class NS {
         });
 
         let o = {};
+        // iterates through collections on Schema and defined Collections on NS
         Object.keys(_schema.document.model.collections).forEach((col) =&gt; {
             o[col] = class extends Collection {
                 constructor() {
                     super(_schema.document.model.collections[col]);
+                    // defines className reference on Collection
                     Object.defineProperty(this, &quot;$className&quot;, {
                         get: () =&gt; col,
                         enumerable: false,
                     });
+                    // defines Namespace reference on Collection
                     Object.defineProperty(this, &quot;$scope&quot;, {
                         get: () =&gt; _self,
                         enumerable: false,
                     });
                 }
             };
+            // applies Collection instance to Namespace
             this.addCollection(col, o[col]);
         });
 
@@ -93,14 +102,15 @@ class NS {
     }
 
     /**
-     *
+     * Accessor for defined API Options for Namespace
+     * @returns {*}
      */
     get options() {
         return _namespaces.get(this).document.model.options;
     }
 
     /**
-     *
+     * Setter for Namespace API Options
      * @param value
      * @returns {NS}
      */
@@ -110,7 +120,7 @@ class NS {
     }
 
     /**
-     *
+     * Accessor for Option at Key
      * @param key
      */
     getOption(key) {
@@ -118,7 +128,7 @@ class NS {
     }
 
     /**
-     *
+     * Sets individual Option at Key
      * @param key
      * @param value
      * @returns {NS}
@@ -129,18 +139,23 @@ class NS {
     }
 
     /**
-     *
+     * Accessor for Schema Collections Map
+     * @returns {*}
      */
     get collections() {
         return _nsCollections.get(this);
     }
 
+    /**
+     * Retrieved list of registered Collection names
+     * @returns {string[]}
+     */
     listCollections() {
         return Object.keys(_namespaces.get(this));
     }
 
     /**
-     *
+     * Adds Collection to Namespace
      * @param name
      * @param col
      * @returns {NS}
@@ -151,7 +166,7 @@ class NS {
                 get: () =&gt; {
                     let _s = _namespaces.get(this).document;
                     return new col(_s.model.collections[name]);
-                    },
+                },
                 enumerable: true,
             });
         }
@@ -159,7 +174,7 @@ class NS {
     }
 
     /**
-     *
+     * Removes Collection from Namespace
      * @param name
      * @returns {NS}
      */
@@ -172,15 +187,35 @@ class NS {
         }
         return this;
     }
-};
 
+    sync(method, model, options = {}) {
+        let opts = this.$utils.apiOptions;
+        Object.assign(opts, {method: method});
+        return fetch(model.url, opts).then((res) =&gt; {
+            return res.json();
+        });
+    }
+}
+
+/**
+ * Utility Methods
+ */
 class Utils {
+    /**
+     *
+     * @param $scope
+     */
     constructor($scope) {
         Object.defineProperty(this, &quot;$scope&quot;, {
             get: () =&gt; $scope,
             enumerable: false,
         });
     }
+
+    /**
+     * Helper Method returns REST Request Headers from Config
+     * @returns {*}
+     */
     get apiOptions() {
         let o;
         (o = {
@@ -204,12 +239,13 @@ class Utils {
 
         return o;
     }
+
     /**
-     *
+     * Helper Method generates URL for REST Requests
      * @returns {string}
      */
     get apiUrl() {
-        const _pcl  = this.$scope.options.PROTOCOL.toLowerCase();
+        const _pcl = this.$scope.options.PROTOCOL.toLowerCase();
         const _host = this.$scope.options.HOST;
         const _port = this.$scope.options.PORT;
         const _path = this.$scope.options.BASE_PATH.replace(/^\//, &quot;&quot;);
@@ -244,7 +280,7 @@ class Utils {
         if ((t = `${iso8601}`.match(Rx)) === null) {
             return null;
         }
-        t = t.map((i) =&gt;  i &amp;&amp; i.match(/^[\d]+$/) !== null ? parseInt(i, 10) : null )
+        t = t.map((i) =&gt; i &amp;&amp; i.match(/^[\d]+$/) !== null ? parseInt(i, 10) : null)
             .filter((i) =&gt; i !== null);
         t[1] = t[1] - 1;
         return new Date(Date.UTC.apply(this, t));
@@ -255,14 +291,19 @@ class Utils {
      * @param obj
      * @returns {string}
      */
-    querify(obj) {
+    static querify(obj) {
         return (map(pairs(obj || {}), (v, k) =&gt; v.join(&quot;=&quot;))).join(&quot;&amp;&quot;);
     }
 }
 
+/**
+ *
+ * @param config - JSON Config file (see: [defaults.js](./file/src/defaults.js.html))
+ * @returns {NS}
+ */
 export default (config) =&gt; {
     return new NS(config);
-};</code></pre>
+}</code></pre>
 
 </div>
 

@@ -69,7 +69,8 @@
 
   
   
-  
+  <div class="description" data-ice="description"><p>RESTful Collection Management Class</p>
+</div>
   
 
   
@@ -101,7 +102,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(schema: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -136,13 +137,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-get-length">length</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-get-length">length</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Returns current <code>models</code> length</p>
+</div>
       </div>
     </td>
     <td>
@@ -170,7 +172,8 @@
       <div>
         
         
-        
+        <div data-ice="description"><p>Getter for Model Class with embedded back-references to this NS::Collection</p>
+</div>
       </div>
     </td>
     <td>
@@ -227,6 +230,35 @@
         
         
         
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-get-url">url</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>getter for API URI for Collection</p>
+</div>
       </div>
     </td>
     <td>
@@ -313,13 +345,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-count">count</a></span></span><span class="code" data-ice="signature">(): <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-count">count</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Returns current <code>models</code> length</p>
+        <div data-ice="description"><p>alias for <code>length</code></p>
 </div>
       </div>
     </td>
@@ -342,13 +374,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-create">create</a></span></span><span class="code" data-ice="signature">(data: <span>*</span>): <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-create">create</a></span></span><span class="code" data-ice="signature">(data: <span>*</span>, immediate: <span>*</span>): <span>Model</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Adds model to collection and saves to remote collection</p>
+        <div data-ice="description"><p>Adds Model to Collection and saves to remote collection by default</p>
 </div>
       </div>
     </td>
@@ -371,13 +403,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-entries">entries</a></span></span><span class="code" data-ice="signature">(): <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-entries">entries</a></span></span><span class="code" data-ice="signature">(): <span>CollectionIterator</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Get an iterator of all [ID, model] tuples in this collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -399,13 +432,15 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-fetch">fetch</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-fetch">fetch</a></span></span><span class="code" data-ice="signature">(): <span>*|PromiseLike</span>&lt;<span>T&gt;</span>|<span>Promise&lt;T</span>&gt;</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Performs REST::GET Operation to populate collection
+note: uses Query if present</p>
+</div>
       </div>
     </td>
     <td>
@@ -483,13 +518,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-reset">reset</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-reset">reset</a></span></span><span class="code" data-ice="signature">(): <span><a href="class/src/collection.js~Collection.html">Collection</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Resets collection to empty <code>Array</code></p>
+</div>
       </div>
     </td>
     <td>
@@ -546,7 +582,7 @@
       <div>
         
         
-        <div data-ice="description"><p>should be oberservable</p>
+        <div data-ice="description"><p>TODO: should be observable</p>
 </div>
       </div>
     </td>
@@ -569,13 +605,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-url">url</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-toJSON">toJSON</a></span></span><span class="code" data-ice="signature">(): <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>returns uri encoded Query String</p>
+        <div data-ice="description"><p>Accessor for Collection&apos;s <code>JSON</code> representation</p>
 </div>
       </div>
     </td>
@@ -598,13 +634,72 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-values">values</a></span></span><span class="code" data-ice="signature">(): <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-toString">toString</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
       <div>
         
         
+        <div data-ice="description"><p>Accessor for Collection&apos;s <code>String</code> representation</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-valueOf">valueOf</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
         
+        
+        <div data-ice="description"><p>Accessor for Collection&apos;s Primitive Value</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/collection.js~Collection.html#instance-method-values">values</a></span></span><span class="code" data-ice="signature">(): <span>CollectionIterator</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Get an iterator of all models in this collection</p>
+</div>
       </div>
     </td>
     <td>
@@ -630,11 +725,11 @@
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(schema: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber16">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber20">source</a></span></span>
     </span>
   </h3>
 
@@ -645,10 +740,39 @@
 
   
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">schema</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Collection JSD Schema</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -676,25 +800,38 @@
     
     
     
-    <span class="code" data-ice="name">length</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">length</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber135">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber140">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Returns current <code>models</code> length</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -723,14 +860,15 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber200">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber232">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Getter for Model Class with embedded back-references to this NS::Collection</p>
+</div>
 
   
 
@@ -778,7 +916,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber76">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -833,7 +971,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber88">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber83">source</a></span></span>
     </span>
   </h3>
 
@@ -876,6 +1014,62 @@
   
   
 </div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-url">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">url</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber148">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>getter for API URI for Collection</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 </div>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
@@ -891,7 +1085,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber176">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber208">source</a></span></span>
     </span>
   </h3>
 
@@ -963,7 +1157,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber186">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber218">source</a></span></span>
     </span>
   </h3>
 
@@ -1031,18 +1225,18 @@
     
     
     
-    <span class="code" data-ice="name">count</span><span class="code" data-ice="signature">(): <span>*</span></span>
+    <span class="code" data-ice="name">count</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber131">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Returns current <code>models</code> length</p>
+  <div data-ice="description"><p>alias for <code>length</code></p>
 </div>
 
   
@@ -1055,7 +1249,7 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
           
         </tr>
       </tbody>
@@ -1087,18 +1281,18 @@
     
     
     
-    <span class="code" data-ice="name">create</span><span class="code" data-ice="signature">(data: <span>*</span>): <span>*</span></span>
+    <span class="code" data-ice="name">create</span><span class="code" data-ice="signature">(data: <span>*</span>, immediate: <span>*</span>): <span>Model</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber167">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber191">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Adds model to collection and saves to remote collection</p>
+  <div data-ice="description"><p>Adds Model to Collection and saves to remote collection by default</p>
 </div>
 
   
@@ -1117,6 +1311,13 @@
       <td data-ice="appendix"></td>
       <td data-ice="description"></td>
     </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">immediate</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>set to <code>false</code> to add to collection without saving to remote</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -1127,7 +1328,7 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          <td class="return-type code" data-ice="returnType"><span>Model</span></td>
           
         </tr>
       </tbody>
@@ -1159,18 +1360,19 @@
     
     
     
-    <span class="code" data-ice="name">entries</span><span class="code" data-ice="signature">(): <span>*</span></span>
+    <span class="code" data-ice="name">entries</span><span class="code" data-ice="signature">(): <span>CollectionIterator</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber124">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Get an iterator of all [ID, model] tuples in this collection.</p>
+</div>
 
   
 
@@ -1182,7 +1384,7 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          <td class="return-type code" data-ice="returnType"><span>CollectionIterator</span></td>
           
         </tr>
       </tbody>
@@ -1214,25 +1416,39 @@
     
     
     
-    <span class="code" data-ice="name">fetch</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">fetch</span><span class="code" data-ice="signature">(): <span>*|PromiseLike</span>&lt;<span>T&gt;</span>|<span>Promise&lt;T</span>&gt;</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber158">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber174">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Performs REST::GET Operation to populate collection
+note: uses Query if present</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*|PromiseLike</span>&lt;<span>T&gt;</span>|<span>Promise&lt;T</span>&gt;</td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1261,7 +1477,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber118">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber116">source</a></span></span>
     </span>
   </h3>
 
@@ -1316,7 +1532,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber192">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber224">source</a></span></span>
     </span>
   </h3>
 
@@ -1383,25 +1599,38 @@
     
     
     
-    <span class="code" data-ice="name">reset</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">reset</span><span class="code" data-ice="signature">(): <span><a href="class/src/collection.js~Collection.html">Collection</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber154">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Resets collection to empty <code>Array</code></p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1430,7 +1659,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber220">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber252">source</a></span></span>
     </span>
   </h3>
 
@@ -1502,14 +1731,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber234">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber266">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>should be oberservable</p>
+  <div data-ice="description"><p>TODO: should be observable</p>
 </div>
 
   
@@ -1535,25 +1764,81 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-url">
+  <h3 data-ice="anchor" id="instance-method-toJSON">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">url</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    <span class="code" data-ice="name">toJSON</span><span class="code" data-ice="signature">(): <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber143">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber282">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>returns uri encoded Query String</p>
+  <div data-ice="description"><p>Accessor for Collection&apos;s <code>JSON</code> representation</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-toString">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">toString</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber290">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Accessor for Collection&apos;s <code>String</code> representation</p>
 </div>
 
   
@@ -1591,25 +1876,26 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-values">
+  <h3 data-ice="anchor" id="instance-method-valueOf">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">values</span><span class="code" data-ice="signature">(): <span>*</span></span>
+    <span class="code" data-ice="name">valueOf</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber113">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber274">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Accessor for Collection&apos;s Primitive Value</p>
+</div>
 
   
 
@@ -1621,7 +1907,63 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-values">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">values</span><span class="code" data-ice="signature">(): <span>CollectionIterator</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/collection.js.html#lineNumber111">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Get an iterator of all models in this collection</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>CollectionIterator</span></td>
           
         </tr>
       </tbody>

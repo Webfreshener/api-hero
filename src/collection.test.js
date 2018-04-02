@@ -65,14 +65,31 @@ describe("Collection Class Tests", () => {
             nock("http://0.0.0.0")
                 .get("/api/1/TestCol1")
                 .reply(200, JSON.stringify(simpleReq));
+
+            nock("http://0.0.0.0/api/1/TestCol1")
+                .post("")
+                .reply(201, JSON.stringify({
+                    headers: {
+                        location: "http://0.0.0.0/api/1/TestCol1/26"
+                    }
+                }));
         });
 
         it("should FETCH a record set from API endpoint", (done) => {
             return _col.fetch().then(() => {
+                console.log(`_col: ${JSON.stringify(_col)}`);
                 expect(_col.length).toBe(25);
                 done();
             })
 
         });
+
+        // it("should CREATE a new record to the API endpiont", (done) => {
+        //     return _col.create({name: "Zuul", value: 26}).then(() => {
+        //         expect(_col.length).toBe(26);
+        //         done();
+        //     })
+        //
+        // });
     });
 });

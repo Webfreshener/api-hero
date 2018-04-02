@@ -1,6 +1,7 @@
 import {JSD} from "jsd";
 import MetaData from "./metadata";
-import {_cids} from "./_references";
+import {_cids, _requests} from "./_references";
+import uniqueid from "lodash.uniqueid";
 
 const _modelRefs = new WeakMap();
 
@@ -11,6 +12,12 @@ export default class {
             get: () => collection,
             enumerable: false,
         });
+
+        Object.defineProperty(this, "$scope", {
+            get: () => this.$collection.$scope,
+            enumerable: false,
+        });
+
         const _mdRef = new MetaData(this);
         Object.defineProperty(this, "$metadata", {
             get: () => _mdRef,
@@ -125,20 +132,28 @@ export default class {
         return this.data.$ref.isValid();
     }
 
+    get isNew() {
+        return (!Object.keys(this.data).length || !this.data.id);
+    }
+
     /**
      *
      * @returns {string}
      */
     get url() {
-        // const base    = $scope.getAPIUrl();
-        // const ref     = !$scope.CAPITALIZE_CLASSNAMES ? this.className.toLowerCase() : this.className;
-        // const item    = !this.isNew() ? `/${this.get(this.idAttribute)}` : '';
-        // // search  = if (p=$scope.querify @__op).length then "?#{p}" else ''
-        // const _preQ  = (this.params != null) ? this.params : '?';
+        const base    = this.$scope.$utils.apiUrl;
+        // TODO: work out classname casing/transform
+        const ref     = !this.$scope.options.CAPITALIZE_CLASSNAMES ?
+            this.$collection.$className :
+            this.$collection.$className;
+        const item    = !this.isNew ? `/${this.get(this.idAttribute)}` : "";
+        // search  = if (p=$scope.querify @__op).length then "?#{p}" else ''
+        // const _preQ  = (this.params != null) ? this.params : "?";
         // const _query = $scope.querify(this.__op);
-        // const search = _query.length ? `${_preQ}&${_query}` : _preQ;
-        // return `${base}/${ref}${item}${search}`;
-        return "";
+        const search = ""; // _query.length ? `${_preQ}&${_query}` : _preQ;
+        let _url =  `${base}/${ref}${item}${search}`;
+        console.log(_url);
+        return _url;
     }
 
     //
@@ -156,14 +171,16 @@ export default class {
      *
      */
     save() {
-
-    }
-
-    /**
-     *
-     */
-    sync() {
-
+        let _req = {
+            method: this.$scope.options.CRUD_METHODS.create,
+            id: uniqueid(`${this.$collectionName}-create-`),
+        };
+        _requests.set(this, _req);
+        return this.$scope.sync(_req.method, this, {}).then((res) => {
+            // this.data = res;
+            console.log(`res: ${JSON.stringify(res)}`);
+            _requests.delete(this);
+        })
     }
 
     /**

@@ -288,6 +288,16 @@
                             required: false,
                             restrict: &quot;^DELETE+$&quot;,
                         },
+                        patch: {
+                            type: &quot;String&quot;,
+                            required: false,
+                            restrict: &quot;^PATCH+$&quot;,
+                        },
+                        options: {
+                            type: &quot;String&quot;,
+                            required: false,
+                            restrict: &quot;^OPTIONS+$&quot;,
+                        }
                     },
                 },
                 QUERY_PARAM: {

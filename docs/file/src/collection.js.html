@@ -53,11 +53,15 @@ import {_cids} from &quot;./_references&quot;;
 
 const _models = new WeakMap();
 const _queries = new WeakMap();
-
+const _requests = new WeakMap();
 /**
- *
+ * RESTful Collection Management Class
  */
 class Collection {
+    /**
+     * @param schema Collection JSD Schema
+     * @returns {boolean}
+     */
     constructor(schema) {
         const _self = this;
         const _q = new Query();
@@ -88,15 +92,7 @@ class Collection {
             }]);
             _jsd.document.subscribe({
                 next: (d) =&gt; {
-                    foreach(d.models, (m) =&gt; {
-                        const _model = new this.modelClass(m);
-                        _cids.get(this)[_model.$cid] = m;
-                        Object.defineProperty(m.$ref, &quot;$model&quot;, {
-                            value: _model,
-                            enumerable: false,
-                            writable: false,
-                        });
-                    });
+                    foreach(d.models, (m) =&gt; this.create(m));
                 },
                 error: (e) =&gt; {
                 },
@@ -112,6 +108,8 @@ class Collection {
         _cids.set(this, {});
         // set timeout to allow subclasses to construct before sealing
         setTimeout((() =&gt; Object.seal(this)), 0);
+        // returns
+        return;
     }
 
     /**
@@ -120,9 +118,6 @@ class Collection {
      */
     get models() {
         return _models.get(this).document.model;
-        // return map(_models.get(this).document.model, (m) =&gt; {
-        //     return m.$model;
-        // });
     }
 
     /**
@@ -154,7 +149,10 @@ class Collection {
         return this;
     }
 
-    // Get an iterator of all models in this collection.
+    /**
+     * Get an iterator of all models in this collection
+     * @returns {CollectionIterator}
+     */
     values() {
         return new CollectionIterator(this, ITERATOR_VALUES);
     }
@@ -164,53 +162,87 @@ class Collection {
         return new CollectionIterator(this, ITERATOR_KEYS);
     }
 
-    // Get an iterator of all [ID, model] tuples in this collection.
+    /**
+     * Get an iterator of all [ID, model] tuples in this collection.
+     * @returns {CollectionIterator}
+     */
     entries() {
         return new CollectionIterator(this, ITERATOR_KEYSVALUES);
     }
 
     /**
-     * Returns current `models` length
-     * @returns {*}
+     * alias for `length`
+     * @returns {number}
      */
     count() {
-        return this.models.length;
+        return this.length;
     }
 
+    /**
+     * Returns current `models` length
+     * @returns {number}
+     */
     get length() {
         return this.models.length;
     }
 
     /**
-     * returns uri encoded Query String
+     * getter for API URI for Collection
      * @returns {string}
      */
-    url() {
-        let q = `${this.$scope.getAPIUrl()}/${this.$className}`;
-        if (this.__method === &quot;read&quot;) {
-            let p = this.$scope.querify(this.__params);
-            if (p.length) {
-                q = `${q}?${p}`;
-            }
+    get url() {
+        let _req = _requests.get(this) || void(0);
+        let q = `${this.$scope.$utils.apiUrl}/${this.$className}`;
+        if (_req &amp;&amp; _req.method === &quot;read&quot;) {
+            // let p = this.$scope.querify(this.__params);
+            // if (p.length) {
+            //     q = `${q}?${p}`;
+            // }
         }
         return encodeURI(q);
     }
 
+    /**
+     * Resets collection to empty `Array`
+     * @returns {Collection}
+     */
     reset() {
         this.models = [];
-    }
-
-    fetch() {
-
+        return this;
     }
 
     /**
-     * Adds model to collection and saves to remote collection
-     * @param data
-     * @returns {*}
+     * Performs REST::GET Operation to populate collection
+     * note: uses Query if present
+     * @returns {*|PromiseLike&lt;T&gt;|Promise&lt;T&gt;}
      */
-    create(data) {
-        return new this._modelClass(data);
+    fetch() {
+        let _req = {
+            method: this.$scope.options.CRUD_METHODS.read,
+            id: uniqueid(`${this.$collectionName}-read-`),
+        };
+        _requests.set(this, _req);
+        return this.$scope.sync(_req.method, this, {}).then((res) =&gt; {
+            this.models = res;
+        });
+    }
+
+    /**
+     * Adds Model to Collection and saves to remote collection by default
+     * @param data
+     * @param immediate - set to `false` to add to collection without saving to remote
+     * @returns {Model}
+     */
+    create(data, immediate = false) {
+        const _model = new (this.modelClass)(this);
+        // puts actual data on WeakMap reference
+        _cids.get(this)[_model.$cid] = data;
+        Object.defineProperty(_model.$ref, &quot;$model&quot;, {
+            value: _model,
+            enumerable: false,
+            writable: false,
+        });
+        return _model;
     }
 
     /**
@@ -239,7 +271,7 @@ class Collection {
     }
 
     /**
-     *
+     * Getter for Model Class with embedded back-references to this NS::Collection
      * @returns {Class}
      */
     get modelClass() {
@@ -274,10 +306,34 @@ class Collection {
     }
 
     /**
-     * should be oberservable
+     * TODO: should be observable
      */
     subscribe() {
         //TODO: implement this or something to this effect
+    }
+
+    /**
+     * Accessor for Collection&apos;s Primitive Value
+     * @returns {Object}
+     */
+    valueOf() {
+        return _models.get(this).document.valueOf();
+    }
+
+    /**
+     * Accessor for Collection&apos;s `JSON` representation
+     * @returns {*}
+     */
+    toJSON() {
+        return _models.get(this).document.toJSON();
+    }
+
+    /**
+     * Accessor for Collection&apos;s `String` representation
+     * @returns {string}
+     */
+    toString() {
+        return _models.get(this).document.toString();
     }
 }
 

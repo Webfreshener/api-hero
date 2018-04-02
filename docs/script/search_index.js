@@ -444,9 +444,27 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/collection.js~collection#tojson",
+    "class/src/collection.js~Collection.html#instance-method-toJSON",
+    "src/collection.js~Collection#toJSON",
+    "method"
+  ],
+  [
+    "src/collection.js~collection#tostring",
+    "class/src/collection.js~Collection.html#instance-method-toString",
+    "src/collection.js~Collection#toString",
+    "method"
+  ],
+  [
     "src/collection.js~collection#url",
-    "class/src/collection.js~Collection.html#instance-method-url",
+    "class/src/collection.js~Collection.html#instance-get-url",
     "src/collection.js~Collection#url",
+    "member"
+  ],
+  [
+    "src/collection.js~collection#valueof",
+    "class/src/collection.js~Collection.html#instance-method-valueOf",
+    "src/collection.js~Collection#valueOf",
     "method"
   ],
   [
@@ -523,13 +541,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/model.js~model#data",
-    "class/src/model.js~model.html#instance-set-data",
+    "class/src/model.js~model.html#instance-get-data",
     "src/model.js~model#data",
     "member"
   ],
   [
     "src/model.js~model#data",
-    "class/src/model.js~model.html#instance-get-data",
+    "class/src/model.js~model.html#instance-set-data",
     "src/model.js~model#data",
     "member"
   ],

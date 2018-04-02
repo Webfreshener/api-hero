@@ -246,11 +246,16 @@ class Utils {
      * @param obj
      * @returns {string}
      */
-    static querify(obj) {
+    querify(obj) {
         return (map(pairs(obj || {}), (v, k) => v.join("="))).join("&");
     }
 }
 
+/**
+ *
+ * @param config - JSON Config file (see: [defaults.js](./file/src/defaults.js.html))
+ * @returns {NS}
+ */
 export default (config) => {
     return new NS(config);
 }
