@@ -145,7 +145,7 @@ class NS {
 
     sync(method, model, options = {}) {
         let opts = this.$utils.apiOptions;
-        Object.assign(opts, {method: method});
+        Object.assign(opts, options, {method: method});
         return fetch(model.url, opts).then((res) => {
             return res.json();
         });

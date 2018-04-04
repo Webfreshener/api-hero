@@ -5,14 +5,18 @@ export const _collectionSchema = {
     plural: "TestCol1",
     description: " ",
     properties: {
+        id: {
+            type: "Number",
+        },
         name: {
             type: "String",
-            required: true,
         },
         value: {
             type: "Number",
-            required: false,
         },
+        createdOn: {
+            type: "String",
+        }
     },
 };
 

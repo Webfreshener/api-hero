@@ -7,22 +7,13 @@ const _modelRefs = new WeakMap();
 
 export default class {
     constructor(collection) {
-        // defines getter for owner Collection reference
-        Object.defineProperty(this, "$collection", {
-            get: () => collection,
-            enumerable: false,
-        });
-
-        Object.defineProperty(this, "$scope", {
-            get: () => this.$collection.$scope,
-            enumerable: false,
-        });
-
-        const _mdRef = new MetaData(this);
-        Object.defineProperty(this, "$metadata", {
-            get: () => _mdRef,
-            enumerable: false,
-        });
+        setTimeout(() => {
+            const _mdRef = new MetaData(this);
+            Object.defineProperty(this, "$metadata", {
+                get: () => _mdRef,
+                enumerable: false,
+            });
+        }, 0);
     }
 
     //
@@ -30,7 +21,25 @@ export default class {
     //
 
     /**
+     * retrieves ID of record if set
+     * @returns {string|number|UUID|null}
+     */
+    get id() {
+        return this.data["id"] || null;
+    }
+
+    /**
+     * sets ID of record
+     * @param value {string|number|UUID|null}
+     */
+    set id(value) {
+        this.data["id"] = value;
+        return this;
+    }
+
+    /**
      * returns data from JSD Document
+     * @returns {*}
      */
     get data() {
         return _cids.get(this.$collection)[this.$cid];
@@ -41,44 +50,48 @@ export default class {
      * @param d
      */
     set data(d) {
-        this.data.$ref.model = d;
+        // this.data.$ref.model = d;
+        // let _jsd = new JSD(this.$collection.$schema.properties);
+        // _jsd.document.model = d;
+        _cids.get(this.$collection)[this.$cid].$ref.model = d;
+        // this.data = d;
         return this;
     }
 
-    /**
-     * alias for data getter
-     * @returns {*}
-     */
-    get attrs() {
-        return this.data;
-    }
-
-    /**
-     * alias for data setter
-     * @param d
-     * @returns {*}
-     */
-    set attrs(d) {
-        return this.data = d;
-    }
-
-    /**
-     * retrieves data at key
-     * @param key
-     */
-    get(key) {
-        return this.data[key];
-    }
-
-    /**
-     * sets value upon key
-     * @param key
-     * @param val
-     */
-    set(key, val) {
-        this.data.$ref.set(key, val);
-        return this;
-    }
+    // /**
+    //  * alias for data getter
+    //  * @returns {*}
+    //  */
+    // get attrs() {
+    //     return this.data;
+    // }
+    //
+    // /**
+    //  * alias for data setter
+    //  * @param d
+    //  * @returns {*}
+    //  */
+    // set attrs(d) {
+    //     return this.data = d;
+    // }
+    //
+    // /**
+    //  * retrieves data at key
+    //  * @param key
+    //  */
+    // get(key) {
+    //     return this.data.$ref.get(key);
+    // }
+    //
+    // /**
+    //  * sets value upon key
+    //  * @param key
+    //  * @param val
+    //  */
+    // set(key, val) {
+    //     this.data.$ref.set(key, val);
+    //     return this;
+    // }
 
     //
     // MetaData Accessors
@@ -129,11 +142,15 @@ export default class {
      * @returns {boolean}
      */
     get isValid() {
-        return this.data.$ref.isValid();
+        return _cids.get(this.$collection)[this.$cid].$ref.isValid;
     }
 
     get isNew() {
-        return (!Object.keys(this.data).length || !this.data.id);
+        return (!("id" in this.data));
+    }
+
+    get isDirty() {
+        return !this.isNew;
     }
 
     /**
@@ -141,18 +158,17 @@ export default class {
      * @returns {string}
      */
     get url() {
-        const base    = this.$scope.$utils.apiUrl;
+        const base = this.$scope.$utils.apiUrl;
         // TODO: work out classname casing/transform
-        const ref     = !this.$scope.options.CAPITALIZE_CLASSNAMES ?
+        const ref = !this.$scope.options.CAPITALIZE_CLASSNAMES ?
             this.$collection.$className :
             this.$collection.$className;
-        const item    = !this.isNew ? `/${this.get(this.idAttribute)}` : "";
+        const item = !this.isNew ? `/${this.id}` : "";
         // search  = if (p=$scope.querify @__op).length then "?#{p}" else ''
         // const _preQ  = (this.params != null) ? this.params : "?";
         // const _query = $scope.querify(this.__op);
         const search = ""; // _query.length ? `${_preQ}&${_query}` : _preQ;
-        let _url =  `${base}/${ref}${item}${search}`;
-        console.log(_url);
+        let _url = `${base}/${ref}${item}${search}`;
         return _url;
     }
 
@@ -164,23 +180,36 @@ export default class {
      *
      */
     fetch() {
+        let _req = {
+            method: this.$scope.options.CRUD_METHODS.read,
+            id: uniqueid(`${this.$collectionName}-read-`),
+        };
+        _requests.set(this, _req);
 
+        return this.$scope.sync(_req.method, this, {}).then((res) => {
+            this.data = res.body;
+            _requests.delete(this);
+        });
     }
 
     /**
      *
      */
     save() {
+        let _method = !this.isNew && this.isDirty ?
+            this.$scope.options.CRUD_METHODS.update :
+            this.$scope.options.CRUD_METHODS.create;
         let _req = {
-            method: this.$scope.options.CRUD_METHODS.create,
+            method: _method,
             id: uniqueid(`${this.$collectionName}-create-`),
         };
         _requests.set(this, _req);
-        return this.$scope.sync(_req.method, this, {}).then((res) => {
-            // this.data = res;
-            console.log(`res: ${JSON.stringify(res)}`);
+        return this.$scope.sync(_req.method, this, {body: `${this.data.$ref}`}).then((res) => {
+            if (res.body) {
+                this.data = res.body;
+            }
             _requests.delete(this);
-        })
+        });
     }
 
     /**
@@ -205,22 +234,14 @@ export default class {
      *
      * @returns {string}
      */
-    valueOf() {
-        return this.data.$ref.valueOf();
-    }
-
-    /**
-     *
-     * @returns {string}
-     */
-    toString() {
-        return this.data.$ref.toString();
-    }
+    // toString() {
+    //     return JSON.stringify(this.data);
+    // }
 
     /**
      * @returns {JSON}
      */
     toJSON() {
-        return this.data.$ref.toJSON();
+        // return _cids.get(this.$collection)[this.$cid];
     }
 }

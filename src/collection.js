@@ -8,6 +8,21 @@ import {_cids, _requests} from "./_references";
 
 const _models = new WeakMap();
 const _queries = new WeakMap();
+const resolveData = (data) => {
+    return ("$model" in data) ? data.$model.data : data;
+};
+const _createReference = (model, collection) => {
+    // creates new Model Class to point to JSD weak-reference
+    const _mC = new (collection.modelClass)();
+    // sets JSD weak-reference / is referenced by Collection UID
+    _cids.get(collection)[_mC.$cid] = model;
+    // sets back-ref to the Model on the JSD data element
+    Object.defineProperty(model, "$model", {
+        get: () => _mC,
+        enumerable: false,
+    });
+};
+
 /**
  * RESTful Collection Management Class
  */
@@ -59,7 +74,6 @@ class Collection {
             console.error(`${this.$classname}: invalid schema: ${e}`);
             return false;
         }
-
         _cids.set(this, {});
         // set timeout to allow subclasses to construct before sealing
         setTimeout((() => Object.seal(this)), 0);
@@ -73,6 +87,7 @@ class Collection {
      */
     get models() {
         return _models.get(this).document.model;
+        // return _models.get(this).document.model;
     }
 
     /**
@@ -81,18 +96,6 @@ class Collection {
      * @returns {Collection}
      */
     set models(data) {
-        const _create = (m) => {
-            // creates new Model Class to point to JSD weak-reference
-            const _mC = new (this.modelClass)();
-            // sets JSD weak-reference / is referenced by Collection UID
-            _cids.get(this)[_mC.$cid] = m;
-            // sets back-ref to the Model on the JSD data element
-            Object.defineProperty(m, "$model", {
-                get: () => _mC,
-                enumerable: false,
-            });
-        };
-
         // helper to determine how to handle incoming data elements
         const _derive = (m) => {
             return (m instanceof Model ? m.data : m);
@@ -103,7 +106,7 @@ class Collection {
         _models.get(this).document.model = _m;
 
         // applies the Model back-refs onto the dataset
-        foreach(_models.get(this).document.model, (m) => _create(m));
+        foreach(_models.get(this).document.model, (m) => _createReference(m, this));
         return this;
     }
 
@@ -188,27 +191,42 @@ class Collection {
     }
 
     /**
+     *
+     * @param data
+     */
+    newModel(data) {
+        data = resolveData(data);
+        const _jsd = new JSD(this.$schema.properties);
+        _jsd.document.model = ((data) && (typeof data) !== "null") ? data : {};
+        _createReference(_jsd.document.model, this);
+        let _inst = {};
+        Object.keys(this.$schema.properties).forEach((prop) => {
+            Object.defineProperty(_inst, prop, {
+                get: () => _jsd.document.model[prop],
+                set: (val) => _jsd.document.model[prop] = val,
+                enumerable: true,
+            });
+        });
+        Object.defineProperty(_inst, "$model", {
+            get: () => _jsd.document.model.$model,
+            enumerable: false,
+        });
+        return _inst;
+    }
+
+    /**
      * Adds Model to Collection and saves to remote collection by default
      * @param data
      * @param immediate - set to `false` to add to collection without saving to remote
      * @returns {Model}
      */
     create(data, immediate = true) {
-        const _model = new (this.modelClass)(this);
-        // puts actual data on WeakMap reference
-        _cids.get(this)[_model.$cid] = new JSD(this.$schema.properties);
-        const _ref = _cids.get(this)[_model.$cid];
-        console.log(_ref);
-        Object.defineProperty(_ref, "$model", {
-            value: _model,
-            enumerable: false,
-            writable: false,
-        });
-        _ref.document.model = data;
+        data = this.newModel(data);
+        this.add(data);
         if (immediate) {
-            return _model.save();
+            return data.$model.save();
         } else {
-            return _model;
+            return data.$model;
         }
     }
 
@@ -218,7 +236,7 @@ class Collection {
      * @returns {Collection}
      */
     add(data) {
-        this.models.document.addItem(data);
+        this.models.$ref.addItem(resolveData(data));
         return this;
     }
 
@@ -243,22 +261,25 @@ class Collection {
      */
     get modelClass() {
         const _self = this;
-        const _def = (ref) => {
-            Object.defineProperty(ref, "$cid", {
-                get: () => _cid,
-                enumerable: false,
-            });
-        }
+        const $cid = uniqueid(_self.$className);
         return class extends Model {
             constructor() {
                 super(_self);
-                const _cid = uniqueid(_self.$className);
+                Object.defineProperty(this, "$cid", {
+                    get: () => $cid,
+                    enumerable: false,
+                });
 
-                // defined getter for private cid attribute
-                // setTimeout(() => {
-                //     console.log( this );
-                //     // _def(this);
-                // }, 0);
+                // defines getter for owner Collection reference
+                Object.defineProperty(this, "$collection", {
+                    get: () => _self,
+                    enumerable: false,
+                });
+
+                Object.defineProperty(this, "$scope", {
+                    get: () => _self.$scope,
+                    enumerable: false,
+                });
             }
         };
     }

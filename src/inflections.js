@@ -1,13 +1,14 @@
-// String Inflection utility used to convert Class Names
+/**
+ * String Inflection utility used to convert Class/Collection Names
+ * @param $scope
+ */
 export default ($scope) => {
     $scope.Inflection = new (() => {
-        // __uncountable_words
-        // Holder for array of words that can not be pluralized
         return {
+            // Holder for array of words that can not be pluralized
             __uncountable_words: [
                 "equipment", "information", "rice", "money", "species",
                 "series", "fish", "sheep", "moose", "deer", "news"],
-            // __plural_rules
             // Holder for RegExp pluralization rules
             __plural_rules: [
                 [/(m)an$/gi, "$1en"],
@@ -31,8 +32,14 @@ export default ($scope) => {
                 [/s$/gi, "s"],
                 [/$/gi, "s"]
             ],
-            // apply_rules(string, rules, skip)
-            // Applies the appropriate RegExp for the provided string
+
+            /**
+             * Applies the appropriate RegExp for the provided string
+             * @param str
+             * @param rules
+             * @param skip
+             * @returns {*}
+             */
             apply_rules(str, rules, skip) {
                 // skips any string that is detected on `skip` array
                 if ((skip.indexOf(str.toLowerCase())) === -1) {
@@ -45,8 +52,12 @@ export default ($scope) => {
                 // returns inoperable string
                 return str;
             },
-            // pluralize(string)
-            // pluralizes the provided string
+
+            /**
+             * pluralizes provided string
+             * @param str - string to pluralize
+             * @returns {*}
+             */
             pluralize(str) {
                 // returns results of `apply_rules`
                 return this.apply_rules(str, this.__plural_rules, this.__uncountable_words);
