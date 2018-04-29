@@ -1,5 +1,5 @@
 import Model from "./model";
-import {JSD} from "jsd";
+import {RxVO} from "rxvo";
 import Query from "./query";
 import foreach from "lodash.foreach";
 import map from "lodash.map";
@@ -11,12 +11,13 @@ const _queries = new WeakMap();
 const resolveData = (data) => {
     return ("$model" in data) ? data.$model.data : data;
 };
+
 const _createReference = (model, collection) => {
-    // creates new Model Class to point to JSD weak-reference
+    // creates new Model Class to point to RxVO weak-reference
     const _mC = new (collection.modelClass)();
-    // sets JSD weak-reference / is referenced by Collection UID
+    // sets RxVO weak-reference / is referenced by Collection UID
     _cids.get(collection)[_mC.$cid] = model;
-    // sets back-ref to the Model on the JSD data element
+    // sets back-ref to the Model on the RxVO data element
     Object.defineProperty(model, "$model", {
         get: () => _mC,
         enumerable: false,
@@ -28,7 +29,7 @@ const _createReference = (model, collection) => {
  */
 class Collection {
     /**
-     * @param schema Collection JSD Schema
+     * @param schema Collection RxVO Schema
      * @returns {boolean}
      */
     constructor(schema) {
@@ -53,13 +54,26 @@ class Collection {
             get: () => schema,
         });
 
-        // creates JSD and subscribes to events on root
+        // creates RxVO and subscribes to events on root
         try {
-            const _jsd = new JSD([{
-                type: "Object",
-                elements: schema.properties
-            }]);
-            _jsd.document.subscribe({
+            // const _colSchema = {
+            //     type: "array",
+            //     "$schema": "http://json-schema.org/draft-07/schema#",
+            //     items: {
+            //         type: "object",
+            //         properties: schema.properties
+            //     },
+            // };
+            const _colSchema = {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                    }
+                }
+            };
+            const _rxvo = new RxVO(_colSchema);
+            _rxvo.subscribe({
                 next: (d) => {
                     foreach(d.models, (m) => this.create(m));
                 },
@@ -68,8 +82,8 @@ class Collection {
                 },
             });
 
-            // stores JSD ref to WeakMap
-            _models.set(this, _jsd);
+            // stores RxVO ref to WeakMap
+            _models.set(this, _rxvo);
         } catch (e) {
             console.error(`${this.$classname}: invalid schema: ${e}`);
             return false;
@@ -86,8 +100,8 @@ class Collection {
      * @returns {*}
      */
     get models() {
-        return _models.get(this).document.model;
-        // return _models.get(this).document.model;
+        return _models.get(this).model;
+        // return _models.get(this).model;
     }
 
     /**
@@ -96,17 +110,17 @@ class Collection {
      * @returns {Collection}
      */
     set models(data) {
-        // helper to determine how to handle incoming data elements
+        // helper to determine how to handle incoming data properties
         const _derive = (m) => {
             return (m instanceof Model ? m.data : m);
         };
 
         // tests for array and maps or wraps single element into an array
         const _m = Array.isArray(data) ? map(data, _derive) : [_derive(data)];
-        _models.get(this).document.model = _m;
+        _models.get(this).model = _m;
 
         // applies the Model back-refs onto the dataset
-        foreach(_models.get(this).document.model, (m) => _createReference(m, this));
+        foreach(_models.get(this).model, (m) => _createReference(m, this));
         return this;
     }
 
@@ -196,21 +210,33 @@ class Collection {
      */
     newModel(data) {
         data = resolveData(data);
-        const _jsd = new JSD(this.$schema.properties);
-        _jsd.document.model = ((data) && (typeof data) !== "null") ? data : {};
-        _createReference(_jsd.document.model, this);
+
+        // seems model contamination is occuring here
+        // todo: dig into this
+        const _s = {
+            properties: JSON.parse(JSON.stringify(this.$schema.properties)),
+        };
+
+        const _rxvo = new RxVO(_s);
+
+        _rxvo.model = ((data) && (typeof data) !== "null") ? data : {};
+        _createReference(_rxvo.model, this);
+
         let _inst = {};
+
         Object.keys(this.$schema.properties).forEach((prop) => {
             Object.defineProperty(_inst, prop, {
-                get: () => _jsd.document.model[prop],
-                set: (val) => _jsd.document.model[prop] = val,
+                get: () => _rxvo.model[prop],
+                set: (val) => _rxvo.model[prop] = val,
                 enumerable: true,
             });
         });
+
         Object.defineProperty(_inst, "$model", {
-            get: () => _jsd.document.model.$model,
+            get: () => _rxvo.model.$model,
             enumerable: false,
         });
+
         return _inst;
     }
 
@@ -236,7 +262,7 @@ class Collection {
      * @returns {Collection}
      */
     add(data) {
-        this.models.$ref.addItem(resolveData(data));
+        this.models.$model.addItem(resolveData(data));
         return this;
     }
 
@@ -312,7 +338,7 @@ class Collection {
      * @returns {Object}
      */
     valueOf() {
-        return _models.get(this).document.valueOf();
+        return _models.get(this).valueOf();
     }
 
     /**
@@ -320,7 +346,7 @@ class Collection {
      * @returns {*}
      */
     toJSON() {
-        return _models.get(this).document.toJSON();
+        return _models.get(this).toJSON();
     }
 
     /**
@@ -328,7 +354,7 @@ class Collection {
      * @returns {string}
      */
     toString() {
-        return _models.get(this).document.toString();
+        return _models.get(this).toString();
     }
 }
 

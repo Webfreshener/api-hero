@@ -4,9 +4,9 @@ const webpack = require("webpack");
 module.exports = [{
 	output: {
         path: path.join(__dirname, "dist"),
-        filename: 'jsd.js',
+        filename: 'rxvo.js',
 		libraryTarget: "umd",
-		library: "JSD",
+		library: "RxVO",
 	},
     module: {
         rules: [
@@ -22,9 +22,9 @@ module.exports = [{
 }, {
     output: {
         path: path.join(__dirname, "dist"),
-        filename: 'jsd.node.js',
+        filename: 'rxvo.node.js',
         libraryTarget: "commonjs",
-        library: "JSD",
+        library: "RxVO",
     },
     module: {
         rules: [

@@ -193,9 +193,9 @@
                     "line": 4,
                     "column": 12
                   },
-                  "identifierName": "elements"
+                  "identifierName": "properties"
                 },
-                "name": "elements"
+                "name": "properties"
               },
               "value": {
                 "type": "ObjectExpression",
@@ -397,9 +397,9 @@
                                 "line": 8,
                                 "column": 20
                               },
-                              "identifierName": "elements"
+                              "identifierName": "properties"
                             },
-                            "name": "elements"
+                            "name": "properties"
                           },
                           "value": {
                             "type": "ObjectExpression",
@@ -553,9 +553,9 @@
                                             "line": 11,
                                             "column": 28
                                           },
-                                          "identifierName": "elements"
+                                          "identifierName": "properties"
                                         },
-                                        "name": "elements"
+                                        "name": "properties"
                                       },
                                       "value": {
                                         "type": "ObjectExpression",
@@ -1502,9 +1502,9 @@
                                                         "line": 32,
                                                         "column": 36
                                                       },
-                                                      "identifierName": "elements"
+                                                      "identifierName": "properties"
                                                     },
-                                                    "name": "elements"
+                                                    "name": "properties"
                                                   },
                                                   "value": {
                                                     "type": "ObjectExpression",
@@ -1658,9 +1658,9 @@
                                                                     "line": 35,
                                                                     "column": 44
                                                                   },
-                                                                  "identifierName": "elements"
+                                                                  "identifierName": "properties"
                                                                 },
-                                                                "name": "elements"
+                                                                "name": "properties"
                                                               },
                                                               "value": {
                                                                 "type": "ObjectExpression",
@@ -2409,7 +2409,7 @@
                                                                                 "column": 45
                                                                               }
                                                                             },
-                                                                            "elements": [
+                                                                            "properties": [
                                                                               {
                                                                                 "type": "ObjectExpression",
                                                                                 "start": 2323,
@@ -2582,9 +2582,9 @@
                                                                                           "line": 58,
                                                                                           "column": 60
                                                                                         },
-                                                                                        "identifierName": "elements"
+                                                                                        "identifierName": "properties"
                                                                                       },
-                                                                                      "name": "elements"
+                                                                                      "name": "properties"
                                                                                     },
                                                                                     "value": {
                                                                                       "type": "ObjectExpression",
@@ -4554,9 +4554,9 @@
                                 "line": 116,
                                 "column": 20
                               },
-                              "identifierName": "elements"
+                              "identifierName": "properties"
                             },
-                            "name": "elements"
+                            "name": "properties"
                           },
                           "value": {
                             "type": "ObjectExpression",
@@ -4758,9 +4758,9 @@
                                             "line": 120,
                                             "column": 28
                                           },
-                                          "identifierName": "elements"
+                                          "identifierName": "properties"
                                         },
-                                        "name": "elements"
+                                        "name": "properties"
                                       },
                                       "value": {
                                         "type": "ArrayExpression",
@@ -4776,7 +4776,7 @@
                                             "column": 22
                                           }
                                         },
-                                        "elements": [
+                                        "properties": [
                                           {
                                             "type": "ObjectExpression",
                                             "start": 5819,
@@ -5109,7 +5109,7 @@
                                             "column": 213
                                           }
                                         },
-                                        "elements": [
+                                        "properties": [
                                           {
                                             "type": "StringLiteral",
                                             "start": 6076,
@@ -9273,9 +9273,9 @@
                                             "line": 225,
                                             "column": 28
                                           },
-                                          "identifierName": "elements"
+                                          "identifierName": "properties"
                                         },
-                                        "name": "elements"
+                                        "name": "properties"
                                       },
                                       "value": {
                                         "type": "ObjectExpression",
@@ -11112,7 +11112,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "elements",
+      "value": "properties",
       "start": 64,
       "end": 72,
       "loc": {
@@ -11477,7 +11477,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "elements",
+      "value": "properties",
       "start": 167,
       "end": 175,
       "loc": {
@@ -11737,7 +11737,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "elements",
+      "value": "properties",
       "start": 258,
       "end": 266,
       "loc": {
@@ -13647,7 +13647,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "elements",
+      "value": "properties",
       "start": 1135,
       "end": 1143,
       "loc": {
@@ -13907,7 +13907,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "elements",
+      "value": "properties",
       "start": 1274,
       "end": 1282,
       "loc": {
@@ -15785,7 +15785,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "elements",
+      "value": "properties",
       "start": 2615,
       "end": 2623,
       "loc": {
@@ -20456,7 +20456,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "elements",
+      "value": "properties",
       "start": 5678,
       "end": 5686,
       "loc": {
@@ -20821,7 +20821,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "elements",
+      "value": "properties",
       "start": 5808,
       "end": 5816,
       "loc": {
@@ -30299,7 +30299,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "elements",
+      "value": "properties",
       "start": 9557,
       "end": 9565,
       "loc": {

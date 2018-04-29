@@ -70,9 +70,9 @@
                   "line": 1,
                   "column": 11
                 },
-                "identifierName": "JSD"
+                "identifierName": "RxVO"
               },
-              "name": "JSD"
+              "name": "RxVO"
             },
             "local": {
               "type": "Identifier",
@@ -87,9 +87,9 @@
                   "line": 1,
                   "column": 11
                 },
-                "identifierName": "JSD"
+                "identifierName": "RxVO"
               },
-              "name": "JSD"
+              "name": "RxVO"
             }
           }
         ],
@@ -108,10 +108,10 @@
             }
           },
           "extra": {
-            "rawValue": "jsd",
-            "raw": "\"jsd\""
+            "rawValue": "rxvo",
+            "raw": "\"rxvo\""
           },
-          "value": "jsd"
+          "value": "rxvo"
         }
       },
       {
@@ -1158,7 +1158,7 @@
                   },
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * returns data from JSD Document\n     ",
+                    "value": "*\n     * returns data from RxVO Document\n     ",
                     "start": 592,
                     "end": 641,
                     "loc": {
@@ -1477,7 +1477,7 @@
                   },
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * returns data from JSD Document\n     ",
+                    "value": "*\n     * returns data from RxVO Document\n     ",
                     "start": 592,
                     "end": 641,
                     "loc": {
@@ -1495,7 +1495,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * sets data to JSD Document\n     * @param d\n     ",
+                    "value": "*\n     * sets data to RxVO Document\n     * @param d\n     ",
                     "start": 725,
                     "end": 785,
                     "loc": {
@@ -1701,9 +1701,9 @@
                                   "line": 37,
                                   "column": 22
                                 },
-                                "identifierName": "$ref"
+                                "identifierName": "$model"
                               },
-                              "name": "$ref"
+                              "name": "$model"
                             },
                             "computed": false
                           },
@@ -1782,7 +1782,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * sets data to JSD Document\n     * @param d\n     ",
+                    "value": "*\n     * sets data to RxVO Document\n     * @param d\n     ",
                     "start": 725,
                     "end": 785,
                     "loc": {
@@ -2600,9 +2600,9 @@
                                   "line": 72,
                                   "column": 22
                                 },
-                                "identifierName": "$ref"
+                                "identifierName": "$model"
                               },
-                              "name": "$ref"
+                              "name": "$model"
                             },
                             "computed": false
                           },
@@ -3338,7 +3338,7 @@
                   "trailingComments": [
                     {
                       "type": "CommentLine",
-                      "value": " return this.data.$ref.subscribe(handler);",
+                      "value": " return this.data.$model.subscribe(handler);",
                       "start": 1884,
                       "end": 1928,
                       "loc": {
@@ -3657,9 +3657,9 @@
                                   "line": 117,
                                   "column": 29
                                 },
-                                "identifierName": "$ref"
+                                "identifierName": "$model"
                               },
-                              "name": "$ref"
+                              "name": "$model"
                             },
                             "computed": false
                           },
@@ -3945,9 +3945,9 @@
                                   "line": 125,
                                   "column": 29
                                 },
-                                "identifierName": "$ref"
+                                "identifierName": "$model"
                               },
-                              "name": "$ref"
+                              "name": "$model"
                             },
                             "computed": false
                           },
@@ -5071,9 +5071,9 @@
                                   "line": 192,
                                   "column": 29
                                 },
-                                "identifierName": "$ref"
+                                "identifierName": "$model"
                               },
-                              "name": "$ref"
+                              "name": "$model"
                             },
                             "computed": false
                           },
@@ -5360,9 +5360,9 @@
                                   "line": 200,
                                   "column": 29
                                 },
-                                "identifierName": "$ref"
+                                "identifierName": "$model"
                               },
-                              "name": "$ref"
+                              "name": "$model"
                             },
                             "computed": false
                           },
@@ -5601,9 +5601,9 @@
                                   "line": 207,
                                   "column": 29
                                 },
-                                "identifierName": "$ref"
+                                "identifierName": "$model"
                               },
-                              "name": "$ref"
+                              "name": "$model"
                             },
                             "computed": false
                           },
@@ -5727,7 +5727,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * returns data from JSD Document\n     ",
+      "value": "*\n     * returns data from RxVO Document\n     ",
       "start": 592,
       "end": 641,
       "loc": {
@@ -5743,7 +5743,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * sets data to JSD Document\n     * @param d\n     ",
+      "value": "*\n     * sets data to RxVO Document\n     * @param d\n     ",
       "start": 725,
       "end": 785,
       "loc": {
@@ -5967,7 +5967,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " return this.data.$ref.subscribe(handler);",
+      "value": " return this.data.$model.subscribe(handler);",
       "start": 1884,
       "end": 1928,
       "loc": {
@@ -6496,7 +6496,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "JSD",
+      "value": "RxVO",
       "start": 8,
       "end": 11,
       "loc": {
@@ -6574,7 +6574,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "jsd",
+      "value": "rxvo",
       "start": 18,
       "end": 23,
       "loc": {
@@ -8901,7 +8901,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * returns data from JSD Document\n     ",
+      "value": "*\n     * returns data from RxVO Document\n     ",
       "start": 592,
       "end": 641,
       "loc": {
@@ -9463,7 +9463,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * sets data to JSD Document\n     * @param d\n     ",
+      "value": "*\n     * sets data to RxVO Document\n     * @param d\n     ",
       "start": 725,
       "end": 785,
       "loc": {
@@ -9748,7 +9748,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "$ref",
+      "value": "$model",
       "start": 822,
       "end": 826,
       "loc": {
@@ -11376,7 +11376,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "$ref",
+      "value": "$model",
       "start": 1352,
       "end": 1356,
       "loc": {
@@ -12652,7 +12652,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " return this.data.$ref.subscribe(handler);",
+      "value": " return this.data.$model.subscribe(handler);",
       "start": 1884,
       "end": 1928,
       "loc": {
@@ -13002,7 +13002,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "$ref",
+      "value": "$model",
       "start": 2068,
       "end": 2072,
       "loc": {
@@ -13458,7 +13458,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "$ref",
+      "value": "$model",
       "start": 2186,
       "end": 2190,
       "loc": {
@@ -15071,7 +15071,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "$ref",
+      "value": "$model",
       "start": 3246,
       "end": 3250,
       "loc": {
@@ -15501,7 +15501,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "$ref",
+      "value": "$model",
       "start": 3359,
       "end": 3363,
       "loc": {
@@ -15931,7 +15931,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "$ref",
+      "value": "$model",
       "start": 3462,
       "end": 3466,
       "loc": {

@@ -1,4 +1,4 @@
-import {JSD} from "jsd";
+import {RxVO} from "rxvo";
 import MetaData from "./metadata";
 import {_cids, _requests} from "./_references";
 import uniqueid from "lodash.uniqueid";
@@ -38,7 +38,7 @@ export default class {
     }
 
     /**
-     * returns data from JSD Document
+     * returns data from RxVO Document
      * @returns {*}
      */
     get data() {
@@ -46,14 +46,14 @@ export default class {
     }
 
     /**
-     * sets data to JSD Document
+     * sets data to RxVO Document
      * @param d
      */
     set data(d) {
-        // this.data.$ref.model = d;
-        // let _jsd = new JSD(this.$collection.$schema.properties);
-        // _jsd.document.model = d;
-        _cids.get(this.$collection)[this.$cid].$ref.model = d;
+        // this.data.$model.model = d;
+        // let _rxvo = new RxVO(this.$collection.$schema.properties);
+        // _rxvo.model = d;
+        _cids.get(this.$collection)[this.$cid].$model.model = d;
         // this.data = d;
         return this;
     }
@@ -80,7 +80,7 @@ export default class {
     //  * @param key
     //  */
     // get(key) {
-    //     return this.data.$ref.get(key);
+    //     return this.data.$model.get(key);
     // }
     //
     // /**
@@ -89,7 +89,7 @@ export default class {
     //  * @param val
     //  */
     // set(key, val) {
-    //     this.data.$ref.set(key, val);
+    //     this.data.$model.set(key, val);
     //     return this;
     // }
 
@@ -123,7 +123,7 @@ export default class {
      * @param handler
      */
     subscribe(handler) {
-        // return this.data.$ref.subscribe(handler);
+        // return this.data.$model.subscribe(handler);
     }
 
     //
@@ -134,7 +134,7 @@ export default class {
      * @returns {boolean|string}
      */
     validate() {
-        return this.data.$ref.validate();
+        return this.data.$model.validate();
     }
 
     /**
@@ -142,7 +142,7 @@ export default class {
      * @returns {boolean}
      */
     get isValid() {
-        return _cids.get(this.$collection)[this.$cid].$ref.isValid;
+        return _cids.get(this.$collection)[this.$cid].$model.isValid;
     }
 
     get isNew() {
@@ -178,12 +178,19 @@ export default class {
 
     /**
      *
+     * @param id
+     * @returns {*|PromiseLike<T>|Promise<T>|{$ref}}
      */
-    fetch() {
+    fetch(id = null) {
         let _req = {
             method: this.$scope.options.CRUD_METHODS.read,
             id: uniqueid(`${this.$collectionName}-read-`),
         };
+
+        if (id !== null) {
+            this.id = id;
+        }
+
         _requests.set(this, _req);
 
         return this.$scope.sync(_req.method, this, {}).then((res) => {
@@ -204,7 +211,7 @@ export default class {
             id: uniqueid(`${this.$collectionName}-create-`),
         };
         _requests.set(this, _req);
-        return this.$scope.sync(_req.method, this, {body: `${this.data.$ref}`}).then((res) => {
+        return this.$scope.sync(_req.method, this, {body: `${this.data.$model}`}).then((res) => {
             if (res.body) {
                 this.data = res.body;
             }

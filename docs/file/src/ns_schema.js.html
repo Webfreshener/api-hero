@@ -46,14 +46,14 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default {
     type: &quot;Object&quot;,
     extensible: false,
-    elements: {
+    properties: {
         collections: {
             type: &quot;Object&quot;,
             required: true,
-            elements: {
+            properties: {
                 &quot;*&quot;: {
                     type: &quot;Object&quot;,
-                    elements: {
+                    properties: {
                         name: {
                             type: &quot;String&quot;,
                             required: true,
@@ -74,10 +74,10 @@
                             type: &quot;Object&quot;,
                             required: true,
                             extensible: false,
-                            elements: {
+                            properties: {
                                 &quot;*&quot;: {
                                     type: &quot;Object&quot;,
-                                    elements: {
+                                    properties: {
                                         default: {
                                             type: &quot;*&quot;,
                                             required: false,
@@ -100,7 +100,7 @@
                                                 },
                                                 {
                                                     type: &quot;Object&quot;,
-                                                    elements: {
+                                                    properties: {
                                                         type: {
                                                             type: &quot;String&quot;,
                                                             required: true,
@@ -158,11 +158,11 @@
         options: {
             type: &quot;Object&quot;,
             required: true,
-            elements: {
+            properties: {
                 ALLOWED: {
                     type: &quot;Array&quot;,
                     required: true,
-                    elements: [{
+                    properties: [{
                         type: &quot;String&quot;,
                         required: false,
                     }],
@@ -267,7 +267,7 @@
                     type: &quot;Object&quot;,
                     required: true,
                     extensible: true,
-                    elements: {
+                    properties: {
                         create: {
                             type: &quot;String&quot;,
                             required: false,

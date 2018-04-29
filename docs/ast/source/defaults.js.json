@@ -240,7 +240,7 @@
                           "column": 9
                         }
                       },
-                      "elements": [
+                      "properties": [
                         {
                           "type": "StringLiteral",
                           "start": 138,

@@ -9,9 +9,9 @@ import {simpleReq} from "../fixtures/collection.mock";
 describe("Collection Class Tests", () => {
     const ns = Namespace(_nsSchema);
     const _col = ns.TestCol1;
-    describe("Basic Validation and Data", () => {
-        it.skip("should define a collection from a Schema", () => {
-            // TODO: Resolve this issue in JSD Lib (filtering keys such as "required" etc)
+    describe.skip("Basic Validation and Data", () => {
+        it("should define a collection from a Schema", () => {
+            // TODO: Resolve this issue in RxVO Lib (filtering keys such as "required" etc)
             expect(deepEqual(_col.$schema, _collectionSchema)).toBe(true);
         });
 
@@ -32,7 +32,7 @@ describe("Collection Class Tests", () => {
             expect(_col.length).toBe(3);
         });
 
-        it("should return Models attached to JSD Docs", () => {
+        it("should return Models attached to RxVO Docs", () => {
             expect(_col.models[0].$model instanceof Model).toBe(true);
             expect(_col.models[0].$model.save).toBeDefined();
         });
@@ -60,7 +60,7 @@ describe("Collection Class Tests", () => {
         });
     });
 
-    describe("Basic HTTP Requests", () => {
+    describe.skip("Basic HTTP Requests", () => {
         beforeEach(() => {
             nock("http://0.0.0.0")
                 .get("/api/1/TestCol1")

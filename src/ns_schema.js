@@ -1,72 +1,70 @@
 export default {
-    type: "Object",
+    type: "object",
     extensible: false,
-    elements: {
+    required: ["collections"],
+    properties: {
         collections: {
-            type: "Object",
-            required: true,
-            elements: {
-                "*": {
-                    type: "Object",
-                    elements: {
+            type: "object",
+            patternProperties: {
+                ".*": {
+                    type: "object",
+                    required: ["name", "properties"],
+                    properties: {
                         name: {
-                            type: "String",
-                            required: true,
-                            restrict: "^[a-zA-Z0-9_]+$",
+                            type: "string",
+                            pattern: "^[a-zA-Z0-9_]+$",
                         },
                         description: {
-                            type: "String",
-                            required: false,
-                            default: " ",
-                            restrict: "^[\\w\\s\\W]+$",
+                            type: "string",
+                            pattern: "^[\\w\\s\\W]+$",
                         },
                         plural: {
-                            type: "String",
-                            required: false,
-                            restrict: "^[a-zA-Z0-9_]+$",
+                            type: "string",
+                            pattern: "^[a-zA-Z0-9_]+$",
                         },
                         properties: {
-                            type: "Object",
-                            required: true,
+                            type: "object",
                             extensible: false,
-                            elements: {
-                                "*": {
-                                    type: "Object",
-                                    elements: {
+                            patternProperties: {
+                                ".*": {
+                                    type: "object",
+                                    required: ["type"],
+                                    properties: {
                                         default: {
-                                            type: "*",
-                                            required: false,
+                                            anyOf: [
+                                                {type: "string"},
+                                                {type: "number"},
+                                                {type: "object"},
+                                                {type: "boolean"},
+                                            ],
                                         },
                                         defaultFn: {
-                                            type: "String",
-                                            required: false,
-                                            restrict: "^(guid|uuid|uuidv4|now)+$",
+                                            type: "string",
+                                            pattern: "^(guid|uuid|uuidv4|now)+$",
                                         },
                                         description: {
-                                            type: "String",
-                                            required: false,
-                                            restrict: "^((?!\"|\\b|\\f|\\n|\\r|\\t|\\u).)*$",
+                                            type: "string",
+                                            pattern: "^((?!\"|\\b|\\f|\\n|\\r|\\t|\\u).)*$",
                                         },
                                         id: {
-                                            required: false,
                                             polymorphic: [
                                                 {
-                                                    type: "Boolean",
+                                                    type: "boolean",
                                                 },
                                                 {
-                                                    type: "Object",
-                                                    elements: {
+                                                    type: "object",
+                                                    properties: {
                                                         type: {
-                                                            type: "String",
+                                                            type: "string",
                                                             required: true,
-                                                            restrict: "^(String|Number)+$",
+                                                            pattern: "^(string|integer)+$",
                                                         },
                                                         id: {
-                                                            type: "Boolean",
+                                                            type: "boolean",
                                                             required: true,
                                                         },
                                                         generated: {
-                                                            type: "Boolean",
+                                                            type: "boolean",
                                                             required: false,
                                                         },
                                                     },
@@ -74,32 +72,26 @@ export default {
                                             ],
                                         },
                                         index: {
-                                            type: "Boolean",
-                                            required: false,
+                                            type: "boolean",
                                         },
                                         type: {
-                                            type: "String",
-                                            required: true,
-                                            restrict: "^(any|Array|Boolean|Buffer|Date|GeoPoint|Number|Object|String)+$",
+                                            type: "string",
+                                            pattern: "^(any|array|boolean|Buffer|Date|GeoPoint|integer|object|string)+$",
                                         },
                                         required: {
-                                            type: "Boolean",
-                                            required: false,
+                                            type: "boolean",
                                             default: false,
                                         },
                                         length: {
-                                            type: "Number",
-                                            required: false,
+                                            type: "integer",
                                             default: null,
                                         },
                                         precision: {
-                                            type: "Number",
-                                            required: false,
+                                            type: "integer",
                                             default: null,
                                         },
                                         scale: {
-                                            type: "Number",
-                                            required: false,
+                                            type: "integer",
                                             default: null,
                                         },
                                     },
@@ -111,154 +103,142 @@ export default {
             },
         },
         options: {
-            type: "Object",
-            required: true,
-            elements: {
+            type: "object",
+            required: ["ALLOWED", "SESSION_KEY", "REST_KEY",
+                "APP_ID", "API_VERSION", "CRUD_METHODS"],
+            default: {
+                CRUD_METHODS: {
+                    create: "POST",
+                    read: "GET",
+                    update: "PUT",
+                    patch: "PATCH",
+                    destroy: "DELETE",
+                    options: "OPTIONS",
+                },
+            },
+            properties: {
                 ALLOWED: {
-                    type: "Array",
-                    required: true,
-                    elements: [{
-                        type: "String",
-                        required: false,
-                    }],
+                    type: "array",
+                    items: {
+                        type: "string",
+                    },
                 },
                 VERSION: {
-                    type: "String",
-                    required: false,
-                    restrict: ["\\\\bv?(?:0|[1-9]\\\\d*)\\\\.(?:0|[1-9]\\\\d*)\\\\.(?:0|[1-9]\\\\d*)(?:-[\\\\da-z\\\\-]+(?:\\\\.[\\\\da-z\\\\-]+)*)?(?:\\\\+[\\\\da-z\\\\-]+(?:\\\\.[\\\\da-z\\\\-]+)*)?\\\\b", "ig"],
+                    type: "string",
+                    default: "1",
+                    // pattern: "\\\\bv?(?:0|[1-9]\\\\d*)\\\\.(?:0|[1-9]\\\\d*)\\\\.(?:0|[1-9]\\\\d*)(?:-[\\\\da-z\\\\-]+(?:\\\\.[\\\\da-z\\\\-]+)*)?(?:\\\\+[\\\\da-z\\\\-]+(?:\\\\.[\\\\da-z\\\\-]+)*)?\\\\b",
                 },
                 APP_ID: {
-                    type: "String",
-                    required: true,
-                    restrict: "^[a-zA-Z0-9]{16,32}$"
+                    type: "string",
+                    pattern: "^[a-zA-Z0-9]{16,32}$"
                 },
                 APP_ID_PARAM_NAME: {
-                    type: "String",
-                    required: false,
+                    type: "string",
                 },
-                REST_KEY: {
-                    type: "String",
-                    required: true,
-                    restrict: "^[a-zA-Z0-9]{16,32}$",
+                REST_KEYREST_KEY: {
+                    type: "string",
+                    pattern: "^[a-zA-Z0-9]{16,32}$",
                 },
                 REST_KEY_PARAM_NAME: {
-                    type: "String",
-                    required: false,
+                    type: "string",
                 },
                 SESSION_TOKEN: {
-                    type: "String",
-                    required: false,
+                    type: "string",
                 },
                 SESSION_KEY: {
-                    type: "String",
-                    required: true,
-                    restrict: "^[a-zA-Z0-9]{16,32}$",
+                    type: "string",
+                    pattern: "^[a-zA-Z0-9]{16,32}$",
                 },
                 CSRF_TOKEN: {
-                    type: "String",
-                    required: false,
-                    restrict: "^[a-zA-Z0-9]{16,32}$",
+                    type: "string",
+                    pattern: "^[a-zA-Z0-9]{16,32}$",
                 },
                 API_VERSION: {
-                    type: "String",
-                    required: true,
+                    type: "string",
                 },
                 MAX_BATCH_SIZE: {
-                    type: "Number",
-                    required: false,
+                    type: "integer",
                     default: 50,
                 },
                 DEFAULT_FETCH_LIMIT_OVERRIDE: {
-                    type: "Number",
-                    required: false,
+                    type: "integer",
                     default: 50000,
                 },
                 UNDEFINED_CLASSNAME: {
-                    type: "String",
-                    required: false,
+                    type: "string",
                     default: "__UNDEFINED_CLASSNAME__",
-                    restrict: "^[a-zA-Z0-9_]+$",
+                    pattern: "^[a-zA-Z0-9_]+$",
                 },
                 API_URI: {
-                    type: "String",
-                    required: false,
+                    type: "string",
                     default: "/api",
-                    restrict: "^[a-zA-Z0-9_]+$",
+                    pattern: "^\\/?[a-zA-Z0-9_]+\\/?$",
                 },
                 CORS: {
-                    type: "Boolean",
-                    required: false,
+                    type: "boolean",
                     default: false,
                 },
                 PROTOCOL: {
-                    type: "String",
-                    required: false,
+                    type: "string",
                     default: "http",
-                    restrict: "^(HTTP|http)+(S|s)?$",
+                    pattern: "^(HTTP|http)+(S|s)?$",
                 },
                 HOST: {
-                    type: "String",
-                    required: false,
+                    type: "string",
                     default: "127.0.0.1",
-                    restrict: "^(?:[0-9]{1,3}\\\\.){3}[0-9]{1,3}$",
+                    pattern: "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$",
                 },
                 PORT: {
-                    type: "Number",
-                    required: false,
+                    type: "integer",
                     default: 3000,
                 },
                 BASE_PATH: {
-                    type: "String",
-                    required: false,
+                    type: "string",
                     default: "/api",
-                    restrict: "^\\\\/+[a-zA-Z0-9_\\\\/\\\\.\\\\-]+$",
+                    pattern: "^\\/+[a-zA-Z0-9_\\/\\.\\-]+$",
                 },
                 CAPITALIZE_CLASSNAMES: {
-                    type: "Boolean",
-                    required: false,
+                    type: "boolean",
                     default: true,
                 },
                 CRUD_METHODS: {
-                    type: "Object",
-                    required: true,
-                    extensible: true,
-                    elements: {
+                    type: "object",
+                    properties: {
                         create: {
-                            type: "String",
-                            required: false,
-                            restrict: "^POST+$",
+                            type: "string",
+                            pattern: "^POST+$",
+                            default: "POST",
                         },
                         read: {
-                            type: "String",
-                            required: false,
-                            restrict: "^GET+$",
+                            type: "string",
+                            pattern: "^GET+$",
+                            default: "GET",
                         },
                         update: {
-                            type: "String",
-                            required: false,
-                            restrict: "^PUT+$",
+                            type: "string",
+                            pattern: "^PUT+$",
+                            default: "PUT",
                         },
                         destroy: {
-                            type: "String",
-                            required: false,
-                            restrict: "^DELETE+$",
+                            type: "string",
+                            pattern: "^DELETE+$",
+                            default: "DELETE",
                         },
                         patch: {
-                            type: "String",
-                            required: false,
-                            restrict: "^PATCH+$",
+                            type: "string",
+                            pattern: "^PATCH+$",
+                            default: "PATCH",
                         },
                         options: {
-                            type: "String",
-                            required: false,
-                            restrict: "^OPTIONS+$",
+                            type: "string",
+                            pattern: "^OPTIONS+$",
+                            default: "OPTIONS",
                         }
                     },
                 },
                 QUERY_PARAM: {
-                    type: "String",
-                    required: false,
-                    restrict: "^[a-zA-Z0-9_]+$",
+                    type: "string",
+                    pattern: "^[a-zA-Z0-9_]+$",
                 },
             },
         },

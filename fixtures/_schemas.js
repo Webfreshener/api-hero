@@ -1,30 +1,50 @@
 import defaults from "../src/defaults";
-
+import assign from "lodash.assign";
+import {default as PetStorev2} from "./petstore.v2";
 export const _collectionSchema = {
     name: "TestCol1",
     plural: "TestCol1",
-    description: " ",
     properties: {
         id: {
-            type: "Number",
+            type: "integer",
         },
         name: {
-            type: "String",
+            type: "string",
         },
         value: {
-            type: "Number",
+            type: "integer",
         },
         createdOn: {
-            type: "String",
+            type: "string",
         }
     },
 };
 
 let _nsSchema = {};
-Object.assign(_nsSchema, defaults, {
-    collections: {
-        TestCol1: _collectionSchema
+assign(_nsSchema, defaults, {
+    namespaces: {
+        "PetStore": PetStorev2,
     },
+    options: {
+        VERSION: "1",
+        API_VERSION: "1",
+        APP_ID: "ABCDABCDABCDABCDABCDABCD",
+        REST_KEY: "EFGH",
+        HOST: "0.0.0.0",
+        PORT: 80,
+        SESSION_KEY: "ABCDABCDABCDABCDABCDABCD",
+        ALLOWED: ["application/json"],
+        PROTOCOL: "http",
+        BASE_PATH: "/api",
+        CRUD_METHODS: {
+            create: "POST",
+            read: "GET",
+            update: "PUT",
+            patch: "PATCH",
+            destroy: "DELETE",
+            options: "OPTIONS",
+        },
+    }
 });
 
 export {_nsSchema as _nsSchema};

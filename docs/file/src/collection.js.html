@@ -44,7 +44,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/collection.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Model from &quot;./model&quot;;
-import {JSD} from &quot;jsd&quot;;
+import {RxVO} from &quot;rxvo&quot;;
 import Query from &quot;./query&quot;;
 import foreach from &quot;lodash.foreach&quot;;
 import map from &quot;lodash.map&quot;;
@@ -59,7 +59,7 @@ const _requests = new WeakMap();
  */
 class Collection {
     /**
-     * @param schema Collection JSD Schema
+     * @param schema Collection RxVO Schema
      * @returns {boolean}
      */
     constructor(schema) {
@@ -84,13 +84,13 @@ class Collection {
             get: () =&gt; schema,
         });
 
-        // creates JSD and subscribes to events on root
+        // creates RxVO and subscribes to events on root
         try {
-            const _jsd = new JSD([{
+            const _rxvo = new RxVO([{
                 type: &quot;Object&quot;,
-                elements: schema.properties
+                properties: schema.properties
             }]);
-            _jsd.document.subscribe({
+            _rxvo.document.subscribe({
                 next: (d) =&gt; {
                     foreach(d.models, (m) =&gt; this.create(m));
                 },
@@ -98,8 +98,8 @@ class Collection {
                 },
             });
 
-            // stores JSD ref to WeakMap
-            _models.set(this, _jsd);
+            // stores RxVO ref to WeakMap
+            _models.set(this, _rxvo);
         } catch (e) {
             console.error(`${this.$classname}: invalid schema: ${e}`);
             return false;
@@ -117,7 +117,7 @@ class Collection {
      * @returns {*}
      */
     get models() {
-        return _models.get(this).document.model;
+        return _models.get(this).model;
     }
 
     /**
@@ -127,25 +127,25 @@ class Collection {
      */
     set models(data) {
         const _create = (m) =&gt; {
-            // creates new Model Class to point to JSD weak-reference
+            // creates new Model Class to point to RxVO weak-reference
             const _mC = new (this.modelClass)();
-            // sets JSD weak-reference / is referenced by Collection UID
+            // sets RxVO weak-reference / is referenced by Collection UID
             _cids.get(this)[_mC.$cid] = m;
-            // sets back-ref to the Model on the JSD data element
+            // sets back-ref to the Model on the RxVO data element
             Object.defineProperty(m, &quot;$model&quot;, {
                 get: () =&gt; _mC,
                 enumerable: false,
             });
         };
-        // helper to determine how to handle incoming data elements
+        // helper to determine how to handle incoming data properties
         const _derive = (m) =&gt; {
             return (m instanceof Model ? m.data : m);
         };
         // tests for array and maps or wraps single element into an array
         const _m = Array.isArray(data) ? map(data, _derive) : [_derive(data)];
-        _models.get(this).document.model = _m;
+        _models.get(this).model = _m;
         // applies the Model back-refs onto the dataset
-        foreach(_models.get(this).document.model, (m) =&gt; _create(m));
+        foreach(_models.get(this).model, (m) =&gt; _create(m));
         return this;
     }
 
@@ -237,7 +237,7 @@ class Collection {
         const _model = new (this.modelClass)(this);
         // puts actual data on WeakMap reference
         _cids.get(this)[_model.$cid] = data;
-        Object.defineProperty(_model.$ref, &quot;$model&quot;, {
+        Object.defineProperty(_model.$model, &quot;$model&quot;, {
             value: _model,
             enumerable: false,
             writable: false,

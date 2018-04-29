@@ -43,7 +43,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/model.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {JSD} from &quot;jsd&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {RxVO} from &quot;rxvo&quot;;
 import MetaData from &quot;./metadata&quot;;
 import {_cids} from &quot;./_references&quot;;
 
@@ -68,18 +68,18 @@ export default class {
     //
 
     /**
-     * returns data from JSD Document
+     * returns data from RxVO Document
      */
     get data() {
         return _cids.get(this.$collection)[this.$cid];
     }
 
     /**
-     * sets data to JSD Document
+     * sets data to RxVO Document
      * @param d
      */
     set data(d) {
-        this.data.$ref.model = d;
+        this.data.$model.model = d;
         return this;
     }
 
@@ -114,7 +114,7 @@ export default class {
      * @param val
      */
     set(key, val) {
-        this.data.$ref.set(key, val);
+        this.data.$model.set(key, val);
         return this;
     }
 
@@ -148,7 +148,7 @@ export default class {
      * @param handler
      */
     subscribe(handler) {
-        // return this.data.$ref.subscribe(handler);
+        // return this.data.$model.subscribe(handler);
     }
 
     //
@@ -159,7 +159,7 @@ export default class {
      * @returns {boolean|string}
      */
     validate() {
-        return this.data.$ref.validate();
+        return this.data.$model.validate();
     }
 
     /**
@@ -167,7 +167,7 @@ export default class {
      * @returns {boolean}
      */
     get isValid() {
-        return this.data.$ref.isValid();
+        return this.data.$model.isValid();
     }
 
     /**
@@ -234,7 +234,7 @@ export default class {
      * @returns {string}
      */
     valueOf() {
-        return this.data.$ref.valueOf();
+        return this.data.$model.valueOf();
     }
 
     /**
@@ -242,14 +242,14 @@ export default class {
      * @returns {string}
      */
     toString() {
-        return this.data.$ref.toString();
+        return this.data.$model.toString();
     }
 
     /**
      * @returns {JSON}
      */
     toJSON() {
-        return this.data.$ref.toJSON();
+        return this.data.$model.toJSON();
     }
 }
 </code></pre>

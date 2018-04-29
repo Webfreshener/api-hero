@@ -43,7 +43,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/namespace.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {JSD} from &quot;jsd&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {RxVO} from &quot;rxvo&quot;;
 import map from &quot;lodash.map&quot;;
 import pairs from &quot;lodash.pairs&quot;;
 import foreach from &quot;lodash.foreach&quot;;
@@ -64,8 +64,8 @@ class NS {
      * @param config
      */
     constructor(config) {
-        const _schema = new JSD(ns_schema);
-        _schema.document.model = config;
+        const _schema = new RxVO(ns_schema);
+        _schema.model = config;
         _namespaces.set(this, _schema);
         let _cols = {};
         const _self = this;
@@ -78,10 +78,10 @@ class NS {
 
         let o = {};
         // iterates through collections on Schema and defined Collections on NS
-        Object.keys(_schema.document.model.collections).forEach((col) =&gt; {
+        Object.keys(_schema.model.collections).forEach((col) =&gt; {
             o[col] = class extends Collection {
                 constructor() {
-                    super(_schema.document.model.collections[col]);
+                    super(_schema.model.collections[col]);
                     // defines className reference on Collection
                     Object.defineProperty(this, &quot;$className&quot;, {
                         get: () =&gt; col,
@@ -106,7 +106,7 @@ class NS {
      * @returns {*}
      */
     get options() {
-        return _namespaces.get(this).document.model.options;
+        return _namespaces.get(this).model.options;
     }
 
     /**
@@ -115,7 +115,7 @@ class NS {
      * @returns {NS}
      */
     set options(value) {
-        _namespaces.get(this).document.model.options = value;
+        _namespaces.get(this).model.options = value;
         return this;
     }
 
@@ -124,7 +124,7 @@ class NS {
      * @param key
      */
     getOption(key) {
-        return _namespaces.get(this).document.model.options[key];
+        return _namespaces.get(this).model.options[key];
     }
 
     /**
@@ -134,7 +134,7 @@ class NS {
      * @returns {NS}
      */
     setOption(key, value) {
-        _namespaces.get(this).document.model.options[key] = value;
+        _namespaces.get(this).model.options[key] = value;
         return this;
     }
 

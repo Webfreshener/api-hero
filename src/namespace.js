@@ -1,4 +1,4 @@
-import {JSD} from "jsd";
+import {RxVO} from "rxvo";
 import map from "lodash.map";
 import pairs from "lodash.pairs";
 import foreach from "lodash.foreach";
@@ -6,6 +6,9 @@ import "cross-fetch/polyfill";
 import {_namespaces, _nsCollections} from "./_references";
 import Collection from "./collection";
 import ns_schema from "./ns_schema";
+import {default as jsonSchema} from "./schemas/json-schema-draft04";
+import {default as OpenAPIv2} from "./schemas/OpenAPIv2";
+import {default as OpenAPIv3} from "./schemas/OpenAPIv3";
 
 /**
  * Namespace
@@ -19,24 +22,24 @@ class NS {
      * @param config
      */
     constructor(config) {
-        const _schema = new JSD(ns_schema);
-        _schema.document.model = config;
+        const _schema = new RxVO({schemas: [jsonSchema, OpenAPIv2, OpenAPIv3]});
+        _schema.model = (typeof config === "object") ? config : JSON.parse(config);
         _namespaces.set(this, _schema);
         let _cols = {};
         const _self = this;
         // defines utilies reference on Namespace
         Object.defineProperty(this, "$utils", {
-            value: new Utils(this),
+            value: new Utils(_self),
             enumerable: false,
             writable: false,
         });
 
         let o = {};
         // iterates through collections on Schema and defined Collections on NS
-        Object.keys(_schema.document.model.collections).forEach((col) => {
+        Object.keys(_schema.model.collections).forEach((col) => {
             o[col] = class extends Collection {
                 constructor() {
-                    super(_schema.document.model.collections[col]);
+                    super(_schema.model.collections[col]);
                     // defines className reference on Collection
                     Object.defineProperty(this, "$className", {
                         get: () => col,
@@ -56,12 +59,16 @@ class NS {
         _nsCollections.set(this, _cols);
     }
 
+    get errors() {
+        return _namespaces.get(this).errors;
+    }
+
     /**
      * Accessor for defined API Options for Namespace
      * @returns {*}
      */
     get options() {
-        return _namespaces.get(this).document.model.options;
+        return _namespaces.get(this).model.options;
     }
 
     /**
@@ -70,7 +77,7 @@ class NS {
      * @returns {NS}
      */
     set options(value) {
-        _namespaces.get(this).document.model.options = value;
+        _namespaces.get(this).model.options = value;
         return this;
     }
 
@@ -79,7 +86,7 @@ class NS {
      * @param key
      */
     getOption(key) {
-        return _namespaces.get(this).document.model.options[key];
+        return _namespaces.get(this).model.options[key];
     }
 
     /**
@@ -89,7 +96,7 @@ class NS {
      * @returns {NS}
      */
     setOption(key, value) {
-        _namespaces.get(this).document.model.options[key] = value;
+        _namespaces.get(this).model.options[key] = value;
         return this;
     }
 
@@ -119,7 +126,7 @@ class NS {
         if (!this.hasOwnProperty(name)) {
             Object.defineProperty(this, name, {
                 get: () => {
-                    let _s = _namespaces.get(this).document;
+                    let _s = _namespaces.get(this);
                     return new col(_s.model.collections[name]);
                 },
                 enumerable: true,
@@ -200,12 +207,13 @@ class Utils {
      * @returns {string}
      */
     get apiUrl() {
-        const _pcl = this.$scope.options.PROTOCOL.toLowerCase();
-        const _host = this.$scope.options.HOST;
-        const _port = this.$scope.options.PORT;
-        const _path = this.$scope.options.BASE_PATH.replace(/^\//, "");
-        const _vers = this.$scope.options.API_VERSION;
-        return `${_pcl}://${_host}${_port !== 80 ? `:${_port}` : ""}/${_path}/${_vers}`;
+        // const _pcl  = this.$scope.options.PROTOCOL.toLowerCase();
+        // const _host = this.$scope.options.HOST;
+        // const _port = this.$scope.options.PORT;
+        // const _path = this.$scope.options.BASE_PATH.replace(/^\//, "");
+        // const _vers = this.$scope.options.API_VERSION;
+        // return `${_pcl}://${_host}${_port !== 80 ? `:${_port}` : ""}/${_path}/${_vers}`;
+        return "http://0.0.0.0:3000";
     }
 
     /**

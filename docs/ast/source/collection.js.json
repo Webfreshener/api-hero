@@ -139,9 +139,9 @@
                   "line": 2,
                   "column": 11
                 },
-                "identifierName": "JSD"
+                "identifierName": "RxVO"
               },
-              "name": "JSD"
+              "name": "RxVO"
             },
             "local": {
               "type": "Identifier",
@@ -156,9 +156,9 @@
                   "line": 2,
                   "column": 11
                 },
-                "identifierName": "JSD"
+                "identifierName": "RxVO"
               },
-              "name": "JSD"
+              "name": "RxVO"
             }
           }
         ],
@@ -177,10 +177,10 @@
             }
           },
           "extra": {
-            "rawValue": "jsd",
-            "raw": "\"jsd\""
+            "rawValue": "rxvo",
+            "raw": "\"rxvo\""
           },
-          "value": "jsd"
+          "value": "rxvo"
         }
       },
       {
@@ -2040,7 +2040,7 @@
                     "trailingComments": [
                       {
                         "type": "CommentLine",
-                        "value": " creates JSD and subscribes to events on root",
+                        "value": " creates RxVO and subscribes to events on root",
                         "start": 1095,
                         "end": 1142,
                         "loc": {
@@ -2127,9 +2127,9 @@
                                     "line": 44,
                                     "column": 22
                                   },
-                                  "identifierName": "_jsd"
+                                  "identifierName": "_rxvo"
                                 },
-                                "name": "_jsd",
+                                "name": "_rxvo",
                                 "leadingComments": null
                               },
                               "init": {
@@ -2159,9 +2159,9 @@
                                       "line": 44,
                                       "column": 32
                                     },
-                                    "identifierName": "JSD"
+                                    "identifierName": "RxVO"
                                   },
-                                  "name": "JSD"
+                                  "name": "RxVO"
                                 },
                                 "arguments": [
                                   {
@@ -2178,7 +2178,7 @@
                                         "column": 14
                                       }
                                     },
-                                    "elements": [
+                                    "properties": [
                                       {
                                         "type": "ObjectExpression",
                                         "start": 1191,
@@ -2279,9 +2279,9 @@
                                                   "line": 46,
                                                   "column": 24
                                                 },
-                                                "identifierName": "elements"
+                                                "identifierName": "properties"
                                               },
-                                              "name": "elements"
+                                              "name": "properties"
                                             },
                                             "value": {
                                               "type": "MemberExpression",
@@ -2415,9 +2415,9 @@
                                       "line": 48,
                                       "column": 16
                                     },
-                                    "identifierName": "_jsd"
+                                    "identifierName": "_rxvo"
                                   },
-                                  "name": "_jsd"
+                                  "name": "_rxvo"
                                 },
                                 "property": {
                                   "type": "Identifier",
@@ -2880,7 +2880,7 @@
                           "trailingComments": [
                             {
                               "type": "CommentLine",
-                              "value": " stores JSD ref to WeakMap",
+                              "value": " stores RxVO ref to WeakMap",
                               "start": 1516,
                               "end": 1544,
                               "loc": {
@@ -3005,9 +3005,9 @@
                                     "line": 57,
                                     "column": 34
                                   },
-                                  "identifierName": "_jsd"
+                                  "identifierName": "_rxvo"
                                 },
-                                "name": "_jsd"
+                                "name": "_rxvo"
                               }
                             ],
                             "leadingComments": null
@@ -3015,7 +3015,7 @@
                           "leadingComments": [
                             {
                               "type": "CommentLine",
-                              "value": " stores JSD ref to WeakMap",
+                              "value": " stores RxVO ref to WeakMap",
                               "start": 1516,
                               "end": 1544,
                               "loc": {
@@ -3347,7 +3347,7 @@
                     "leadingComments": [
                       {
                         "type": "CommentLine",
-                        "value": " creates JSD and subscribes to events on root",
+                        "value": " creates RxVO and subscribes to events on root",
                         "start": 1095,
                         "end": 1142,
                         "loc": {
@@ -3748,7 +3748,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * @param schema Collection JSD Schema\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * @param schema Collection RxVO Schema\n     * @returns {boolean}\n     ",
                   "start": 395,
                   "end": 475,
                   "loc": {
@@ -4332,7 +4332,7 @@
                                 "leadingComments": [
                                   {
                                     "type": "CommentLine",
-                                    "value": " creates new Model Class to point to JSD weak-reference",
+                                    "value": " creates new Model Class to point to RxVO weak-reference",
                                     "start": 2163,
                                     "end": 2220,
                                     "loc": {
@@ -4350,7 +4350,7 @@
                                 "trailingComments": [
                                   {
                                     "type": "CommentLine",
-                                    "value": " sets JSD weak-reference / is referenced by Collection UID",
+                                    "value": " sets RxVO weak-reference / is referenced by Collection UID",
                                     "start": 2282,
                                     "end": 2342,
                                     "loc": {
@@ -4569,7 +4569,7 @@
                                 "leadingComments": [
                                   {
                                     "type": "CommentLine",
-                                    "value": " sets JSD weak-reference / is referenced by Collection UID",
+                                    "value": " sets RxVO weak-reference / is referenced by Collection UID",
                                     "start": 2282,
                                     "end": 2342,
                                     "loc": {
@@ -4587,7 +4587,7 @@
                                 "trailingComments": [
                                   {
                                     "type": "CommentLine",
-                                    "value": " sets back-ref to the Model on the JSD data element",
+                                    "value": " sets back-ref to the Model on the RxVO data element",
                                     "start": 2398,
                                     "end": 2451,
                                     "loc": {
@@ -4867,7 +4867,7 @@
                                 "leadingComments": [
                                   {
                                     "type": "CommentLine",
-                                    "value": " sets back-ref to the Model on the JSD data element",
+                                    "value": " sets back-ref to the Model on the RxVO data element",
                                     "start": 2398,
                                     "end": 2451,
                                     "loc": {
@@ -4893,7 +4893,7 @@
                     "trailingComments": [
                       {
                         "type": "CommentLine",
-                        "value": " helper to determine how to handle incoming data elements",
+                        "value": " helper to determine how to handle incoming data properties",
                         "start": 2603,
                         "end": 2662,
                         "loc": {
@@ -5170,7 +5170,7 @@
                     "leadingComments": [
                       {
                         "type": "CommentLine",
-                        "value": " helper to determine how to handle incoming data elements",
+                        "value": " helper to determine how to handle incoming data properties",
                         "start": 2603,
                         "end": 2662,
                         "loc": {
@@ -5431,7 +5431,7 @@
                                 "column": 77
                               }
                             },
-                            "elements": [
+                            "properties": [
                               {
                                 "type": "CallExpression",
                                 "start": 2898,
@@ -7988,7 +7988,7 @@
                             "column": 24
                           }
                         },
-                        "elements": []
+                        "properties": []
                       }
                     }
                   },
@@ -9709,9 +9709,9 @@
                                 "line": 195,
                                 "column": 41
                               },
-                              "identifierName": "$ref"
+                              "identifierName": "$model"
                             },
-                            "name": "$ref"
+                            "name": "$model"
                           },
                           "computed": false
                         },
@@ -15686,7 +15686,7 @@
                                                     "column": 43
                                                   }
                                                 },
-                                                "elements": [
+                                                "properties": [
                                                   {
                                                     "type": "Identifier",
                                                     "start": 9012,
@@ -18157,7 +18157,7 @@
                       "trailingComments": [
                         {
                           "type": "CommentLine",
-                          "value": " creates JSD and subscribes to events on root",
+                          "value": " creates RxVO and subscribes to events on root",
                           "start": 1095,
                           "end": 1142,
                           "loc": {
@@ -18244,9 +18244,9 @@
                                       "line": 44,
                                       "column": 22
                                     },
-                                    "identifierName": "_jsd"
+                                    "identifierName": "_rxvo"
                                   },
-                                  "name": "_jsd",
+                                  "name": "_rxvo",
                                   "leadingComments": null
                                 },
                                 "init": {
@@ -18276,9 +18276,9 @@
                                         "line": 44,
                                         "column": 32
                                       },
-                                      "identifierName": "JSD"
+                                      "identifierName": "RxVO"
                                     },
-                                    "name": "JSD"
+                                    "name": "RxVO"
                                   },
                                   "arguments": [
                                     {
@@ -18295,7 +18295,7 @@
                                           "column": 14
                                         }
                                       },
-                                      "elements": [
+                                      "properties": [
                                         {
                                           "type": "ObjectExpression",
                                           "start": 1191,
@@ -18396,9 +18396,9 @@
                                                     "line": 46,
                                                     "column": 24
                                                   },
-                                                  "identifierName": "elements"
+                                                  "identifierName": "properties"
                                                 },
-                                                "name": "elements"
+                                                "name": "properties"
                                               },
                                               "value": {
                                                 "type": "MemberExpression",
@@ -18532,9 +18532,9 @@
                                         "line": 48,
                                         "column": 16
                                       },
-                                      "identifierName": "_jsd"
+                                      "identifierName": "_rxvo"
                                     },
-                                    "name": "_jsd"
+                                    "name": "_rxvo"
                                   },
                                   "property": {
                                     "type": "Identifier",
@@ -18997,7 +18997,7 @@
                             "trailingComments": [
                               {
                                 "type": "CommentLine",
-                                "value": " stores JSD ref to WeakMap",
+                                "value": " stores RxVO ref to WeakMap",
                                 "start": 1516,
                                 "end": 1544,
                                 "loc": {
@@ -19122,9 +19122,9 @@
                                       "line": 57,
                                       "column": 34
                                     },
-                                    "identifierName": "_jsd"
+                                    "identifierName": "_rxvo"
                                   },
-                                  "name": "_jsd"
+                                  "name": "_rxvo"
                                 }
                               ],
                               "leadingComments": null
@@ -19132,7 +19132,7 @@
                             "leadingComments": [
                               {
                                 "type": "CommentLine",
-                                "value": " stores JSD ref to WeakMap",
+                                "value": " stores RxVO ref to WeakMap",
                                 "start": 1516,
                                 "end": 1544,
                                 "loc": {
@@ -19464,7 +19464,7 @@
                       "leadingComments": [
                         {
                           "type": "CommentLine",
-                          "value": " creates JSD and subscribes to events on root",
+                          "value": " creates RxVO and subscribes to events on root",
                           "start": 1095,
                           "end": 1142,
                           "loc": {
@@ -19865,7 +19865,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * @param schema Collection JSD Schema\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * @param schema Collection RxVO Schema\n     * @returns {boolean}\n     ",
                     "start": 395,
                     "end": 475,
                     "loc": {
@@ -20449,7 +20449,7 @@
                                   "leadingComments": [
                                     {
                                       "type": "CommentLine",
-                                      "value": " creates new Model Class to point to JSD weak-reference",
+                                      "value": " creates new Model Class to point to RxVO weak-reference",
                                       "start": 2163,
                                       "end": 2220,
                                       "loc": {
@@ -20467,7 +20467,7 @@
                                   "trailingComments": [
                                     {
                                       "type": "CommentLine",
-                                      "value": " sets JSD weak-reference / is referenced by Collection UID",
+                                      "value": " sets RxVO weak-reference / is referenced by Collection UID",
                                       "start": 2282,
                                       "end": 2342,
                                       "loc": {
@@ -20686,7 +20686,7 @@
                                   "leadingComments": [
                                     {
                                       "type": "CommentLine",
-                                      "value": " sets JSD weak-reference / is referenced by Collection UID",
+                                      "value": " sets RxVO weak-reference / is referenced by Collection UID",
                                       "start": 2282,
                                       "end": 2342,
                                       "loc": {
@@ -20704,7 +20704,7 @@
                                   "trailingComments": [
                                     {
                                       "type": "CommentLine",
-                                      "value": " sets back-ref to the Model on the JSD data element",
+                                      "value": " sets back-ref to the Model on the RxVO data element",
                                       "start": 2398,
                                       "end": 2451,
                                       "loc": {
@@ -20984,7 +20984,7 @@
                                   "leadingComments": [
                                     {
                                       "type": "CommentLine",
-                                      "value": " sets back-ref to the Model on the JSD data element",
+                                      "value": " sets back-ref to the Model on the RxVO data element",
                                       "start": 2398,
                                       "end": 2451,
                                       "loc": {
@@ -21010,7 +21010,7 @@
                       "trailingComments": [
                         {
                           "type": "CommentLine",
-                          "value": " helper to determine how to handle incoming data elements",
+                          "value": " helper to determine how to handle incoming data properties",
                           "start": 2603,
                           "end": 2662,
                           "loc": {
@@ -21287,7 +21287,7 @@
                       "leadingComments": [
                         {
                           "type": "CommentLine",
-                          "value": " helper to determine how to handle incoming data elements",
+                          "value": " helper to determine how to handle incoming data properties",
                           "start": 2603,
                           "end": 2662,
                           "loc": {
@@ -21548,7 +21548,7 @@
                                   "column": 77
                                 }
                               },
-                              "elements": [
+                              "properties": [
                                 {
                                   "type": "CallExpression",
                                   "start": 2898,
@@ -24105,7 +24105,7 @@
                               "column": 24
                             }
                           },
-                          "elements": []
+                          "properties": []
                         }
                       }
                     },
@@ -25826,9 +25826,9 @@
                                   "line": 195,
                                   "column": 41
                                 },
-                                "identifierName": "$ref"
+                                "identifierName": "$model"
                               },
-                              "name": "$ref"
+                              "name": "$model"
                             },
                             "computed": false
                           },
@@ -29509,7 +29509,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * @param schema Collection JSD Schema\n     * @returns {boolean}\n     ",
+      "value": "*\n     * @param schema Collection RxVO Schema\n     * @returns {boolean}\n     ",
       "start": 395,
       "end": 475,
       "loc": {
@@ -29589,7 +29589,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " creates JSD and subscribes to events on root",
+      "value": " creates RxVO and subscribes to events on root",
       "start": 1095,
       "end": 1142,
       "loc": {
@@ -29605,7 +29605,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " stores JSD ref to WeakMap",
+      "value": " stores RxVO ref to WeakMap",
       "start": 1516,
       "end": 1544,
       "loc": {
@@ -29685,7 +29685,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " creates new Model Class to point to JSD weak-reference",
+      "value": " creates new Model Class to point to RxVO weak-reference",
       "start": 2163,
       "end": 2220,
       "loc": {
@@ -29701,7 +29701,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " sets JSD weak-reference / is referenced by Collection UID",
+      "value": " sets RxVO weak-reference / is referenced by Collection UID",
       "start": 2282,
       "end": 2342,
       "loc": {
@@ -29717,7 +29717,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " sets back-ref to the Model on the JSD data element",
+      "value": " sets back-ref to the Model on the RxVO data element",
       "start": 2398,
       "end": 2451,
       "loc": {
@@ -29733,7 +29733,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " helper to determine how to handle incoming data elements",
+      "value": " helper to determine how to handle incoming data properties",
       "start": 2603,
       "end": 2662,
       "loc": {
@@ -30603,7 +30603,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "JSD",
+      "value": "RxVO",
       "start": 37,
       "end": 40,
       "loc": {
@@ -30681,7 +30681,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "jsd",
+      "value": "rxvo",
       "start": 47,
       "end": 52,
       "loc": {
@@ -32166,7 +32166,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * @param schema Collection JSD Schema\n     * @returns {boolean}\n     ",
+      "value": "*\n     * @param schema Collection RxVO Schema\n     * @returns {boolean}\n     ",
       "start": 395,
       "end": 475,
       "loc": {
@@ -34552,7 +34552,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " creates JSD and subscribes to events on root",
+      "value": " creates RxVO and subscribes to events on root",
       "start": 1095,
       "end": 1142,
       "loc": {
@@ -34659,7 +34659,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "_jsd",
+      "value": "_rxvo",
       "start": 1175,
       "end": 1179,
       "loc": {
@@ -34740,7 +34740,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "JSD",
+      "value": "RxVO",
       "start": 1186,
       "end": 1189,
       "loc": {
@@ -34947,7 +34947,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "elements",
+      "value": "properties",
       "start": 1241,
       "end": 1249,
       "loc": {
@@ -35179,7 +35179,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "_jsd",
+      "value": "_rxvo",
       "start": 1298,
       "end": 1302,
       "loc": {
@@ -36349,7 +36349,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " stores JSD ref to WeakMap",
+      "value": " stores RxVO ref to WeakMap",
       "start": 1516,
       "end": 1544,
       "loc": {
@@ -36532,7 +36532,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "_jsd",
+      "value": "_rxvo",
       "start": 1575,
       "end": 1579,
       "loc": {
@@ -39016,7 +39016,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " creates new Model Class to point to JSD weak-reference",
+      "value": " creates new Model Class to point to RxVO weak-reference",
       "start": 2163,
       "end": 2220,
       "loc": {
@@ -39347,7 +39347,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " sets JSD weak-reference / is referenced by Collection UID",
+      "value": " sets RxVO weak-reference / is referenced by Collection UID",
       "start": 2282,
       "end": 2342,
       "loc": {
@@ -39728,7 +39728,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " sets back-ref to the Model on the JSD data element",
+      "value": " sets back-ref to the Model on the RxVO data element",
       "start": 2398,
       "end": 2451,
       "loc": {
@@ -40390,7 +40390,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " helper to determine how to handle incoming data elements",
+      "value": " helper to determine how to handle incoming data properties",
       "start": 2603,
       "end": 2662,
       "loc": {
@@ -49804,7 +49804,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "$ref",
+      "value": "$model",
       "start": 5439,
       "end": 5443,
       "loc": {
