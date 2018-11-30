@@ -1,14 +1,41 @@
+import {BehaviorSubject} from "rxjs/Rx";
 import {RxVO} from "rxvo";
-import map from "lodash.map";
-import pairs from "lodash.pairs";
-import foreach from "lodash.foreach";
 import "cross-fetch/polyfill";
-import {_namespaces, _nsCollections} from "./_references";
+import {_modelClassRefs, _namespaces, _nsCollections} from "./_references";
 import Collection from "./collection";
-import ns_schema from "./ns_schema";
+import {default as jistySchema, default as Jisty} from "./schemas/jisty.schema";
+import {default as nsSchema} from "./schemas/namespace.schema";
 import {default as jsonSchema} from "./schemas/json-schema-draft04";
-import {default as OpenAPIv2} from "./schemas/OpenAPIv2";
-import {default as OpenAPIv3} from "./schemas/OpenAPIv3";
+import {assignTraits} from "./traits";
+import {Utils} from "./utils";
+
+const generateCollections = (schema) => {
+    const _cols = {};
+    Object.keys(schema.model.paths).forEach((path) => {
+        const _p = path.match(/^\/([a-zA-Z0-9\-_])[^\/]$/);
+        // if (_p !== null &&
+        //     _uName.indexOf(_p[1]) > -1) {
+        //    _cols[path] = schema.model.paths[path];
+        // }
+    });
+
+    return _cols;
+};
+
+// const initModelRef = (collection) => {
+//     try {
+//         const _rxvo = new RxVO({
+//             schemas: [{
+//                 id: "root",
+//                 type: "array",
+//                 items: Collection.getModelSchema(collection),
+//             }],
+//         });
+//         _models.set(collection, _rxvo);
+//     } catch (e) {
+//         throw(e);
+//     }
+// };
 
 /**
  * Namespace
@@ -22,41 +49,91 @@ class NS {
      * @param config
      */
     constructor(config) {
-        const _schema = new RxVO({schemas: [jsonSchema, OpenAPIv2, OpenAPIv3]});
+        const _schema = new RxVO({
+            meta: [jsonSchema, jistySchema],
+            schemas: [nsSchema],
+            use: "http://webfreshener.com/v1/jisty/namespace.json#",
+        });
+
+        // todo: remove options from NS Config
+        delete config.options;
         _schema.model = (typeof config === "object") ? config : JSON.parse(config);
         _namespaces.set(this, _schema);
         let _cols = {};
         const _self = this;
-        // defines utilies reference on Namespace
+
+        // defines utilities reference on Namespace
         Object.defineProperty(this, "$utils", {
             value: new Utils(_self),
             enumerable: false,
             writable: false,
         });
 
+        // defines getter for namespace schema
+        Object.defineProperty(this, "schema", {
+            get: () => config.schema,
+            enumerable: true,
+            configurable: false,
+        });
+
+        const _p = {};
+        // iterates through path items on open-api schema
+        Object.keys(_schema.model.schema.paths).forEach((path) => {
+            // console.log(`path: ${path}`);
+            const _parts = path.split("/");
+            const colName = _parts[1];
+            let _op = {};
+
+            if (colName && colName.length) {
+                Object.keys(_schema.model.schema.paths[path]).forEach((op) => {
+                    const _opSchema = _schema.model.schema.paths[path][op];
+                    _op[op] = (this.schemaType.type === "openapi") ?
+                        _opSchema :
+                        Utils.reformatV2Response(_opSchema);
+                });
+
+                if (_p.hasOwnProperty(colName)) {
+                    const _name = _parts[2] && _parts[2] !== "" ? _parts[2] : "/";
+                    Object.defineProperty(_p[colName].modelPaths, _name, {
+                        value: _op,
+                        configurable: false,
+                        enumerable: true,
+                    });
+                } else {
+                    _p[colName] = {
+                        name: _parts[1],
+                        operations: _op,
+                        modelPaths: {}
+                    }
+                }
+            }
+        });
+
         let o = {};
         // iterates through collections on Schema and defined Collections on NS
-        Object.keys(_schema.model.collections).forEach((col) => {
+        Object.keys(_p).forEach((col) => {
             o[col] = class extends Collection {
                 constructor() {
-                    super(_schema.model.collections[col]);
+                    super(_p[col], _self);
                     // defines className reference on Collection
                     Object.defineProperty(this, "$className", {
                         get: () => col,
                         enumerable: false,
+                        configurable: false,
                     });
-                    // defines Namespace reference on Collection
-                    Object.defineProperty(this, "$scope", {
-                        get: () => _self,
-                        enumerable: false,
-                    });
+
+                    const _ref = Collection.createModelRef(this);
+                    _modelClassRefs.set(this, _ref);
+                    assignTraits(this);
                 }
+
             };
-            // applies Collection instance to Namespace
+
+            // applies Collection Class to Namespace
             this.addCollection(col, o[col]);
         });
 
-        _nsCollections.set(this, _cols);
+        _nsCollections.set(this, o);
     }
 
     get errors() {
@@ -69,6 +146,33 @@ class NS {
      */
     get options() {
         return _namespaces.get(this).model.options;
+    }
+
+    /**
+     * Getter for Schema type (openapi, swagger etc) and version
+     * @returns {type: string, verson: string} | null
+     */
+    get schemaType() {
+        const _schema = _namespaces.get(this);
+        let _schemaData = null;
+        ["openapi", "swagger"].forEach((type) => {
+            if (_schema.model.schema.hasOwnProperty(type)) {
+                _schemaData = {
+                    type: type,
+                    version: _schema.model.schema[type],
+                };
+            }
+        });
+
+        return _schemaData;
+    }
+
+    /**
+     * Getter for Schema Info Element
+     * @returns object | null
+     */
+    get info() {
+        return _schema.model.schema.info || null
     }
 
     /**
@@ -113,7 +217,7 @@ class NS {
      * @returns {string[]}
      */
     listCollections() {
-        return Object.keys(_namespaces.get(this));
+        return Object.keys(this.collections);
     }
 
     /**
@@ -127,7 +231,7 @@ class NS {
             Object.defineProperty(this, name, {
                 get: () => {
                     let _s = _namespaces.get(this);
-                    return new col(_s.model.collections[name]);
+                    return new col();
                 },
                 enumerable: true,
             });
@@ -150,112 +254,51 @@ class NS {
         return this;
     }
 
+    /**
+     * Performs HTTP Operations using the Fetch API
+     * @param method
+     * @param model
+     * @param options
+     * @returns {BehaviorSubject<any>}
+     */
     sync(method, model, options = {}) {
+        if (!options.hasOwnProperty("$subj")) {
+            const _subj = new BehaviorSubject().skip(1);
+            Object.defineProperty(options, "$subj", {
+                get: () => _subj,
+                enumerable: false,
+                configurable: false,
+            });
+        }
         let opts = this.$utils.apiOptions;
         Object.assign(opts, options, {method: method});
-        return fetch(model.url, opts).then((res) => {
-            return res.json();
-        });
-    }
-}
+        // sets model as body on POST and PUT requests
+        if (method === "POST" || method === "PUT") {
+            opts.body = model.toString();
+        } else {
 
-/**
- * Utility Methods
- */
-class Utils {
-    /**
-     *
-     * @param $scope
-     */
-    constructor($scope) {
-        Object.defineProperty(this, "$scope", {
-            get: () => $scope,
-            enumerable: false,
-        });
-    }
-
-    /**
-     * Helper Method returns REST Request Headers from Config
-     * @returns {*}
-     */
-    get apiOptions() {
-        let o;
-        (o = {
-                contentType: "application/json",
-                processData: false,
-                dataType: "json",
-                data: null,
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Application-Id": this.$scope.options.APP_ID || null,
-                    "X-REST-API-Key": this.$scope.options.REST_KEY || null,
-                    "X-CSRF-Token": this.$scope.options.CSRF_TOKEN || null,
-                    "X-User-Email": this.$scope.options.USER_EMAIL || null,
-                },
-            }
-        );
-
-        if (this.$scope.options.SESSION_KEY) {
-            o.headers[this.$scope.options.SESSION_KEY] = this.$scope.options.SESSION_TOKEN;
         }
+        // handle Fetch's Promise and update Rx Subject
+        fetch(model.url, opts)
+            .then((res) => {
+                if (this.$utils.isFetchPolyfill) {
+                    const _location = res.headers.get("location");
+                    if (_location !== null) {
+                        this.sync("GET", {url: _location}, options);
+                    } else {
+                        options.$subj.next(res);
+                    }
+                } else {
+                    // sends response object to subscriber
+                    options.$subj.next(res);
+                }
+            })
+            .catch((e) => {
+                // sends error to subscriber
+                options.$subj.error(e);
+            });
 
-        return o;
-    }
-
-    /**
-     * Helper Method generates URL for REST Requests
-     * @returns {string}
-     */
-    get apiUrl() {
-        // const _pcl  = this.$scope.options.PROTOCOL.toLowerCase();
-        // const _host = this.$scope.options.HOST;
-        // const _port = this.$scope.options.PORT;
-        // const _path = this.$scope.options.BASE_PATH.replace(/^\//, "");
-        // const _vers = this.$scope.options.API_VERSION;
-        // return `${_pcl}://${_host}${_port !== 80 ? `:${_port}` : ""}/${_path}/${_vers}`;
-        return "http://0.0.0.0:3000";
-    }
-
-    /**
-     *
-     * @param route
-     * @returns {boolean}
-     */
-    validateRoute(route) {
-        const Rx = `^(${this.$scope.regEscape(this.getAPIUrl())}\/)+`;
-        // throws error if route does not pass validation
-        if (!route.match(new RegExp(Rx))) {
-            throw `Bad route: ${route}`;
-        }
-        // returns true if no error thrown
-        return true;
-    }
-
-    /**
-     * Implementation of Parse._parseDate used to parse iso8601 UTC formatted `datetime`
-     * @param iso8601
-     * @returns {*}
-     */
-    parseDate(iso8601) {
-        // returns null if `iso8601` argument fails `RegExp`
-        let t;
-        let Rx = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
-        if ((t = `${iso8601}`.match(Rx)) === null) {
-            return null;
-        }
-        t = t.map((i) => i && i.match(/^[\d]+$/) !== null ? parseInt(i, 10) : null)
-            .filter((i) => i !== null);
-        t[1] = t[1] - 1;
-        return new Date(Date.UTC.apply(this, t));
-    }
-
-    /**
-     * Returns passes object as Key/Value paired string
-     * @param obj
-     * @returns {string}
-     */
-    querify(obj) {
-        return (map(pairs(obj || {}), (v, k) => v.join("="))).join("&");
+        return options.$subj;
     }
 }
 

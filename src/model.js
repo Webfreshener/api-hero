@@ -1,24 +1,79 @@
 import {RxVO} from "rxvo";
-import MetaData from "./metadata";
-import {_cids, _requests} from "./_references";
+import {_cids, _modelStats, _modelRefs} from "./_references";
+import {NSElement} from "./ns_element";
+import {default as jsonSchema} from "./schemas/json-schema-draft04";
+import {default as OpenAPIv3} from "./schemas/OpenAPIv3";
+import {default as jistySchema} from "./schemas/jisty.schema";
+import {default as OpenAPIv2} from "./schemas/OpenAPIv2";
+import {default as CollectionSchema} from "./schemas/collection.schema";
+import deepEqual from "deep-equal";
+import foreach from "lodash.foreach";
 import uniqueid from "lodash.uniqueid";
+import {assignTraits} from "./traits";
+import {Utils} from "./utils";
+const _stateRefs = new WeakMap();
 
-const _modelRefs = new WeakMap();
+export class Model extends NSElement {
+    constructor(schema, collection) {
+        super(schema);
+        const $cid = uniqueid(collection.$className).toUpperCase();
+        Object.defineProperty(this, "$cid", {
+            get: () => $cid,
+            enumerable: false,
+        });
 
-export default class {
-    constructor(collection) {
-        setTimeout(() => {
-            const _mdRef = new MetaData(this);
-            Object.defineProperty(this, "$metadata", {
-                get: () => _mdRef,
-                enumerable: false,
+        _modelStats.set(this, {
+            isNew: true,
+            isDirty: false,
+        });
+
+        assignGetters(this, collection);
+
+        const _derived = Utils.deriveSchema(collection.$schema, collection.$scope.schema);
+        const _ajvSchema = Object.assign({id: "collectionSchema#"}, _derived);
+
+        _stateRefs.set(this, []);
+
+        // creates RxVO and subscribes to events on root
+        try {
+            const _rxvo = new RxVO({
+                meta: [jsonSchema, OpenAPIv3, jistySchema],
+                schemas: [OpenAPIv2, CollectionSchema, _ajvSchema],
+                use: "collectionSchema#"
+            }, {
+                ajvOptions: {
+                    removeAdditional: "all",
+                }
             });
-        }, 0);
+            _rxvo.subscribe({
+                next: (d) => {
+                    const _states = _stateRefs.get(this);
+                    _states.splice(_states.length - 1, 0, d.toJSON());
+                    if (_states.length > 2 ) {
+                        _states.shift()
+                    }
+                   _modelStats.get(this).isDirty = true;
+                },
+            });
+
+            // stores RxVO ref to WeakMap
+           _modelRefs.set(this, _rxvo);
+
+        } catch (e) {
+            return false;
+        }
+
+        assignTraits(this);
+        _cids.get(collection)[this.$cid] = this;
     }
 
     //
     // Accessor Methods
     //
+
+    get url() {
+        return `${super.url}${this.id !== null ? "/" + this.id : ""}`;
+    }
 
     /**
      * retrieves ID of record if set
@@ -29,20 +84,11 @@ export default class {
     }
 
     /**
-     * sets ID of record
-     * @param value {string|number|UUID|null}
-     */
-    set id(value) {
-        this.data["id"] = value;
-        return this;
-    }
-
-    /**
-     * returns data from RxVO Document
-     * @returns {*}
+     *
+     * @returns {}
      */
     get data() {
-        return _cids.get(this.$collection)[this.$cid];
+        return _modelRefs.get(this).model;
     }
 
     /**
@@ -50,48 +96,8 @@ export default class {
      * @param d
      */
     set data(d) {
-        // this.data.$model.model = d;
-        // let _rxvo = new RxVO(this.$collection.$schema.properties);
-        // _rxvo.model = d;
-        _cids.get(this.$collection)[this.$cid].$model.model = d;
-        // this.data = d;
-        return this;
+        _modelRefs.get(this).model = d;
     }
-
-    // /**
-    //  * alias for data getter
-    //  * @returns {*}
-    //  */
-    // get attrs() {
-    //     return this.data;
-    // }
-    //
-    // /**
-    //  * alias for data setter
-    //  * @param d
-    //  * @returns {*}
-    //  */
-    // set attrs(d) {
-    //     return this.data = d;
-    // }
-    //
-    // /**
-    //  * retrieves data at key
-    //  * @param key
-    //  */
-    // get(key) {
-    //     return this.data.$model.get(key);
-    // }
-    //
-    // /**
-    //  * sets value upon key
-    //  * @param key
-    //  * @param val
-    //  */
-    // set(key, val) {
-    //     this.data.$model.set(key, val);
-    //     return this;
-    // }
 
     //
     // MetaData Accessors
@@ -123,7 +129,7 @@ export default class {
      * @param handler
      */
     subscribe(handler) {
-        // return this.data.$model.subscribe(handler);
+        return this.data.$model.subscribe(handler);
     }
 
     //
@@ -138,6 +144,13 @@ export default class {
     }
 
     /**
+     * returns validation errors
+     */
+    get errors() {
+        return this.data.$model.rxvo.errors;
+    }
+
+    /**
      *
      * @returns {boolean}
      */
@@ -146,109 +159,42 @@ export default class {
     }
 
     get isNew() {
-        return (!("id" in this.data));
+        return _modelStats.get(this).isNew;
     }
 
     get isDirty() {
-        return !this.isNew;
+        const _states = [].concat(_stateRefs.get(this));
+        return _states.length > 0 && !deepEqual(_states.pop(), this.toJSON());
     }
 
-    /**
-     *
-     * @returns {string}
-     */
-    get url() {
-        const base = this.$scope.$utils.apiUrl;
-        // TODO: work out classname casing/transform
-        const ref = !this.$scope.options.CAPITALIZE_CLASSNAMES ?
-            this.$collection.$className :
-            this.$collection.$className;
-        const item = !this.isNew ? `/${this.id}` : "";
-        // search  = if (p=$scope.querify @__op).length then "?#{p}" else ''
-        // const _preQ  = (this.params != null) ? this.params : "?";
-        // const _query = $scope.querify(this.__op);
-        const search = ""; // _query.length ? `${_preQ}&${_query}` : _preQ;
-        let _url = `${base}/${ref}${item}${search}`;
-        return _url;
-    }
-
-    //
-    // REST Life-Cycle
-    //
-
-    /**
-     *
-     * @param id
-     * @returns {*|PromiseLike<T>|Promise<T>|{$ref}}
-     */
-    fetch(id = null) {
-        let _req = {
-            method: this.$scope.options.CRUD_METHODS.read,
-            id: uniqueid(`${this.$collectionName}-read-`),
-        };
-
-        if (id !== null) {
-            this.id = id;
-        }
-
-        _requests.set(this, _req);
-
-        return this.$scope.sync(_req.method, this, {}).then((res) => {
-            this.data = res.body;
-            _requests.delete(this);
-        });
-    }
-
-    /**
-     *
-     */
-    save() {
-        let _method = !this.isNew && this.isDirty ?
-            this.$scope.options.CRUD_METHODS.update :
-            this.$scope.options.CRUD_METHODS.create;
-        let _req = {
-            method: _method,
-            id: uniqueid(`${this.$collectionName}-create-`),
-        };
-        _requests.set(this, _req);
-        return this.$scope.sync(_req.method, this, {body: `${this.data.$model}`}).then((res) => {
-            if (res.body) {
-                this.data = res.body;
-            }
-            _requests.delete(this);
-        });
-    }
-
-    /**
-     *
-     */
-    destroy() {
-
-    }
-
-    /**
-     *
-     */
-    reset() {
-
-    }
-
-    //
-    // translation
-    //
-
-    /**
-     *
-     * @returns {string}
-     */
-    // toString() {
-    //     return JSON.stringify(this.data);
-    // }
-
-    /**
-     * @returns {JSON}
-     */
     toJSON() {
-        // return _cids.get(this.$collection)[this.$cid];
+        return _modelRefs.get(this).toJSON();
     }
+
+    toString() {
+        return JSON.stringify(this.toJSON());
+    }
+
 }
+
+/**
+ * @param target
+ */
+const assignGetters = (target, collection) => {
+    // defines getter for owner Collection reference
+    Object.defineProperty(target, "$collection", {
+        get: () => collection,
+        enumerable: false,
+    });
+
+    Object.defineProperty(target, "$scope", {
+        get: () => collection.$scope,
+        enumerable: false,
+    });
+
+    Object.defineProperty(target, "$className", {
+        get: () => collection.$className,
+        enumerable: false,
+        configurable: false,
+    });
+};

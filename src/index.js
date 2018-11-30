@@ -37,14 +37,18 @@ const __init = (() => {
         if (_ns.hasOwnProperty(ns)) {
             return _ns[ns];
         }
-
         _ns[ns] = _appLayer(ns, config, rxvo);
         return _ns[ns];
     };
 
     return app = {
         init(config) {
-            const _rxvo = new RxVO({schemas: [jsonSchema, OpenAPIv2, OpenAPIv3, jisty]});
+            const _rxvo = new RxVO({
+                meta: [jsonSchema, OpenAPIv2, OpenAPIv3],
+                schemas:  [jisty],
+                use: "http://webfreshener.com/v1/jisty.json#",
+            });
+
             Object.defineProperty(this, "rxvo", {
                 get: () => _rxvo,
             });
@@ -56,6 +60,7 @@ const __init = (() => {
                 Object.defineProperty(this, nsName, {
                     get: () => _ns[nsName],
                     enumerable: true,
+                    configurable: false,
                 });
             });
             return this;

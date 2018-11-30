@@ -187,7 +187,7 @@
         }
       },
       "delete": {
-        "operationId": "GetPet",
+        "operationId": "DeletePet",
         "produces": [
           "application/json"
         ],
@@ -203,7 +203,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/Pet"
+              "$ref": "#/definitions/Empty"
             },
             "headers": {
               "Access-Control-Allow-Origin": {
@@ -289,7 +289,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "$ref": "#/definitions/PetType"
+          "type": "string"
         },
         "price": {
           "type": "number"
@@ -299,11 +299,11 @@
     "PetType": {
       "type": "string",
       "enum": [
-        "dog",
-        "cat",
-        "fish",
-        "bird",
-        "gecko"
+        "Dog",
+        "Cat",
+        "Fish",
+        "Bird",
+        "Iguana"
       ]
     }
   }

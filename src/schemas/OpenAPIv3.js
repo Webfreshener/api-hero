@@ -1,70 +1,72 @@
 export default {
+    title: "A JSON Schema for OpenAPI 3.0.",
+    id: "http://openapis.org/v3/schema.json#",
+    $schema: "http://json-schema.org/draft-04/schema#",
     type: "object",
-    id: "http://swagger.io/v3/schema.json#",
+    description: "This is the root document object of the OpenAPI definition file.",
     required: [
         "openapi",
         "info",
         "paths"
     ],
+    additionalProperties: false,
+    patternProperties: {
+        "^x-": {
+            "$ref": "#/definitions/specificationExtension"
+        }
+    },
     properties: {
         openapi: {
-            type: "string",
-            pattern: "^3\\.0\\.\\d(-.+)?$"
+            type: "string"
         },
         info: {
-            $ref: "#/definitions/Info"
-        },
-        externalDocs: {
-            $ref: "#/definitions/ExternalDocumentation"
+            "$ref": "#/definitions/info"
         },
         servers: {
             type: "array",
             items: {
-                $ref: "#/definitions/Server"
-            }
+                "$ref": "#/definitions/server"
+            },
+            uniqueItems: true
+        },
+        paths: {
+            "$ref": "#/definitions/paths"
+        },
+        components: {
+            "$ref": "#/definitions/components"
         },
         security: {
             type: "array",
             items: {
-                $ref: "#/definitions/SecurityRequirement"
-            }
+                "$ref": "#/definitions/securityRequirement"
+            },
+            uniqueItems: true
         },
         tags: {
             type: "array",
             items: {
-                $ref: "#/definitions/Tag"
-            }
+                "$ref": "#/definitions/tag"
+            },
+            uniqueItems: true
         },
-        paths: {
-            $ref: "#/definitions/Paths"
-        },
-        components: {
-            $ref: "#/definitions/Components"
+        externalDocs: {
+            "$ref": "#/definitions/externalDocs"
         }
     },
-    patternProperties: {
-        "^x-": {}
-    },
-    additionalProperties: false,
     definitions: {
-        Reference: {
+        info: {
             type: "object",
-            required: [
-                "$ref"
-            ],
-            properties: {
-                $ref: {
-                    type: "string",
-                    format: "uriref"
-                }
-            }
-        },
-        Info: {
-            type: "object",
+            description: "The object provides metadata about the API. The metadata can be used by the clients if needed, and can be presented in editing or documentation generation tools for convenience.",
             required: [
                 "title",
                 "version"
             ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
             properties: {
                 title: {
                     type: "string"
@@ -73,68 +75,73 @@ export default {
                     type: "string"
                 },
                 termsOfService: {
-                    type: "string",
-                    format: "uriref"
+                    type: "string"
                 },
                 contact: {
-                    $ref: "#/definitions/Contact"
+                    "$ref": "#/definitions/contact"
                 },
                 license: {
-                    $ref: "#/definitions/License"
+                    "$ref": "#/definitions/license"
                 },
                 version: {
                     type: "string"
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
+            }
         },
-        Contact: {
+        contact: {
             type: "object",
+            description: "Contact information for the exposed API.",
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
             properties: {
                 name: {
                     type: "string"
                 },
                 url: {
-                    type: "string",
-                    format: "uriref"
+                    type: "string"
                 },
                 email: {
-                    type: "string",
-                    format: "email"
+                    type: "string"
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
+            }
         },
-        License: {
+        license: {
             type: "object",
+            description: "License information for the exposed API.",
             required: [
                 "name"
             ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
             properties: {
                 name: {
                     type: "string"
                 },
                 url: {
-                    type: "string",
-                    format: "uriref"
+                    type: "string"
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
+            }
         },
-        Server: {
+        server: {
             type: "object",
+            description: "An object representing a Server.",
             required: [
                 "url"
             ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
             properties: {
                 url: {
                     type: "string"
@@ -143,28 +150,29 @@ export default {
                     type: "string"
                 },
                 variables: {
-                    type: "object",
-                    additionalProperties: {
-                        $ref: "#/definitions/ServerVariable"
-                    }
+                    "$ref": "#/definitions/serverVariables"
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
+            }
         },
-        ServerVariable: {
+        serverVariable: {
             type: "object",
+            description: "An object representing a Server Variable for server URL template substitution.",
             required: [
                 "default"
             ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
             properties: {
                 enum: {
                     type: "array",
                     items: {
                         type: "string"
-                    }
+                    },
+                    uniqueItems: true
                 },
                 default: {
                     type: "string"
@@ -172,739 +180,71 @@ export default {
                 description: {
                     type: "string"
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
+            }
         },
-        Components: {
+        components: {
             type: "object",
+            description: "Holds a set of reusable objects for different aspects of the OAS. All objects defined within the components object will have no effect on the API unless they are explicitly referenced from properties outside the components object.",
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
             properties: {
                 schemas: {
-                    type: "object",
-                    patternProperties: {
-                        "^[a-zA-Z0-9\\.\\-_]+$": {
-                            oneOf: [
-                                {
-                                    $ref: "#/definitions/Reference"
-                                },
-                                {
-                                    $ref: "#/definitions/Schema"
-                                }
-                            ]
-                        }
-                    }
+                    "$ref": "#/definitions/schemasOrReferences"
                 },
                 responses: {
-                    type: "object",
-                    patternProperties: {
-                        "^[a-zA-Z0-9\\.\\-_]+$": {
-                            oneOf: [
-                                {
-                                    $ref: "#/definitions/Reference"
-                                },
-                                {
-                                    $ref: "#/definitions/Response"
-                                }
-                            ]
-                        }
-                    }
+                    "$ref": "#/definitions/responsesOrReferences"
                 },
                 parameters: {
-                    type: "object",
-                    patternProperties: {
-                        "^[a-zA-Z0-9\\.\\-_]+$": {
-                            oneOf: [
-                                {
-                                    $ref: "#/definitions/Reference"
-                                },
-                                {
-                                    $ref: "#/definitions/Parameter"
-                                }
-                            ]
-                        }
-                    }
+                    "$ref": "#/definitions/parametersOrReferences"
                 },
                 examples: {
-                    type: "object",
-                    patternProperties: {
-                        "^[a-zA-Z0-9\\.\\-_]+$": {
-                            oneOf: [
-                                {
-                                    $ref: "#/definitions/Reference"
-                                },
-                                {
-                                    $ref: "#/definitions/Example"
-                                }
-                            ]
-                        }
-                    }
+                    "$ref": "#/definitions/examplesOrReferences"
                 },
                 requestBodies: {
-                    type: "object",
-                    patternProperties: {
-                        "^[a-zA-Z0-9\\.\\-_]+$": {
-                            oneOf: [
-                                {
-                                    $ref: "#/definitions/Reference"
-                                },
-                                {
-                                    $ref: "#/definitions/RequestBody"
-                                }
-                            ]
-                        }
-                    }
+                    "$ref": "#/definitions/requestBodiesOrReferences"
                 },
                 headers: {
-                    type: "object",
-                    patternProperties: {
-                        "^[a-zA-Z0-9\\.\\-_]+$": {
-                            oneOf: [
-                                {
-                                    $ref: "#/definitions/Reference"
-                                },
-                                {
-                                    $ref: "#/definitions/Header"
-                                }
-                            ]
-                        }
-                    }
+                    "$ref": "#/definitions/headersOrReferences"
                 },
                 securitySchemes: {
-                    type: "object",
-                    patternProperties: {
-                        "^[a-zA-Z0-9\\.\\-_]+$": {
-                            oneOf: [
-                                {
-                                    $ref: "#/definitions/Reference"
-                                },
-                                {
-                                    $ref: "#/definitions/SecurityScheme"
-                                }
-                            ]
-                        }
-                    }
+                    "$ref": "#/definitions/securitySchemesOrReferences"
                 },
                 links: {
-                    type: "object",
-                    patternProperties: {
-                        "^[a-zA-Z0-9\\.\\-_]+$": {
-                            oneOf: [
-                                {
-                                    $ref: "#/definitions/Reference"
-                                },
-                                {
-                                    $ref: "#/definitions/Link"
-                                }
-                            ]
-                        }
-                    }
+                    "$ref": "#/definitions/linksOrReferences"
                 },
                 callbacks: {
-                    type: "object",
-                    patternProperties: {
-                        "^[a-zA-Z0-9\\.\\-_]+$": {
-                            oneOf: [
-                                {
-                                    $ref: "#/definitions/Reference"
-                                },
-                                {
-                                    $ref: "#/definitions/Callback"
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        Schema: {
-            type: "object",
-            properties: {
-                title: {
-                    type: "string"
-                },
-                multipleOf: {
-                    type: "number",
-                    minimum: 0,
-                    exclusiveMinimum: true
-                },
-                maximum: {
-                    type: "number"
-                },
-                exclusiveMaximum: {
-                    type: "boolean",
-                    default: false
-                },
-                minimum: {
-                    type: "number"
-                },
-                exclusiveMinimum: {
-                    type: "boolean",
-                    default: false
-                },
-                maxLength: {
-                    type: "integer",
-                    minimum: 0
-                },
-                minLength: {
-                    type: "integer",
-                    minimum: 0,
-                    default: 0
-                },
-                pattern: {
-                    type: "string",
-                    format: "regex"
-                },
-                maxItems: {
-                    type: "integer",
-                    minimum: 0
-                },
-                minItems: {
-                    type: "integer",
-                    minimum: 0,
-                    default: 0
-                },
-                uniqueItems: {
-                    type: "boolean",
-                    default: false
-                },
-                maxProperties: {
-                    type: "integer",
-                    minimum: 0
-                },
-                minProperties: {
-                    type: "integer",
-                    minimum: 0,
-                    default: 0
-                },
-                required: {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    minItems: 1,
-                    uniqueItems: true
-                },
-                enum: {
-                    type: "array",
-                    items: {},
-                    minItems: 1,
-                    uniqueItems: true
-                },
-                type: {
-                    type: "string",
-                    enum: [
-                        "array",
-                        "boolean",
-                        "integer",
-                        "number",
-                        "object",
-                        "string"
-                    ]
-                },
-                not: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                allOf: {
-                    type: "array",
-                    items: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Schema"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                },
-                oneOf: {
-                    type: "array",
-                    items: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Schema"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                },
-                anyOf: {
-                    type: "array",
-                    items: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Schema"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                },
-                items: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                properties: {
-                    type: "object",
-                    additionalProperties: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Schema"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                },
-                additionalProperties: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        },
-                        {
-                            type: "boolean"
-                        }
-                    ],
-                    default: true
-                },
-                description: {
-                    type: "string"
-                },
-                format: {
-                    type: "string"
-                },
-                default: {},
-                nullable: {
-                    type: "boolean",
-                    default: false
-                },
-                discriminator: {
-                    $ref: "#/definitions/Discriminator"
-                },
-                readOnly: {
-                    type: "boolean",
-                    default: false
-                },
-                writeOnly: {
-                    type: "boolean",
-                    default: false
-                },
-                example: {},
-                externalDocs: {
-                    $ref: "#/definitions/ExternalDocumentation"
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                xml: {
-                    $ref: "#/definitions/XML"
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        Discriminator: {
-            type: "object",
-            required: [
-                "propertyName"
-            ],
-            properties: {
-                propertyName: {
-                    type: "string"
-                },
-                mapping: {
-                    type: "object",
-                    additionalProperties: {
-                        type: "string"
-                    }
+                    "$ref": "#/definitions/callbacksOrReferences"
                 }
             }
         },
-        XML: {
+        paths: {
             type: "object",
-            properties: {
-                name: {
-                    type: "string"
-                },
-                namespace: {
-                    type: "string",
-                    format: "url"
-                },
-                prefix: {
-                    type: "string"
-                },
-                attribute: {
-                    type: "boolean",
-                    default: false
-                },
-                wrapped: {
-                    type: "boolean",
-                    default: false
-                }
-            },
+            description: "Holds the relative paths to the individual endpoints and their operations. The path is appended to the URL from the `Server Object` in order to construct the full URL.  The Paths MAY be empty, due to ACL constraints.",
+            additionalProperties: false,
             patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        Response: {
-            type: "object",
-            required: [
-                "description"
-            ],
-            properties: {
-                description: {
-                    type: "string"
+                "^/": {
+                    "$ref": "#/definitions/pathItem"
                 },
-                headers: {
-                    additionalProperties: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Header"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                },
-                content: {
-                    type: "object",
-                    additionalProperties: {
-                        $ref: "#/definitions/MediaType"
-                    }
-                },
-                links: {
-                    type: "object",
-                    additionalProperties: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Link"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
                 }
-            },
+            }
+        },
+        pathItem: {
+            type: "object",
+            description: "Describes the operations available on a single path. A Path Item MAY be empty, due to ACL constraints. The path itself is still exposed to the documentation viewer but they will not know which operations and parameters are available.",
+            additionalProperties: false,
             patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        MediaType: {
-            oneOf: [
-                {
-                    $ref: "#/definitions/MediaTypeWithExample"
-                },
-                {
-                    $ref: "#/definitions/MediaTypeWithExamples"
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
                 }
-            ]
-        },
-        MediaTypeWithExample: {
-            type: "object",
+            },
             properties: {
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                example: {},
-                encoding: {
-                    type: "object",
-                    additionalProperties: {
-                        $ref: "#/definitions/Encoding"
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        MediaTypeWithExamples: {
-            type: "object",
-            required: [
-                "examples"
-            ],
-            properties: {
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                examples: {
-                    type: "object",
-                    additionalProperties: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Example"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                },
-                encoding: {
-                    type: "object",
-                    additionalProperties: {
-                        $ref: "#/definitions/Encoding"
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        Example: {
-            type: "object",
-            properties: {
-                summary: {
-                    type: "string"
-                },
-                description: {
-                    type: "string"
-                },
-                value: {},
-                externalValue: {
-                    type: "string",
-                    format: "uriref"
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        Header: {
-            oneOf: [
-                {
-                    $ref: "#/definitions/HeaderWithSchema"
-                },
-                {
-                    $ref: "#/definitions/HeaderWithContent"
-                }
-            ]
-        },
-        HeaderWithSchema: {
-            oneOf: [
-                {
-                    $ref: "#/definitions/HeaderWithSchemaWithExample"
-                },
-                {
-                    $ref: "#/definitions/HeaderWithSchemaWithExamples"
-                }
-            ]
-        },
-        HeaderWithSchemaWithExample: {
-            type: "object",
-            required: [
-                "schema"
-            ],
-            properties: {
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    default: false
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                style: {
-                    type: "string",
-                    enum: [
-                        "simple"
-                    ],
-                    default: "simple"
-                },
-                explode: {
-                    type: "boolean"
-                },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
-                },
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                example: {}
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        HeaderWithSchemaWithExamples: {
-            type: "object",
-            required: [
-                "schema",
-                "examples"
-            ],
-            properties: {
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    default: false
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                style: {
-                    type: "string",
-                    enum: [
-                        "simple"
-                    ],
-                    default: "simple"
-                },
-                explode: {
-                    type: "boolean"
-                },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
-                },
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                examples: {
-                    type: "object",
-                    additionalProperties: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Example"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        HeaderWithContent: {
-            type: "object",
-            required: [
-                "content"
-            ],
-            properties: {
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    default: false
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                content: {
-                    type: "object",
-                    additionalProperties: {
-                        $ref: "#/definitions/MediaType"
-                    },
-                    minProperties: 1,
-                    maxProperties: 1
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        Paths: {
-            type: "object",
-            patternProperties: {
-                "^\\/": {
-                    $ref: "#/definitions/PathItem"
-                },
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        PathItem: {
-            type: "object",
-            properties: {
-                $ref: {
+                "$ref": {
                     type: "string"
                 },
                 summary: {
@@ -914,65 +254,64 @@ export default {
                     type: "string"
                 },
                 get: {
-                    $ref: "#/definitions/Operation"
+                    "$ref": "#/definitions/operation"
                 },
                 put: {
-                    $ref: "#/definitions/Operation"
+                    "$ref": "#/definitions/operation"
                 },
                 post: {
-                    $ref: "#/definitions/Operation"
+                    "$ref": "#/definitions/operation"
                 },
                 delete: {
-                    $ref: "#/definitions/Operation"
+                    "$ref": "#/definitions/operation"
                 },
                 options: {
-                    $ref: "#/definitions/Operation"
+                    "$ref": "#/definitions/operation"
                 },
                 head: {
-                    $ref: "#/definitions/Operation"
+                    "$ref": "#/definitions/operation"
                 },
                 patch: {
-                    $ref: "#/definitions/Operation"
+                    "$ref": "#/definitions/operation"
                 },
                 trace: {
-                    $ref: "#/definitions/Operation"
+                    "$ref": "#/definitions/operation"
                 },
                 servers: {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/Server"
-                    }
+                        "$ref": "#/definitions/server"
+                    },
+                    uniqueItems: true
                 },
                 parameters: {
                     type: "array",
                     items: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Parameter"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
+                        "$ref": "#/definitions/parameterOrReference"
+                    },
+                    uniqueItems: true
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
+            }
         },
-        Operation: {
+        operation: {
             type: "object",
+            description: "Describes a single API operation on a path.",
             required: [
                 "responses"
             ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
             properties: {
                 tags: {
                     type: "array",
                     items: {
                         type: "string"
-                    }
+                    },
+                    uniqueItems: true
                 },
                 summary: {
                     type: "string"
@@ -981,7 +320,7 @@ export default {
                     type: "string"
                 },
                 externalDocs: {
-                    $ref: "#/definitions/ExternalDocumentation"
+                    "$ref": "#/definitions/externalDocs"
                 },
                 operationId: {
                     type: "string"
@@ -989,115 +328,358 @@ export default {
                 parameters: {
                     type: "array",
                     items: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Parameter"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
+                        "$ref": "#/definitions/parameterOrReference"
+                    },
+                    uniqueItems: true
                 },
                 requestBody: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/RequestBody"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
+                    "$ref": "#/definitions/requestBodyOrReference"
                 },
                 responses: {
-                    $ref: "#/definitions/Responses"
+                    "$ref": "#/definitions/responses"
                 },
                 callbacks: {
-                    type: "object",
-                    additionalProperties: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Callback"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
+                    "$ref": "#/definitions/callbacksOrReferences"
                 },
                 deprecated: {
-                    type: "boolean",
-                    default: false
+                    type: "boolean"
                 },
                 security: {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/SecurityRequirement"
-                    }
+                        "$ref": "#/definitions/securityRequirement"
+                    },
+                    uniqueItems: true
                 },
                 servers: {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/Server"
-                    }
+                        "$ref": "#/definitions/server"
+                    },
+                    uniqueItems: true
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        Responses: {
-            type: "object",
-            properties: {
-                default: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Response"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                }
-            },
-            patternProperties: {
-                "[1-5](?:\\d{2}|XX)": {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Response"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                "^x-": {}
-            },
-            minProperties: 1,
-            additionalProperties: false,
-            not: {
-                type: "object",
-                patternProperties: {
-                    "^x-": {}
-                },
-                additionalProperties: false
             }
         },
-        SecurityRequirement: {
+        externalDocs: {
             type: "object",
-            additionalProperties: {
-                type: "array",
-                items: {
+            description: "Allows referencing an external resource for extended documentation.",
+            required: [
+                "url"
+            ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
+            properties: {
+                description: {
+                    type: "string"
+                },
+                url: {
                     type: "string"
                 }
             }
         },
-        Tag: {
+        parameter: {
             type: "object",
+            description: "Describes a single operation parameter.  A unique parameter is defined by a combination of a name and location.",
+            required: [
+                "name",
+                "in"
+            ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
+            properties: {
+                name: {
+                    type: "string"
+                },
+                in: {
+                    type: "string"
+                },
+                description: {
+                    type: "string"
+                },
+                required: {
+                    type: "boolean"
+                },
+                deprecated: {
+                    type: "boolean"
+                },
+                allowEmptyValue: {
+                    type: "boolean"
+                },
+                style: {
+                    type: "string"
+                },
+                explode: {
+                    type: "boolean"
+                },
+                allowReserved: {
+                    type: "boolean"
+                },
+                schema: {
+                    "$ref": "#/definitions/schemaOrReference"
+                },
+                example: {
+                    "$ref": "#/definitions/any"
+                },
+                examples: {
+                    "$ref": "#/definitions/examplesOrReferences"
+                },
+                content: {
+                    "$ref": "#/definitions/mediaTypes"
+                }
+            }
+        },
+        requestBody: {
+            type: "object",
+            description: "Describes a single request body.",
+            required: [
+                "content"
+            ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
+            properties: {
+                description: {
+                    type: "string"
+                },
+                content: {
+                    "$ref": "#/definitions/mediaTypes"
+                },
+                required: {
+                    type: "boolean"
+                }
+            }
+        },
+        mediaType: {
+            type: "object",
+            description: "Each Media Type Object provides schema and examples for the media type identified by its key.",
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
+            properties: {
+                schema: {
+                    "$ref": "#/definitions/schemaOrReference"
+                },
+                example: {
+                    "$ref": "#/definitions/any"
+                },
+                examples: {
+                    "$ref": "#/definitions/examplesOrReferences"
+                },
+                encoding: {
+                    "$ref": "#/definitions/encodings"
+                }
+            }
+        },
+        encoding: {
+            type: "object",
+            description: "A single encoding definition applied to a single schema property.",
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
+            properties: {
+                contentType: {
+                    type: "string"
+                },
+                headers: {
+                    "$ref": "#/definitions/headers"
+                },
+                style: {
+                    type: "string"
+                },
+                explode: {
+                    type: "boolean"
+                },
+                allowReserved: {
+                    type: "boolean"
+                }
+            }
+        },
+        responses: {
+            type: "object",
+            description: "A container for the expected responses of an operation. The container maps a HTTP response code to the expected response.  The documentation is not necessarily expected to cover all possible HTTP response codes because they may not be known in advance. However, documentation is expected to cover a successful operation response and any known errors.  The `default` MAY be used as a default response object for all HTTP codes  that are not covered individually by the specification.  The `Responses Object` MUST contain at least one response code, and it  SHOULD be the response for a successful operation call.",
+            additionalProperties: false,
+            patternProperties: {
+                "^([0-9X]{3})$": {
+                    "$ref": "#/definitions/responseOrReference"
+                },
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
+            properties: {
+                default: {
+                    "$ref": "#/definitions/responseOrReference"
+                }
+            }
+        },
+        response: {
+            type: "object",
+            description: "Describes a single response from an API Operation, including design-time, static  `links` to operations based on the response.",
+            required: [
+                "description"
+            ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
+            properties: {
+                description: {
+                    type: "string"
+                },
+                headers: {
+                    "$ref": "#/definitions/headersOrReferences"
+                },
+                content: {
+                    "$ref": "#/definitions/mediaTypes"
+                },
+                links: {
+                    "$ref": "#/definitions/linksOrReferences"
+                }
+            }
+        },
+        callback: {
+            type: "object",
+            description: "A map of possible out-of band callbacks related to the parent operation. Each value in the map is a Path Item Object that describes a set of requests that may be initiated by the API provider and the expected responses. The key value used to identify the callback object is an expression, evaluated at runtime, that identifies a URL to use for the callback operation.",
+            additionalProperties: false,
+            patternProperties: {
+                "^": {
+                    "$ref": "#/definitions/pathItem"
+                },
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            }
+        },
+        example: {
+            type: "object",
+            description: "",
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
+            properties: {
+                summary: {
+                    type: "string"
+                },
+                description: {
+                    type: "string"
+                },
+                value: {
+                    "$ref": "#/definitions/any"
+                },
+                externalValue: {
+                    type: "string"
+                }
+            }
+        },
+        link: {
+            type: "object",
+            description: "The `Link object` represents a possible design-time link for a response. The presence of a link does not guarantee the caller's ability to successfully invoke it, rather it provides a known relationship and traversal mechanism between responses and other operations.  Unlike _dynamic_ links (i.e. links provided **in** the response payload), the OAS linking mechanism does not require link information in the runtime response.  For computing links, and providing instructions to execute them, a runtime expression is used for accessing values in an operation and using them as parameters while invoking the linked operation.",
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
+            properties: {
+                operationRef: {
+                    type: "string"
+                },
+                operationId: {
+                    type: "string"
+                },
+                parameters: {
+                    "$ref": "#/definitions/anysOrExpressions"
+                },
+                requestBody: {
+                    "$ref": "#/definitions/anyOrExpression"
+                },
+                description: {
+                    type: "string"
+                },
+                server: {
+                    "$ref": "#/definitions/server"
+                }
+            }
+        },
+        header: {
+            type: "object",
+            description: "The Header Object follows the structure of the Parameter Object with the following changes:  1. `name` MUST NOT be specified, it is given in the corresponding `headers` map. 1. `in` MUST NOT be specified, it is implicitly in `header`. 1. All traits that are affected by the location MUST be applicable to a location of `header` (for example, `style`).",
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
+            properties: {
+                description: {
+                    type: "string"
+                },
+                required: {
+                    type: "boolean"
+                },
+                deprecated: {
+                    type: "boolean"
+                },
+                allowEmptyValue: {
+                    type: "boolean"
+                },
+                style: {
+                    type: "string"
+                },
+                explode: {
+                    type: "boolean"
+                },
+                allowReserved: {
+                    type: "boolean"
+                },
+                schema: {
+                    "$ref": "#/definitions/schemaOrReference"
+                },
+                example: {
+                    "$ref": "#/definitions/any"
+                },
+                examples: {
+                    "$ref": "#/definitions/examplesOrReferences"
+                },
+                content: {
+                    "$ref": "#/definitions/mediaTypes"
+                }
+            }
+        },
+        tag: {
+            type: "object",
+            description: "Adds metadata to a single tag that is used by the Operation Object. It is not mandatory to have a Tag Object per tag defined in the Operation Object instances.",
             required: [
                 "name"
             ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
             properties: {
                 name: {
                     type: "string"
@@ -1106,1193 +688,567 @@ export default {
                     type: "string"
                 },
                 externalDocs: {
-                    $ref: "#/definitions/ExternalDocumentation"
+                    "$ref": "#/definitions/externalDocs"
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
+            }
+        },
+        examples: {
+            type: "object",
+            description: "",
             additionalProperties: false
         },
-        ExternalDocumentation: {
+        reference: {
             type: "object",
+            description: "A simple object to allow referencing other components in the specification, internally and externally.  The Reference Object is defined by JSON Reference and follows the same structure, behavior and rules.   For this specification, reference resolution is accomplished as defined by the JSON Reference specification and not by the JSON Schema specification.",
             required: [
-                "url"
+                "$ref"
             ],
+            additionalProperties: false,
             properties: {
-                description: {
+                "$ref": {
                     type: "string"
-                },
-                url: {
-                    type: "string",
-                    format: "uriref"
                 }
-            },
+            }
+        },
+        schema: {
+            type: "object",
+            description: "The Schema Object allows the definition of input and output data types. These types can be objects, but also primitives and arrays. This object is an extended subset of the JSON Schema Specification Wright Draft 00.  For more information about the properties, see JSON Schema Core and JSON Schema Validation. Unless stated otherwise, the property definitions follow the JSON Schema.",
+            additionalProperties: false,
             patternProperties: {
-                "^x-": {}
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
             },
-            additionalProperties: false
-        },
-        Parameter: {
-            oneOf: [
-                {
-                    $ref: "#/definitions/ParameterWithSchema"
-                },
-                {
-                    $ref: "#/definitions/ParameterWithContent"
-                }
-            ]
-        },
-        ParameterWithSchema: {
-            oneOf: [
-                {
-                    $ref: "#/definitions/ParameterWithSchemaWithExample"
-                },
-                {
-                    $ref: "#/definitions/ParameterWithSchemaWithExamples"
-                }
-            ]
-        },
-        ParameterWithSchemaWithExample: {
-            oneOf: [
-                {
-                    $ref: "#/definitions/ParameterWithSchemaWithExampleInPath"
-                },
-                {
-                    $ref: "#/definitions/ParameterWithSchemaWithExampleInQuery"
-                },
-                {
-                    $ref: "#/definitions/ParameterWithSchemaWithExampleInHeader"
-                },
-                {
-                    $ref: "#/definitions/ParameterWithSchemaWithExampleInCookie"
-                }
-            ]
-        },
-        ParameterWithSchemaWithExampleInPath: {
-            type: "object",
-            required: [
-                "name",
-                "in",
-                "schema",
-                "required"
-            ],
             properties: {
-                name: {
-                    type: "string"
-                },
-                in: {
-                    type: "string",
-                    enum: [
-                        "path"
-                    ]
-                },
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    enum: [
-                        true
-                    ]
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                style: {
-                    type: "string",
-                    enum: [
-                        "matrix",
-                        "label",
-                        "simple"
-                    ],
-                    default: "simple"
-                },
-                explode: {
+                nullable: {
                     type: "boolean"
                 },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
+                discriminator: {
+                    "$ref": "#/definitions/discriminator"
                 },
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                example: {}
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ParameterWithSchemaWithExampleInQuery: {
-            type: "object",
-            required: [
-                "name",
-                "in",
-                "schema"
-            ],
-            properties: {
-                name: {
-                    type: "string"
-                },
-                in: {
-                    type: "string",
-                    enum: [
-                        "query"
-                    ]
-                },
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    default: false
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                style: {
-                    type: "string",
-                    enum: [
-                        "form",
-                        "spaceDelimited",
-                        "pipeDelimited",
-                        "deepObject"
-                    ],
-                    default: "form"
-                },
-                explode: {
+                readOnly: {
                     type: "boolean"
                 },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
-                },
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                example: {}
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ParameterWithSchemaWithExampleInHeader: {
-            type: "object",
-            required: [
-                "name",
-                "in",
-                "schema"
-            ],
-            properties: {
-                name: {
-                    type: "string"
-                },
-                in: {
-                    type: "string",
-                    enum: [
-                        "header"
-                    ]
-                },
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    default: false
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                style: {
-                    type: "string",
-                    enum: [
-                        "simple"
-                    ],
-                    default: "simple"
-                },
-                explode: {
+                writeOnly: {
                     type: "boolean"
                 },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
+                xml: {
+                    "$ref": "#/definitions/xml"
                 },
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
+                externalDocs: {
+                    "$ref": "#/definitions/externalDocs"
                 },
-                example: {}
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ParameterWithSchemaWithExampleInCookie: {
-            type: "object",
-            required: [
-                "name",
-                "in",
-                "schema"
-            ],
-            properties: {
-                name: {
-                    type: "string"
-                },
-                in: {
-                    type: "string",
-                    enum: [
-                        "cookie"
-                    ]
-                },
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    default: false
+                example: {
+                    "$ref": "#/definitions/any"
                 },
                 deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                style: {
-                    type: "string",
-                    enum: [
-                        "form"
-                    ],
-                    default: "form"
-                },
-                explode: {
                     type: "boolean"
                 },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
+                title: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/title"
                 },
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
+                multipleOf: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/multipleOf"
                 },
-                example: {}
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ParameterWithSchemaWithExamples: {
-            oneOf: [
-                {
-                    $ref: "#/definitions/ParameterWithSchemaWithExamplesInPath"
+                maximum: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/maximum"
                 },
-                {
-                    $ref: "#/definitions/ParameterWithSchemaWithExamplesInQuery"
+                exclusiveMaximum: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/exclusiveMaximum"
                 },
-                {
-                    $ref: "#/definitions/ParameterWithSchemaWithExamplesInHeader"
+                minimum: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/minimum"
                 },
-                {
-                    $ref: "#/definitions/ParameterWithSchemaWithExamplesInCookie"
-                }
-            ]
-        },
-        ParameterWithSchemaWithExamplesInPath: {
-            type: "object",
-            required: [
-                "name",
-                "in",
-                "schema",
-                "required",
-                "examples"
-            ],
-            properties: {
-                name: {
-                    type: "string"
+                exclusiveMinimum: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/exclusiveMinimum"
                 },
-                in: {
-                    type: "string",
-                    enum: [
-                        "path"
-                    ]
+                maxLength: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/maxLength"
                 },
-                description: {
-                    type: "string"
+                minLength: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/minLength"
+                },
+                pattern: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/pattern"
+                },
+                maxItems: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/maxItems"
+                },
+                minItems: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/minItems"
+                },
+                uniqueItems: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/uniqueItems"
+                },
+                maxProperties: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/maxProperties"
+                },
+                minProperties: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/minProperties"
                 },
                 required: {
-                    type: "boolean",
-                    enum: [
-                        true
-                    ]
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/required"
                 },
-                deprecated: {
-                    type: "boolean",
-                    default: false
+                enum: {
+                    "$ref": "http://json-schema.org/draft-04/schema#/properties/enum"
                 },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                style: {
-                    type: "string",
-                    enum: [
-                        "matrix",
-                        "label",
-                        "simple"
-                    ],
-                    default: "simple"
-                },
-                explode: {
-                    type: "boolean"
-                },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
-                },
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                examples: {
-                    type: "object",
-                    additionalProperties: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Example"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ParameterWithSchemaWithExamplesInQuery: {
-            type: "object",
-            required: [
-                "name",
-                "in",
-                "schema",
-                "examples"
-            ],
-            properties: {
-                name: {
-                    type: "string"
-                },
-                in: {
-                    type: "string",
-                    enum: [
-                        "query"
-                    ]
-                },
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    default: false
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                style: {
-                    type: "string",
-                    enum: [
-                        "form",
-                        "spaceDelimited",
-                        "pipeDelimited",
-                        "deepObject"
-                    ],
-                    default: "form"
-                },
-                explode: {
-                    type: "boolean"
-                },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
-                },
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                examples: {
-                    type: "object",
-                    additionalProperties: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Example"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ParameterWithSchemaWithExamplesInHeader: {
-            type: "object",
-            required: [
-                "name",
-                "in",
-                "schema",
-                "examples"
-            ],
-            properties: {
-                name: {
-                    type: "string"
-                },
-                in: {
-                    type: "string",
-                    enum: [
-                        "header"
-                    ]
-                },
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    default: false
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                style: {
-                    type: "string",
-                    enum: [
-                        "simple"
-                    ],
-                    default: "simple"
-                },
-                explode: {
-                    type: "boolean"
-                },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
-                },
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                examples: {
-                    type: "object",
-                    additionalProperties: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Example"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ParameterWithSchemaWithExamplesInCookie: {
-            type: "object",
-            required: [
-                "name",
-                "in",
-                "schema",
-                "examples"
-            ],
-            properties: {
-                name: {
-                    type: "string"
-                },
-                in: {
-                    type: "string",
-                    enum: [
-                        "cookie"
-                    ]
-                },
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    default: false
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                style: {
-                    type: "string",
-                    enum: [
-                        "form"
-                    ],
-                    default: "form"
-                },
-                explode: {
-                    type: "boolean"
-                },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
-                },
-                schema: {
-                    oneOf: [
-                        {
-                            $ref: "#/definitions/Schema"
-                        },
-                        {
-                            $ref: "#/definitions/Reference"
-                        }
-                    ]
-                },
-                examples: {
-                    type: "object",
-                    additionalProperties: {
-                        oneOf: [
-                            {
-                                $ref: "#/definitions/Example"
-                            },
-                            {
-                                $ref: "#/definitions/Reference"
-                            }
-                        ]
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ParameterWithContent: {
-            oneOf: [
-                {
-                    $ref: "#/definitions/ParameterWithContentInPath"
-                },
-                {
-                    $ref: "#/definitions/ParameterWithContentNotInPath"
-                }
-            ]
-        },
-        ParameterWithContentInPath: {
-            type: "object",
-            required: [
-                "name",
-                "in",
-                "content"
-            ],
-            properties: {
-                name: {
-                    type: "string"
-                },
-                in: {
-                    type: "string",
-                    enum: [
-                        "path"
-                    ]
-                },
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    enum: [
-                        true
-                    ]
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                content: {
-                    type: "object",
-                    additionalProperties: {
-                        $ref: "#/definitions/MediaType"
-                    },
-                    minProperties: 1,
-                    maxProperties: 1
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ParameterWithContentNotInPath: {
-            type: "object",
-            required: [
-                "name",
-                "in",
-                "content"
-            ],
-            properties: {
-                name: {
-                    type: "string"
-                },
-                in: {
-                    type: "string",
-                    enum: [
-                        "query",
-                        "header",
-                        "cookie"
-                    ]
-                },
-                description: {
-                    type: "string"
-                },
-                required: {
-                    type: "boolean",
-                    default: false
-                },
-                deprecated: {
-                    type: "boolean",
-                    default: false
-                },
-                allowEmptyValue: {
-                    type: "boolean",
-                    default: false
-                },
-                content: {
-                    type: "object",
-                    additionalProperties: {
-                        $ref: "#/definitions/MediaType"
-                    },
-                    minProperties: 1,
-                    maxProperties: 1
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        RequestBody: {
-            type: "object",
-            required: [
-                "content"
-            ],
-            properties: {
-                description: {
-                    type: "string"
-                },
-                content: {
-                    type: "object",
-                    additionalProperties: {
-                        $ref: "#/definitions/MediaType"
-                    }
-                },
-                required: {
-                    type: "boolean",
-                    default: false
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        SecurityScheme: {
-            oneOf: [
-                {
-                    $ref: "#/definitions/APIKeySecurityScheme"
-                },
-                {
-                    $ref: "#/definitions/HTTPSecurityScheme"
-                },
-                {
-                    $ref: "#/definitions/OAuth2SecurityScheme"
-                },
-                {
-                    $ref: "#/definitions/OpenIdConnectSecurityScheme"
-                }
-            ]
-        },
-        APIKeySecurityScheme: {
-            type: "object",
-            required: [
-                "type",
-                "name",
-                "in"
-            ],
-            properties: {
                 type: {
-                    type: "string",
-                    enum: [
-                        "apiKey"
-                    ]
-                },
-                name: {
                     type: "string"
                 },
-                in: {
-                    type: "string",
-                    enum: [
-                        "header",
-                        "query",
-                        "cookie"
+                allOf: {
+                    type: "array",
+                    items: {
+                        "$ref": "#/definitions/schemaOrReference"
+                    },
+                    minItems: 1
+                },
+                oneOf: {
+                    type: "array",
+                    items: {
+                        "$ref": "#/definitions/schemaOrReference"
+                    },
+                    minItems: 1
+                },
+                anyOf: {
+                    type: "array",
+                    items: {
+                        "$ref": "#/definitions/schemaOrReference"
+                    },
+                    minItems: 1
+                },
+                not: {
+                    "$ref": "#/definitions/schema"
+                },
+                items: {
+                    anyOf: [
+                        {
+                            "$ref": "#/definitions/schemaOrReference"
+                        },
+                        {
+                            type: "array",
+                            items: {
+                                "$ref": "#/definitions/schemaOrReference"
+                            },
+                            minItems: 1
+                        }
                     ]
+                },
+                properties: {
+                    type: "object",
+                    additionalProperties: {
+                        "$ref": "#/definitions/schemaOrReference"
+                    }
+                },
+                additionalProperties: {
+                    oneOf: [
+                        {
+                            "$ref": "#/definitions/schemaOrReference"
+                        },
+                        {
+                            type: "boolean"
+                        }
+                    ]
+                },
+                default: {
+                    "$ref": "#/definitions/defaultType"
                 },
                 description: {
                     type: "string"
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        HTTPSecurityScheme: {
-            oneOf: [
-                {
-                    $ref: "#/definitions/NonBearerHTTPSecurityScheme"
                 },
-                {
-                    $ref: "#/definitions/BearerHTTPSecurityScheme"
+                format: {
+                    type: "string"
                 }
-            ]
+            }
         },
-        NonBearerHTTPSecurityScheme: {
-            not: {
-                type: "object",
-                properties: {
-                    scheme: {
-                        type: "string",
-                        enum: [
-                            "bearer"
-                        ]
-                    }
+        discriminator: {
+            type: "object",
+            description: "When request bodies or response payloads may be one of a number of different schemas, a `discriminator` object can be used to aid in serialization, deserialization, and validation.  The discriminator is a specific object in a schema which is used to inform the consumer of the specification of an alternative schema based on the value associated with it.  When using the discriminator, _inline_ schemas will not be considered.",
+            required: [
+                "propertyName"
+            ],
+            additionalProperties: false,
+            properties: {
+                propertyName: {
+                    type: "string"
+                },
+                mapping: {
+                    "$ref": "#/definitions/strings"
+                }
+            }
+        },
+        xml: {
+            type: "object",
+            description: "A metadata object that allows for more fine-tuned XML model definitions.  When using arrays, XML element names are *not* inferred (for singular/plural forms) and the `name` property SHOULD be used to add that information. See examples for expected behavior.",
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
                 }
             },
+            properties: {
+                name: {
+                    type: "string"
+                },
+                namespace: {
+                    type: "string"
+                },
+                prefix: {
+                    type: "string"
+                },
+                attribute: {
+                    type: "boolean"
+                },
+                wrapped: {
+                    type: "boolean"
+                }
+            }
+        },
+        securityScheme: {
             type: "object",
+            description: "Defines a security scheme that can be used by the operations. Supported schemes are HTTP authentication, an API key (either as a header or as a query parameter) and OAuth2's common flows (implicit, password, application and access code).",
             required: [
-                "scheme",
                 "type"
             ],
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
             properties: {
-                scheme: {
+                type: {
                     type: "string"
                 },
                 description: {
                     type: "string"
                 },
-                type: {
-                    type: "string",
-                    enum: [
-                        "http"
-                    ]
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        BearerHTTPSecurityScheme: {
-            type: "object",
-            required: [
-                "type",
-                "scheme"
-            ],
-            properties: {
+                name: {
+                    type: "string"
+                },
+                in: {
+                    type: "string"
+                },
                 scheme: {
-                    type: "string",
-                    enum: [
-                        "bearer"
-                    ]
+                    type: "string"
                 },
                 bearerFormat: {
                     type: "string"
                 },
-                type: {
-                    type: "string",
-                    enum: [
-                        "http"
-                    ]
-                },
-                description: {
-                    type: "string"
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        OAuth2SecurityScheme: {
-            type: "object",
-            required: [
-                "type",
-                "flows"
-            ],
-            properties: {
-                type: {
-                    type: "string",
-                    enum: [
-                        "oauth2"
-                    ]
-                },
                 flows: {
-                    $ref: "#/definitions/OAuthFlows"
-                },
-                description: {
-                    type: "string"
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        OpenIdConnectSecurityScheme: {
-            type: "object",
-            required: [
-                "type",
-                "openIdConnectUrl"
-            ],
-            properties: {
-                type: {
-                    type: "string",
-                    enum: [
-                        "openIdConnect"
-                    ]
+                    "$ref": "#/definitions/oauthFlows"
                 },
                 openIdConnectUrl: {
-                    type: "string",
-                    format: "url"
-                },
-                description: {
                     type: "string"
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
+            }
         },
-        OAuthFlows: {
+        oauthFlows: {
             type: "object",
+            description: "Allows configuration of the supported OAuth Flows.",
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
+                }
+            },
             properties: {
                 implicit: {
-                    $ref: "#/definitions/ImplicitOAuthFlow"
+                    "$ref": "#/definitions/oauthFlow"
                 },
                 password: {
-                    $ref: "#/definitions/PasswordOAuthFlow"
+                    "$ref": "#/definitions/oauthFlow"
                 },
                 clientCredentials: {
-                    $ref: "#/definitions/ClientCredentialsFlow"
+                    "$ref": "#/definitions/oauthFlow"
                 },
                 authorizationCode: {
-                    $ref: "#/definitions/AuthorizationCodeOAuthFlow"
+                    "$ref": "#/definitions/oauthFlow"
+                }
+            }
+        },
+        oauthFlow: {
+            type: "object",
+            description: "Configuration details for a supported OAuth Flow",
+            additionalProperties: false,
+            patternProperties: {
+                "^x-": {
+                    "$ref": "#/definitions/specificationExtension"
                 }
             },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ImplicitOAuthFlow: {
-            type: "object",
-            required: [
-                "authorizationUrl",
-                "scopes"
-            ],
             properties: {
                 authorizationUrl: {
-                    type: "string",
-                    format: "uriref"
-                },
-                refreshUrl: {
-                    type: "string",
-                    format: "uriref"
-                },
-                scopes: {
-                    type: "object",
-                    additionalProperties: {
-                        type: "string"
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        PasswordOAuthFlow: {
-            type: "object",
-            required: [
-                "tokenUrl"
-            ],
-            properties: {
-                tokenUrl: {
-                    type: "string",
-                    format: "uriref"
-                },
-                refreshUrl: {
-                    type: "string",
-                    format: "uriref"
-                },
-                scopes: {
-                    type: "object",
-                    additionalProperties: {
-                        type: "string"
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        ClientCredentialsFlow: {
-            type: "object",
-            required: [
-                "tokenUrl"
-            ],
-            properties: {
-                tokenUrl: {
-                    type: "string",
-                    format: "uriref"
-                },
-                refreshUrl: {
-                    type: "string",
-                    format: "uriref"
-                },
-                scopes: {
-                    type: "object",
-                    additionalProperties: {
-                        type: "string"
-                    }
-                }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
-        },
-        AuthorizationCodeOAuthFlow: {
-            type: "object",
-            required: [
-                "authorizationUrl",
-                "tokenUrl"
-            ],
-            properties: {
-                authorizationUrl: {
-                    type: "string",
-                    format: "uriref"
+                    type: "string"
                 },
                 tokenUrl: {
-                    type: "string",
-                    format: "uriref"
+                    type: "string"
                 },
                 refreshUrl: {
-                    type: "string",
-                    format: "uriref"
+                    type: "string"
                 },
                 scopes: {
-                    type: "object",
-                    additionalProperties: {
-                        type: "string"
-                    }
+                    "$ref": "#/definitions/strings"
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
+            }
         },
-        Link: {
+        securityRequirement: {
+            type: "object",
+            description: "Lists the required security schemes to execute this operation. The name used for each property MUST correspond to a security scheme declared in the Security Schemes under the Components Object.  Security Requirement Objects that contain multiple schemes require that all schemes MUST be satisfied for a request to be authorized. This enables support for scenarios where multiple query parameters or HTTP headers are required to convey security information.  When a list of Security Requirement Objects is defined on the Open API object or Operation Object, only one of Security Requirement Objects in the list needs to be satisfied to authorize the request.",
+            additionalProperties: false,
+            patternProperties: {
+                "^[a-zA-Z0-9\\.\\-_]+$": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    uniqueItems: true
+                }
+            }
+        },
+        anyOrExpression: {
             oneOf: [
                 {
-                    $ref: "#/definitions/LinkWithOperationRef"
+                    "$ref": "#/definitions/any"
                 },
                 {
-                    $ref: "#/definitions/LinkWithOperationId"
+                    "$ref": "#/definitions/expression"
                 }
             ]
         },
-        LinkWithOperationRef: {
-            type: "object",
-            properties: {
-                operationRef: {
-                    type: "string",
-                    format: "uriref"
+        callbackOrReference: {
+            oneOf: [
+                {
+                    "$ref": "#/definitions/callback"
                 },
-                parameters: {
-                    type: "object",
-                    additionalProperties: {}
-                },
-                requestBody: {},
-                description: {
-                    type: "string"
-                },
-                server: {
-                    $ref: "#/definitions/Server"
+                {
+                    "$ref": "#/definitions/reference"
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
+            ]
         },
-        LinkWithOperationId: {
-            type: "object",
-            properties: {
-                operationId: {
-                    type: "string"
+        exampleOrReference: {
+            oneOf: [
+                {
+                    "$ref": "#/definitions/example"
                 },
-                parameters: {
-                    type: "object",
-                    additionalProperties: {}
-                },
-                requestBody: {},
-                description: {
-                    type: "string"
-                },
-                server: {
-                    $ref: "#/definitions/Server"
+                {
+                    "$ref": "#/definitions/reference"
                 }
-            },
-            patternProperties: {
-                "^x-": {}
-            },
-            additionalProperties: false
+            ]
         },
-        Callback: {
+        headerOrReference: {
+            oneOf: [
+                {
+                    "$ref": "#/definitions/header"
+                },
+                {
+                    "$ref": "#/definitions/reference"
+                }
+            ]
+        },
+        linkOrReference: {
+            oneOf: [
+                {
+                    "$ref": "#/definitions/link"
+                },
+                {
+                    "$ref": "#/definitions/reference"
+                }
+            ]
+        },
+        parameterOrReference: {
+            oneOf: [
+                {
+                    "$ref": "#/definitions/parameter"
+                },
+                {
+                    "$ref": "#/definitions/reference"
+                }
+            ]
+        },
+        requestBodyOrReference: {
+            oneOf: [
+                {
+                    "$ref": "#/definitions/requestBody"
+                },
+                {
+                    "$ref": "#/definitions/reference"
+                }
+            ]
+        },
+        responseOrReference: {
+            oneOf: [
+                {
+                    "$ref": "#/definitions/response"
+                },
+                {
+                    "$ref": "#/definitions/reference"
+                }
+            ]
+        },
+        schemaOrReference: {
+            oneOf: [
+                {
+                    "$ref": "#/definitions/schema"
+                },
+                {
+                    "$ref": "#/definitions/reference"
+                }
+            ]
+        },
+        securitySchemeOrReference: {
+            oneOf: [
+                {
+                    "$ref": "#/definitions/securityScheme"
+                },
+                {
+                    "$ref": "#/definitions/reference"
+                }
+            ]
+        },
+        anysOrExpressions: {
             type: "object",
             additionalProperties: {
-                $ref: "#/definitions/PathItem"
-            },
-            patternProperties: {
-                "^x-": {}
+                "$ref": "#/definitions/anyOrExpression"
             }
         },
-        Encoding: {
+        callbacksOrReferences: {
             type: "object",
-            properties: {
-                contentType: {
-                    type: "string"
+            additionalProperties: {
+                "$ref": "#/definitions/callbackOrReference"
+            }
+        },
+        encodings: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/encoding"
+            }
+        },
+        examplesOrReferences: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/exampleOrReference"
+            }
+        },
+        headers: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/header"
+            }
+        },
+        headersOrReferences: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/headerOrReference"
+            }
+        },
+        linksOrReferences: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/linkOrReference"
+            }
+        },
+        mediaTypes: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/mediaType"
+            }
+        },
+        parametersOrReferences: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/parameterOrReference"
+            }
+        },
+        requestBodiesOrReferences: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/requestBodyOrReference"
+            }
+        },
+        responsesOrReferences: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/responseOrReference"
+            }
+        },
+        schemasOrReferences: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/schemaOrReference"
+            }
+        },
+        securitySchemesOrReferences: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/securitySchemeOrReference"
+            }
+        },
+        serverVariables: {
+            type: "object",
+            additionalProperties: {
+                "$ref": "#/definitions/serverVariable"
+            }
+        },
+        strings: {
+            type: "object",
+            additionalProperties: {
+                type: "string"
+            }
+        },
+        object: {
+            type: "object",
+            additionalProperties: true
+        },
+        any: {
+            additionalProperties: true
+        },
+        expression: {
+            type: "object",
+            additionalProperties: true
+        },
+        specificationExtension: {
+            description: "Any property starting with x- is valid.",
+            oneOf: [
+                {
+                    type: "null"
                 },
-                headers: {
-                    type: "object",
-                    additionalProperties: {
-                        $ref: "#/definitions/Header"
-                    }
+                {
+                    type: "number"
                 },
-                style: {
-                    type: "string",
-                    enum: [
-                        "form",
-                        "spaceDelimited",
-                        "pipeDelimited",
-                        "deepObject"
-                    ]
-                },
-                explode: {
+                {
                     type: "boolean"
                 },
-                allowReserved: {
-                    type: "boolean",
-                    default: false
+                {
+                    type: "string"
+                },
+                {
+                    type: "object"
+                },
+                {
+                    type: "array"
                 }
-            },
-            additionalProperties: false
+            ]
+        },
+        defaultType: {
+            oneOf: [
+                {
+                    type: "null"
+                },
+                {
+                    type: "array"
+                },
+                {
+                    type: "object"
+                },
+                {
+                    type: "number"
+                },
+                {
+                    type: "boolean"
+                },
+                {
+                    type: "string"
+                }
+            ]
         }
     }
 }

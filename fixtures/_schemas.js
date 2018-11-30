@@ -1,6 +1,8 @@
-import defaults from "../src/defaults";
-import assign from "lodash.assign";
-import {default as PetStorev2} from "./petstore.v2";
+// import {default as PetStoreV2} from "./petstore.v2";
+import {default as petStoreSchemaStaging} from "./petstore-staging";
+import {default as petStoreSchemaV2} from "./petstore.v2";
+import {default as petStoreSchemaV3} from "./petstore.v3";
+import endpoint from "./endpoint-only.schema";
 export const _collectionSchema = {
     name: "TestCol1",
     plural: "TestCol1",
@@ -20,33 +22,27 @@ export const _collectionSchema = {
     },
 };
 
-let _nsSchema = {};
-assign(_nsSchema, defaults, {
+let _nsSchema = {
     namespaces: {
-        "PetStore": PetStorev2,
-    },
-    options: {
-        VERSION: "1",
-        API_VERSION: "1",
-        APP_ID: "ABCDABCDABCDABCDABCDABCD",
-        REST_KEY: "EFGH",
-        HOST: "0.0.0.0",
-        PORT: 80,
-        SESSION_KEY: "ABCDABCDABCDABCDABCDABCD",
-        ALLOWED: ["application/json"],
-        PROTOCOL: "http",
-        BASE_PATH: "/api",
-        CRUD_METHODS: {
-            create: "POST",
-            read: "GET",
-            update: "PUT",
-            patch: "PATCH",
-            destroy: "DELETE",
-            options: "OPTIONS",
+        "EndPointSchema": {
+            name: "EndPointSchema",
+            schema: endpoint,
         },
-    }
-});
+        "PetStoreStaging": {
+            name: "PetStoreStaging",
+            schema: petStoreSchemaStaging
+        },
+        "PetStoreV2": {
+            name: "PetStoreV2",
+            schema: petStoreSchemaV2
+        },
+        "PetStoreV3": {
+            name: "PetStoreV3",
+            schema: petStoreSchemaV3
+        },
+    },
+    options: {},
+};
 
 export {_nsSchema as _nsSchema};
-
 
