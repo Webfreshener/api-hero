@@ -41,15 +41,18 @@ export default {
         },
         collection: {
             type: "object",
-            required: ["name", "operations", "modelPaths"],
+            required: ["name", "operations", "childPaths"],
             properties: {
                 name: {
                     type: "string"
                 },
+                path: {
+                    type: "string",
+                },
                 operations: {
                     $ref: "#/definitions/operation",
                 },
-                modelPaths: {
+                childPaths: {
                     $ref: "#/definitions/paths",
                 }
             },

@@ -1,6 +1,8 @@
 import {NSElement} from "./ns_element";
-import {_collectionSubjects} from "./_references";
+import {_subjects} from "./_references";
+
 const _subs = new WeakMap();
+
 export class CollectionProxy {
     /**
      * @returns {Array}
@@ -37,7 +39,7 @@ const proxyHandler = (target) => {
             if (idx in Array.prototype) {
                 // only handle methods that modify the reference array
                 if (["fill", "pop", "push", "shift", "splice", "unshift"].indexOf(idx) > -1) {
-                   return applyMethod(target, t, idx);
+                    return applyMethod(target, t, idx);
                 } else {
                     return t[idx];
                 }
@@ -72,7 +74,7 @@ const proxyHandler = (target) => {
  * @returns {boolean}
  */
 const deleteTrap = (target, t, idx) => {
-    const _s = _collectionSubjects.get(target);
+    const _s = _subjects.get(target);
     // creates mock of future Model state for evaluation
     let _o = [].concat(t);
     try {
@@ -97,10 +99,15 @@ const deleteTrap = (target, t, idx) => {
  * @param item
  */
 const subscribeToItem = (target, item) => {
-    const _s = _collectionSubjects.get(target);
+    const _s = _subjects.get(target);
     _subs.get(target)[item.$cid] = item.subscribe({
-        next: (m) => _s.next(m),
-        error: (e) => _s.error(e),
+        next: (m) => {
+            _s.next(m)
+        },
+        error: (e) => {
+            _s.error(e)
+        },
+        complete: () => _s.complete(),
     });
 };
 
@@ -127,47 +134,50 @@ const unsubAtIdx = (target, arr, idx) => {
  * @returns {function(...[*]=)}
  */
 const applyMethod = (target, t, idx) => {
-    const isModel = (m) => (m instanceof NSElement);
+    const isModel = (m) => m.hasOwnProperty("$className");
     // returns closure analog to referenced method
     return (...args) => {
         // mocks current model state
         const _arr = [].concat(t);
-        if (idx.match(/^(push|splice|concat|unshift|fill)$/)) {
-           switch (idx) {
-               case "push":
-               case "concat":
-               case "unshift":
-               case "fill":
-                   try {
-                       args.forEach((m) => {
-                           if (!isModel(m)) {
-                               throw Error("not a model");
-                           } else {
-                               subscribeToItem(target, m);
-                           }
-                       });
-                   } catch (e) {
-                       return false;
-                   }
-                   break;
-               case "splice":
-                   try {
-                       let _spArgs = [];
-                       if (args[2] !== void(0)) {
-                           _spArgs = Array.isArray(args[2]) ? args[2] : [args[2]];
-                       }
-                       _spArgs.forEach((m) => {
-                           if (!isModel(m)) {
-                               throw Error("not a model");
-                           } else {
-                               subscribeToItem(target, m);
-                           }
-                       });
-                   } catch (e) {
-                       return false;
-                   }
-                   break;
-           }
+        if (idx.match(/^(push|pop|unshift|fill|splice)$/)) {
+            switch (idx) {
+                case "push":
+                case "pop":
+                case "unshift":
+                case "fill":
+                    try {
+                        args.forEach((m) => {
+                            if (!isModel(m)) {
+                                throw Error("not a model");
+                            } else {
+                                subscribeToItem(target, m);
+                            }
+                        });
+                    } catch (e) {
+                        return false;
+                    }
+                    break;
+                case "splice":
+                    try {
+                        let _spArgs = [];
+                        if (args[2] !== void(0)) {
+                            _spArgs = Array.isArray(args[2]) ? args[2] : [args[2]];
+                        }
+                        _spArgs.forEach((m) => {
+                            if (!isModel(m)) {
+                                throw Error("not a model");
+                            } else {
+                                subscribeToItem(target, m);
+                            }
+                        });
+                    } catch (e) {
+                        return false;
+                    }
+                    break;
+                default:
+                    throw "Unknown Operation";
+                    break;
+            }
         }
 
         if (idx.match(/^(pop|shift)$/)) {
@@ -183,7 +193,7 @@ const applyMethod = (target, t, idx) => {
 
         // applies method to model state
         const _r = t[idx].apply(t, args);
-        _collectionSubjects.get(target).next(target.models);
+        _subjects.get(target).next(target.models);
         return _r;
     }
 };

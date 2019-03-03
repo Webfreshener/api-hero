@@ -1,45 +1,31 @@
-import {BehaviorSubject} from "rxjs/Rx";
 import {RxVO} from "rxvo";
-import "cross-fetch/polyfill";
-import {_modelClassRefs, _namespaces, _nsCollections} from "./_references";
-import Collection from "./collection";
-import {default as jistySchema, default as Jisty} from "./schemas/jisty.schema";
+import {_namespaces, _nsElements} from "./_references";
+import {createElementClass} from "./ns_element";
+import {default as jistySchema} from "./schemas/jisty.schema";
 import {default as nsSchema} from "./schemas/namespace.schema";
 import {default as jsonSchema} from "./schemas/json-schema-draft04";
-import {assignTraits} from "./traits";
 import {Utils} from "./utils";
+import {mix} from "../vendor/mixwith";
+import {SchemaBuilder} from "./schema-builder";
+import {NSOptions} from "./ns-options";
 
-const generateCollections = (schema) => {
-    const _cols = {};
-    Object.keys(schema.model.paths).forEach((path) => {
-        const _p = path.match(/^\/([a-zA-Z0-9\-_])[^\/]$/);
-        // if (_p !== null &&
-        //     _uName.indexOf(_p[1]) > -1) {
-        //    _cols[path] = schema.model.paths[path];
-        // }
-    });
-
-    return _cols;
+const _builders = new WeakMap();
+const NSElementFactory = (ns) => {
+    return (name, schema, parent=null) => {
+        const NSElement = createElementClass(ns, name, schema, parent);
+        const _element = mix(NSElement);
+        const traits = NSElement["getTraitAssignments"](ns, schema, parent);
+        return class extends _element.with.apply(_element, traits) {
+            constructor(__data) {
+                super(__data);
+            }
+        };
+    };
 };
-
-// const initModelRef = (collection) => {
-//     try {
-//         const _rxvo = new RxVO({
-//             schemas: [{
-//                 id: "root",
-//                 type: "array",
-//                 items: Collection.getModelSchema(collection),
-//             }],
-//         });
-//         _models.set(collection, _rxvo);
-//     } catch (e) {
-//         throw(e);
-//     }
-// };
 
 /**
  * Namespace
- * * Defines and Manages Collections
+ * * Defines and Manages Elements
  * * Initializes Options
  * * Provides utility methods
  */
@@ -48,19 +34,34 @@ class NS {
      * @constructor
      * @param config
      */
-    constructor(config) {
+    constructor(config={}) {
         const _schema = new RxVO({
             meta: [jsonSchema, jistySchema],
             schemas: [nsSchema],
             use: "http://webfreshener.com/v1/jisty/namespace.json#",
         });
 
-        // todo: remove options from NS Config
-        delete config.options;
+        // retains user options if exists
+        const _opts = Object.assign({}, config.options || {});
+
+        // removes user options form namespace config
+        if (config.hasOwnProperty("options")) {
+            delete config.options;
+        }
+
+        const _options = new NSOptions(_opts);
+
+        Object.defineProperty(this, "options", {
+            get: () => _options,
+            enumerable: false,
+            configurable: false,
+        });
+
         _schema.model = (typeof config === "object") ? config : JSON.parse(config);
         _namespaces.set(this, _schema);
-        let _cols = {};
+
         const _self = this;
+        const _elFactory = NSElementFactory(_self);
 
         // defines utilities reference on Namespace
         Object.defineProperty(this, "$utils", {
@@ -71,71 +72,70 @@ class NS {
 
         // defines getter for namespace schema
         Object.defineProperty(this, "schema", {
-            get: () => config.schema,
+            get: () => _namespaces.get(this).model.schema,
             enumerable: true,
             configurable: false,
         });
 
-        const _p = {};
-        // iterates through path items on open-api schema
-        Object.keys(_schema.model.schema.paths).forEach((path) => {
-            // console.log(`path: ${path}`);
-            const _parts = path.split("/");
-            const colName = _parts[1];
-            let _op = {};
-
-            if (colName && colName.length) {
-                Object.keys(_schema.model.schema.paths[path]).forEach((op) => {
-                    const _opSchema = _schema.model.schema.paths[path][op];
-                    _op[op] = (this.schemaType.type === "openapi") ?
-                        _opSchema :
-                        Utils.reformatV2Response(_opSchema);
-                });
-
-                if (_p.hasOwnProperty(colName)) {
-                    const _name = _parts[2] && _parts[2] !== "" ? _parts[2] : "/";
-                    Object.defineProperty(_p[colName].modelPaths, _name, {
-                        value: _op,
-                        configurable: false,
-                        enumerable: true,
-                    });
-                } else {
-                    _p[colName] = {
-                        name: _parts[1],
-                        operations: _op,
-                        modelPaths: {}
-                    }
-                }
-            }
+        // defines util method to create child element
+        Object.defineProperty(this, "createElement", {
+            value: _elFactory,
+            enumerable: false,
+            configurable: false,
         });
+
+        _builders.set(this, new SchemaBuilder(this));
 
         let o = {};
-        // iterates through collections on Schema and defined Collections on NS
-        Object.keys(_p).forEach((col) => {
-            o[col] = class extends Collection {
-                constructor() {
-                    super(_p[col], _self);
-                    // defines className reference on Collection
-                    Object.defineProperty(this, "$className", {
-                        get: () => col,
-                        enumerable: false,
-                        configurable: false,
-                    });
+        // iterates through elements on Schema and defined Elements on NS
+        Object.keys(this.schema.paths).forEach((key) => {
+            if (key === "/") {
+                return;
+            }
 
-                    const _ref = Collection.createModelRef(this);
-                    _modelClassRefs.set(this, _ref);
-                    assignTraits(this);
-                }
+            if (key.match(/[a-z0-9_\-\s%]+\/+\{[a-z0-9_]+\}$/i) === null) {
+                const _pathSchema = this.builder.schemaForPath(key);
+                o[_pathSchema.name] = this.createElement(_pathSchema.name, _pathSchema);
+                // applies Collection Class to Namespace
+                this.addCollection(_pathSchema.name, o[_pathSchema.name]);
+            }
 
-            };
 
-            // applies Collection Class to Namespace
-            this.addCollection(col, o[col]);
         });
-
-        _nsCollections.set(this, o);
+        // stores reference to path elements
+        _nsElements.set(this, o);
     }
 
+    //
+    // GETTERS
+    //
+
+    /**
+     * Helper Method generates URL for REST Requests
+     * @returns {string|null}
+     */
+    get apiUrl() {
+        const _idx = this.options.serverIndex;
+        const _params = this.options.serverParameters;
+        let _url = null;
+        if (this.schema.servers.length >= (_idx - 1)) {
+            _url = this.schema.servers[_idx].url || null;
+
+            if (_url !== null && _params.length) {
+                _params.forEach((_pO) => {
+                    let _rx = new RegExp(`\{${_pO.name}\}+`);
+                    _url = _rx.replace(_url, _pO.value);
+                });
+            }
+        }
+
+        return _url;
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
     get errors() {
         return _namespaces.get(this).errors;
     }
@@ -150,7 +150,7 @@ class NS {
 
     /**
      * Getter for Schema type (openapi, swagger etc) and version
-     * @returns {type: string, verson: string} | null
+     * @returns object | null
      */
     get schemaType() {
         const _schema = _namespaces.get(this);
@@ -168,21 +168,27 @@ class NS {
     }
 
     /**
+     * Getter for schema builder instance
+     * @returns {any}
+     */
+    get builder() {
+        return _builders.get(this);
+    }
+
+    /**
      * Getter for Schema Info Element
      * @returns object | null
      */
     get info() {
-        return _schema.model.schema.info || null
+        return this.schema.info || null
     }
 
     /**
      * Setter for Namespace API Options
      * @param value
-     * @returns {NS}
      */
     set options(value) {
         _namespaces.get(this).model.options = value;
-        return this;
     }
 
     /**
@@ -205,32 +211,31 @@ class NS {
     }
 
     /**
-     * Accessor for Schema Collections Map
+     * Accessor for Schema Elements Map
      * @returns {*}
      */
-    get collections() {
-        return _nsCollections.get(this);
+    get elements() {
+        return _nsElements.get(this);
     }
 
     /**
      * Retrieved list of registered Collection names
      * @returns {string[]}
      */
-    listCollections() {
-        return Object.keys(this.collections);
+    listElements() {
+        return Object.keys(this.elements);
     }
 
     /**
      * Adds Collection to Namespace
      * @param name
-     * @param col
+     * @param col<NSElement>
      * @returns {NS}
      */
     addCollection(name, col) {
         if (!this.hasOwnProperty(name)) {
             Object.defineProperty(this, name, {
                 get: () => {
-                    let _s = _namespaces.get(this);
                     return new col();
                 },
                 enumerable: true,
@@ -252,53 +257,6 @@ class NS {
             });
         }
         return this;
-    }
-
-    /**
-     * Performs HTTP Operations using the Fetch API
-     * @param method
-     * @param model
-     * @param options
-     * @returns {BehaviorSubject<any>}
-     */
-    sync(method, model, options = {}) {
-        if (!options.hasOwnProperty("$subj")) {
-            const _subj = new BehaviorSubject().skip(1);
-            Object.defineProperty(options, "$subj", {
-                get: () => _subj,
-                enumerable: false,
-                configurable: false,
-            });
-        }
-        let opts = this.$utils.apiOptions;
-        Object.assign(opts, options, {method: method});
-        // sets model as body on POST and PUT requests
-        if (method === "POST" || method === "PUT") {
-            opts.body = model.toString();
-        } else {
-
-        }
-        // handle Fetch's Promise and update Rx Subject
-        fetch(model.url, opts)
-            .then((res) => {
-                if (this.$utils.isFetchPolyfill) {
-                    const _location = res.headers.get("location");
-                    if (_location !== null) {
-                        this.sync("GET", {url: _location}, options);
-                    } else {
-                        options.$subj.next(res);
-                    }
-                } else {
-                    // sends response object to subscriber
-                    options.$subj.next(res);
-                }
-            })
-            .catch((e) => {
-                // sends error to subscriber
-                options.$subj.error(e);
-            });
-
-        return options.$subj;
     }
 }
 

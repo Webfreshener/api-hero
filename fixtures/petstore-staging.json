@@ -1,29 +1,47 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.1",
   "info": {
-    "version": "2018-08-12T21:14:40Z",
-    "title": "PetStore"
+    "title": "PetStore",
+    "version": "2018-12-21T18:57:13Z"
   },
-  "host": "petstore.testing-api.com",
-  "basePath": "/api",
-  "schemes": [
-    "https"
+  "servers": [
+    {
+      "url": "https://vi70983363.execute-api.us-east-1.amazonaws.com/{basePath}",
+      "variables": {
+        "basePath": {
+          "default": "/Staging"
+        }
+      }
+    }
   ],
   "paths": {
-    "/": {
-      "get": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "text/html"
-        ],
+    "/pets/featured": {
+      "options": {
         "responses": {
           "200": {
             "description": "200 response",
             "headers": {
-              "Content-Type": {
-                "type": "string"
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
               }
             }
           }
@@ -32,32 +50,37 @@
     },
     "/pets": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "type",
             "in": "query",
-            "required": false,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "page",
             "in": "query",
-            "required": false,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Pets"
-            },
             "headers": {
               "Access-Control-Allow-Origin": {
-                "type": "string"
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pets"
+                }
               }
             }
           }
@@ -65,58 +88,95 @@
       },
       "post": {
         "operationId": "CreatePet",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "NewPet",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/NewPet"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewPet"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/NewPetResponse"
-            },
             "headers": {
               "Access-Control-Allow-Origin": {
-                "type": "string"
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewPetResponse"
+                }
               }
             }
           }
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            },
             "headers": {
               "Access-Control-Allow-Origin": {
-                "type": "string"
+                "schema": {
+                  "type": "string"
+                }
               },
               "Access-Control-Allow-Methods": {
-                "type": "string"
+                "schema": {
+                  "type": "string"
+                }
               },
               "Access-Control-Allow-Headers": {
-                "type": "string"
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/info": {
+      "options": {
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
               }
             }
           }
@@ -126,185 +186,201 @@
     "/pets/{petId}": {
       "get": {
         "operationId": "GetPet",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "petId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            },
             "headers": {
               "Access-Control-Allow-Origin": {
-                "type": "string"
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                }
               }
             }
           }
         }
       },
       "put": {
-        "operationId": "UpdatePet",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "petId",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "Pet",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/Pet"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            },
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
               }
             }
           }
         }
       },
       "delete": {
-        "operationId": "DeletePet",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "petId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            },
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
               }
             }
           }
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "petId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            },
             "headers": {
               "Access-Control-Allow-Origin": {
-                "type": "string"
+                "schema": {
+                  "type": "string"
+                }
               },
               "Access-Control-Allow-Methods": {
-                "type": "string"
+                "schema": {
+                  "type": "string"
+                }
               },
               "Access-Control-Allow-Headers": {
-                "type": "string"
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
               }
             }
           }
         }
       }
+    },
+    "/": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        }
+      }
     }
   },
-  "definitions": {
-    "Pets": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Pet"
-      }
-    },
-    "Empty": {
-      "type": "object"
-    },
-    "NewPetResponse": {
-      "type": "object",
-      "properties": {
-        "pet": {
-          "$ref": "#/definitions/Pet"
-        },
-        "message": {
-          "type": "string"
+  "components": {
+    "schemas": {
+      "Pets": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Pet"
         }
-      }
-    },
-    "Pet": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number"
+      },
+      "Empty": {
+        "type": "object"
+      },
+      "NewPetResponse": {
+        "type": "object",
+        "properties": {
+          "pet": {
+            "$ref": "#/components/schemas/Pet"
+          },
+          "message": {
+            "type": "string"
+          }
         }
-      }
-    },
-    "NewPet": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number"
+      },
+      "Pet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
         }
+      },
+      "NewPet": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/PetType"
+          },
+          "price": {
+            "type": "number"
+          }
+        }
+      },
+      "PetType": {
+        "type": "string",
+        "enum": [
+          "dog",
+          "cat",
+          "fish",
+          "bird",
+          "gecko"
+        ]
       }
-    },
-    "PetType": {
-      "type": "string",
-      "enum": [
-        "Dog",
-        "Cat",
-        "Fish",
-        "Bird",
-        "Iguana"
-      ]
     }
   }
 }

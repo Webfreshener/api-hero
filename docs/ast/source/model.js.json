@@ -580,10 +580,10 @@
                               }
                             },
                             "extra": {
-                              "rawValue": "$collection",
-                              "raw": "\"$collection\""
+                              "rawValue": "$parent",
+                              "raw": "\"$parent\""
                             },
-                            "value": "$collection"
+                            "value": "$parent"
                           },
                           {
                             "type": "ObjectExpression",
@@ -1363,9 +1363,9 @@
                                     "line": 29,
                                     "column": 41
                                   },
-                                  "identifierName": "$collection"
+                                  "identifierName": "$parent"
                                 },
-                                "name": "$collection"
+                                "name": "$parent"
                               },
                               "computed": false
                             }
@@ -7563,7 +7563,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "$collection",
+      "value": "$parent",
       "start": 279,
       "end": 292,
       "loc": {
@@ -9239,7 +9239,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "$collection",
+      "value": "$parent",
       "start": 689,
       "end": 700,
       "loc": {

@@ -1,11 +1,11 @@
-import {ListableTrait} from "./traits/listable.trait";
-import {CreateableTrait} from "./traits/creatable.trait";
-import {UpdateableTrait} from "./traits/updateable.trait";
-import {DeletableTrait} from "./traits/deletable.trait";
-import {Utils} from "./utils";
-import {FetchableTrait} from "./traits/fetchable.trait";
-import {PatchableTrait} from "./traits/patchable.trait";
-import {AccessableTrait} from "./traits/accessable.trait";
+import {ListableTrait} from "../src/traits/listable.trait";
+import {CreatableTrait} from "../src/traits/creatable.trait";
+import {UpdateableTrait} from "../src/traits/updatable.trait";
+import {DeletableTrait} from "../src/traits/deletable.trait";
+import {Utils} from "../src/utils";
+import {FetchableTrait} from "../src/traits/fetchable.trait";
+import {PatchableTrait} from "../src/traits/patchable.trait";
+import {AccessibleTrait} from "../src/traits/accessible.trait";
 
 const _reqs = ["$scope", "$schema"];
 /**
@@ -13,32 +13,34 @@ const _reqs = ["$scope", "$schema"];
  * @param schema
  * @param target
  */
-const assignTraits = (target) => {
-    const type = target.$scope.schemaType.type;
-    _reqs.forEach((req) => {
-        if (!target.hasOwnProperty(req)) {
-            throw `required property ${req} missing from target instance`;
-        }
-    });
+const assignTraits = (schema) => {
+    // const type = target.$scope.schemaType.type;
+    // _reqs.forEach((req) => {
+    //     if (!target.hasOwnProperty(req)) {
+    //         throw `required property ${req} missing from target instance`;
+    //     }
+    // });
+    //
+    // const schema = JSON.parse(JSON.stringify(target.$schema));
 
-    const schema = JSON.parse(JSON.stringify(target.$schema));
-
-    if (target.hasOwnProperty("$collection") &&
-        !schema.operations.hasOwnProperty("post")) {
-        if (target.$collection.$schema.operations.hasOwnProperty("post")) {
-            schema.operations.post = target.$collection.$schema.operations.post;
-        }
-    }
+    // TODO: refactor this block
+    // if (target.hasOwnProperty("$parent") &&
+    //     !schema.operations.hasOwnProperty("post")) {
+    //     if (target.$parent.$schema.operations.hasOwnProperty("post")) {
+    //         schema.operations.post = target.$parent.$schema.operations.post;
+    //     }
+    // }
 
     Object.keys(schema.operations).forEach((key) => {
         let ref;
         let refDef;
         let _refDefType;
-        let _content
+        let _content;
+        const traits = [];
 
         switch (key) {
             case "post":
-                new CreateableTrait(target);
+                new CreatableTrait(target);
                 break;
             case "get":
                 if (schema.operations[key].hasOwnProperty("responses")
@@ -60,32 +62,31 @@ const assignTraits = (target) => {
                     }
                     switch (_refDefType) {
                         case "array":
-                            new ListableTrait(target);
+                            traits.push(ListableTrait);
                             break;
                         case "object":
-                            new FetchableTrait(target);
+                            traits.push(FetchableTrait);
                             break;
                         default:
-                            console.log(`refDef: ${JSON.stringify(refDef)}`);
                             throw `Invalid Response Type: <${refDef.type}>`;
                             break;
                     }
                 }
                 break;
             case "put":
-                new UpdateableTrait(target);
+                traits.push(UpdateableTrait);
                 break;
             case "delete":
-                new DeletableTrait(target);
+                traits.push(DeletableTrait);
                 break;
             case "patch":
-                new PatchableTrait(target);
+                traits.push(PatchableTrait);
                 break;
             case "options":
-                new AccessableTrait(target);
+                traits.push(AccessibleTrait);
                 break;
         }
     });
 };
 
-module.exports["assignTraits"] = assignTraits;
+export {assignTraits};

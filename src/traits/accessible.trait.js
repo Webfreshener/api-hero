@@ -1,4 +1,3 @@
-import Query from "../query";
 import {_traits} from "../_references";
 /**
  *
@@ -7,17 +6,17 @@ import {_traits} from "../_references";
  */
 const trait = (superclass) => {
     return class extends superclass {
+        /**
+         *
+         * @param target
+         */
         constructor() {
             super();
             _traits.get(this).push(trait.Name);
         }
 
-        /**
-         * Batch saves Objects that are new or need updating
-         * @returns {*}
-         */
-        query() {
-            return new Query();
+        options() {
+
         }
     }
 };
@@ -25,8 +24,8 @@ const trait = (superclass) => {
  * defines static Name getter for trait
  */
 Object.defineProperty(trait, "Name", {
-    get: () => "QueryableTrait",
+    get: () => "AccessibleTrait",
     enumerable: true,
     configurable: false,
 });
-export {trait as QueryableTrait};
+export {trait as AccessibleTrait};

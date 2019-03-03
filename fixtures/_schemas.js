@@ -28,14 +28,14 @@ let _nsSchema = {
             name: "EndPointSchema",
             schema: endpoint,
         },
-        "PetStoreStaging": {
-            name: "PetStoreStaging",
-            schema: petStoreSchemaStaging
-        },
-        "PetStoreV2": {
-            name: "PetStoreV2",
-            schema: petStoreSchemaV2
-        },
+        // "PetStoreStaging": {
+        //     name: "PetStoreStaging",
+        //     schema: petStoreSchemaStaging
+        // },
+        // "PetStoreV2": {
+        //     name: "PetStoreV2",
+        //     schema: petStoreSchemaV2
+        // },
         "PetStoreV3": {
             name: "PetStoreV3",
             schema: petStoreSchemaV3

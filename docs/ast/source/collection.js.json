@@ -1083,7 +1083,7 @@
                     "trailingComments": [
                       {
                         "type": "CommentLine",
-                        "value": " define read-only $collection property on Query",
+                        "value": " define read-only $parent property on Query",
                         "start": 571,
                         "end": 620,
                         "loc": {
@@ -1212,10 +1212,10 @@
                             }
                           },
                           "extra": {
-                            "rawValue": "$collection",
-                            "raw": "\"$collection\""
+                            "rawValue": "$parent",
+                            "raw": "\"$parent\""
                           },
-                          "value": "$collection"
+                          "value": "$parent"
                         },
                         {
                           "type": "ObjectExpression",
@@ -1312,7 +1312,7 @@
                     "leadingComments": [
                       {
                         "type": "CommentLine",
-                        "value": " define read-only $collection property on Query",
+                        "value": " define read-only $parent property on Query",
                         "start": 571,
                         "end": 620,
                         "loc": {
@@ -8484,9 +8484,9 @@
                                               "line": 177,
                                               "column": 48
                                             },
-                                            "identifierName": "$collectionName"
+                                            "identifierName": "$parentName"
                                           },
-                                          "name": "$collectionName"
+                                          "name": "$parentName"
                                         },
                                         "computed": false
                                       }
@@ -17200,7 +17200,7 @@
                       "trailingComments": [
                         {
                           "type": "CommentLine",
-                          "value": " define read-only $collection property on Query",
+                          "value": " define read-only $parent property on Query",
                           "start": 571,
                           "end": 620,
                           "loc": {
@@ -17329,10 +17329,10 @@
                               }
                             },
                             "extra": {
-                              "rawValue": "$collection",
-                              "raw": "\"$collection\""
+                              "rawValue": "$parent",
+                              "raw": "\"$parent\""
                             },
-                            "value": "$collection"
+                            "value": "$parent"
                           },
                           {
                             "type": "ObjectExpression",
@@ -17429,7 +17429,7 @@
                       "leadingComments": [
                         {
                           "type": "CommentLine",
-                          "value": " define read-only $collection property on Query",
+                          "value": " define read-only $parent property on Query",
                           "start": 571,
                           "end": 620,
                           "loc": {
@@ -24601,9 +24601,9 @@
                                                 "line": 177,
                                                 "column": 48
                                               },
-                                              "identifierName": "$collectionName"
+                                              "identifierName": "$parentName"
                                             },
-                                            "name": "$collectionName"
+                                            "name": "$parentName"
                                           },
                                           "computed": false
                                         }
@@ -29525,7 +29525,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " define read-only $collection property on Query",
+      "value": " define read-only $parent property on Query",
       "start": 571,
       "end": 620,
       "loc": {
@@ -32655,7 +32655,7 @@
     },
     {
       "type": "CommentLine",
-      "value": " define read-only $collection property on Query",
+      "value": " define read-only $parent property on Query",
       "start": 571,
       "end": 620,
       "loc": {
@@ -32837,7 +32837,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "$collection",
+      "value": "$parent",
       "start": 655,
       "end": 668,
       "loc": {
@@ -47354,7 +47354,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "$collectionName",
+      "value": "$parentName",
       "start": 4805,
       "end": 4820,
       "loc": {

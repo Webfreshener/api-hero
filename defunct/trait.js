@@ -1,5 +1,5 @@
 import {RxVO} from "rxvo";
-import {_traits} from "../_references";
+import {_traits} from "../src/_references";
 const _traitSchemas = new WeakMap();
 export class Trait {
     constructor(target, schema) {

@@ -1,9 +1,8 @@
-import {Model} from "./model";
 import {RxVO} from "rxvo";
 import {BehaviorSubject} from "rxjs/Rx";
-import {_cids, _modelClassRefs, _collectionSubjects, _modelStats, _modelRefs} from "./_references";
-import {NSElement} from "./ns_element";
-import {Utils} from "./utils";
+import {_cids, _modelClassRefs, _subjects, _modelStats, _modelRefs} from "../src/_references";
+import {NSElement} from "../src/ns_element";
+import {Utils} from "../src/utils";
 import foreach from "lodash.foreach";
 const _queries = new WeakMap();
 /**
@@ -24,7 +23,7 @@ class Collection extends NSElement {
             configurable: false,
         });
 
-        _collectionSubjects.set(this, new BehaviorSubject().skip(1));
+        _subjects.set(this, new BehaviorSubject().skip(1));
         _cids.set(this, {});
     }
 
@@ -47,7 +46,7 @@ class Collection extends NSElement {
      * @returns {*}
      */
     subscribe(handlers) {
-        return _collectionSubjects.get(this).subscribe(handlers)
+        return _subjects.get(this).subscribe(handlers)
     }
 
     /**
@@ -74,44 +73,6 @@ class Collection extends NSElement {
         return JSON.stringify(this.toJSON());
     }
 
-    /**
-     *
-     * @param collection
-     * @returns {*}
-     */
-    static getModelSchema(collection) {
-        // attempts to derive model schema from GET response
-        let schema = _derivefromElement(collection.$schema);
-        return Utils.deriveSchema(schema, collection.$scope.schema);
-    };
-
-    /**
-     *
-     * @param collection
-     * @returns Function|false
-     */
-    static createModelRef(collection) {
-        const pathKey = Object.keys(collection.$schema.modelPaths)
-            .find((k) => k.match(/^\{+[a-z0-9_\-]{1,}\}+$/i));
-
-        if (pathKey && pathKey !== null) {
-            const _schema = collection.$schema.modelPaths[pathKey];
-            return class extends Model {
-                constructor(data) {
-                    super({operations: _schema}, collection);
-                    if (data && data !== null) {
-                        _modelRefs.get(this).model = data;
-                        if (data.hasOwnProperty("id") && data.id !== null) {
-                            _modelStats.get(this).isNew = false;
-                            _modelStats.get(this).isDirty = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
 }
 
 let $$iterator = typeof Symbol === "function" && Symbol.iterator;

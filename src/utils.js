@@ -1,7 +1,8 @@
 import pairs from "lodash.pairs";
 import map from "lodash.map";
+import deepEqual from "deep-equal";
+import uniqWith from "lodash.uniqwith";
 import uniqueid from "lodash.uniqueid";
-import Collection from "./collection";
 
 /**
  * Utility Methods
@@ -15,6 +16,7 @@ export class Utils {
         Object.defineProperty(this, "$scope", {
             get: () => $scope,
             enumerable: false,
+            configurable: false,
         });
     }
 
@@ -26,9 +28,9 @@ export class Utils {
         let o;
         // TODO: Clean this up
         o = {
-            // contentType: "application/json",
+            contentType: "application/json",
             // processData: false,
-            // dataType: "json",
+            dataType: "json",
             // data: null,
             headers: {
                 "Content-Type": "application/json",
@@ -44,10 +46,6 @@ export class Utils {
             referrer: "no-referrer", // no-referrer, *client
         };
 
-        // if (this.$scope.options.SESSION_KEY) {
-        //     o.headers[this.$scope.options.SESSION_KEY] = this.$scope.options.SESSION_TOKEN;
-        // }
-
         return o;
     }
 
@@ -58,18 +56,6 @@ export class Utils {
     get isFetchPolyfill() {
         const _env = (global || window);
         return _env.fetch.hasOwnProperty("polyfill");
-    }
-
-    /**
-     * Helper Method generates URL for REST Requests
-     * @returns {string}
-     */
-    get apiUrl() {
-        const _schemes = this.$scope.schema.schemes;
-        const _host = this.$scope.schema.host;
-        const _basePath = this.$scope.schema.basePath;
-        const _scheme = _schemes.indexOf("https") ? "https" : "http";
-        return `${_scheme}://${_host}${_basePath}`;
     }
 
     /**
@@ -114,9 +100,17 @@ export class Utils {
         return (map(pairs(obj || {}), (v, k) => v.join("="))).join("&");
     }
 
+    /**
+     * generates unique Request ID
+     * @param target
+     * @param type
+     * @returns {string}
+     */
     createRequestId(target, type) {
         return uniqueid(`${target.$className}-${type}-`);
     }
+
+    // STATIC METHODS
 
     /**
      *
@@ -124,139 +118,164 @@ export class Utils {
      * @param schema
      * @returns Object | null
      */
-    static getDefinition($ref, schema) {
-        if (schema.hasOwnProperty("openapi")) {
-            if (!schema.hasOwnProperty("components")) {
-                return null;
-            }
-            $ref = $ref.replace(/#\/?components\/schemas\//, "");
-            return schema.components.schemas.hasOwnProperty($ref) ? schema.components.schemas[$ref] : null;
+    static getComponent($ref, schema) {
+        if (!schema.hasOwnProperty("components")) {
+            return null;
         }
 
-        if (schema.hasOwnProperty("swagger")) {
-            if (!schema.hasOwnProperty("definitions")) {
-                return null;
-            }
-            $ref = $ref.replace(/#\/?definitions\//, "");
-            return schema.definitions.hasOwnProperty($ref) ? schema.definitions[$ref] : null;
-        }
+        $ref = $ref.replace(/#\/?components\/schemas\//, "");
+        return schema.components.schemas.hasOwnProperty($ref) ? schema.components.schemas[$ref] : null;
 
-        return null;
     };
 
+    static getLookupQuery(model) {
+
+    }
+
     /**
-     *
+     * TODO: remove if defunct/unused
      * @param model
      * @param collection
      * @private
      */
     static createReference(model, collection) {
-        const _ref = Collection.createModelRef(collection);
+        const _ref = collection.createModelRef();
         return new _ref(model);
     };
 
     /**
+     *
+     * @param content
+     * @returns {boolean|string|object}
+     */
+    static getSchemaRef(content) {
+        let $ref = false;
+        if (content.hasOwnProperty("application/json")) {
+            let _sPath = content["application/json"].schema;
+
+            if (_sPath.hasOwnProperty("$ref")) {
+                $ref = _sPath.$ref;
+            } else if (_sPath.hasOwnProperty("items")) {
+                $ref = _sPath.items.$ref;
+            } else if (_sPath.hasOwnProperty("properties")) {
+                $ref = _sPath;
+            }
+        }
+        return $ref;
+    }
+
+    static getRequestParamsSchema(operation) {
+
+    }
+
+    /**
+     *
+     * @param operation
+     * @returns {*}
+     */
+    static getResponseSchema(operation) {
+        const _codes = Object.keys(operation.responses);
+        const successRx = new RegExp("^2+[0-9]{2}$");
+        const _successCode = _codes.find((code) => successRx.exec(code) !== null);
+        if (_successCode) {
+             let _res = Utils.getSchemaRef(operation.responses[_successCode].content);
+             if (typeof _res === "string") {
+                 _res = {$ref: _res};
+             }
+
+             return _res;
+        }
+
+        return false;
+    }
+
+    /**
+     * Retrieves schema or schema ref for operation request
+     *
+     * @param operation
+     * @returns {*}
+     */
+    static getRequestSchema(operation) {
+        const _pVals = ["requestBody", "content", "application/json", "schema"];
+        let _schema = operation;
+        _pVals.forEach((val) => {
+            try {
+                _schema = _schema[val];
+            } catch (e) {
+                _schema = null;
+                throw new Error(e);
+            }
+        });
+
+        return _schema;
+    }
+
+    /**
+     * Attempts to derive model schema from element
+     *
      * @param elPath
      * @returns {*}
      * @private
      */
     static derivefromElement(elPath) {
         let $ref = null;
-        // console.log(`elPath: ${JSON.stringify(elPath, null, 2)}`);
-        // console.log(`elPath: ${Object.keys(elPath)}`);
-        if (elPath.operations.hasOwnProperty("get")) {
-            const _sPath = elPath.operations.get.responses["200"]
-                .content["application/json"].schema;
-            if (_sPath.hasOwnProperty("$ref")) {
-                $ref = _sPath.$ref;
-            }
-
-            if (_sPath.hasOwnProperty("items")) {
-                $ref = _sPath.items.$ref;
-            }
+        let _respSchema;
+        if (!elPath.hasOwnProperty("operations")) {
+            return elPath;
         }
 
-        // if not fetcahble, attempts from POST params
-        else if (elPath.operations.hasOwnProperty("post")) {
-            $ref = elPath.operations.post.parameters.schema.$ref;
+        const _ops = Object.keys(elPath.operations)
+            .filter((op) => op.match(/^(get|post)+$/));
+
+        // console.log(`get op: ${JSON.stringify(elPath.operations[_ops[0]], null, 2)}`);
+
+        if (_ops.length > 1) {
+            $ref = {anyOf: []};
+            _ops.forEach((op) => {
+                _respSchema = Utils.getResponseSchema(elPath.operations[op]);
+                if (_respSchema !== false) {
+                    $ref.anyOf.push(_respSchema);
+                }
+            });
+            $ref.anyOf = uniqWith($ref.anyOf, deepEqual);
+        } else {
+            $ref = {
+                anyOf: [
+                    Utils.getResponseSchema(elPath.operations[_ops[0]]),
+                ]
+            };
         }
 
         return $ref;
     };
 
     /**
+     * Attempts to derive model schema from GET response
+     *
      * @param schema
      * @param scopeSchema
      * @returns {*}
      * @private
      */
     static deriveSchema(schema, scopeSchema) {
-        // attempts to derive model schema from GET response
         let $ref = Utils.derivefromElement(schema);
+        const _rx = new RegExp("^(allOf|anyOf|anyOf)+$");
+        if (Object.keys($ref).some((k) => _rx.exec(k) !== null)) {
+            return $ref;
+        }
 
         if ($ref !== null) {
-            schema = Utils.getDefinition($ref, scopeSchema);
-            if (schema.hasOwnProperty("type") && schema.type === "array") {
-                $ref = schema.items.$ref;
-                schema = Utils.getDefinition($ref, scopeSchema);
+            if ((typeof $ref) === "object") {
+                return $ref;
+            } else {
+                schema = Utils.getComponent($ref, scopeSchema);
+                if (schema.hasOwnProperty("type") && schema.type === "array") {
+                    $ref = schema.items.$ref;
+                    schema = Utils.getComponent($ref, scopeSchema);
+                }
             }
         }
 
         return schema;
     };
-
-    /**
-     *
-     * @param pathElement
-     * @returns {*}
-     */
-    static reformatV2Response(pathElement) {
-        let _element = Object.assign({}, pathElement);
-        let _responses = {};
-        let _mimeType = "application/json";
-
-        if (_element.hasOwnProperty("produces")) {
-            _mimeType =  Array.isArray(_element.produces) ?
-                _element.produces[0] :
-                _element.produces;
-
-            delete _element.produces;
-        }
-
-        Object.keys(_element.responses).forEach((code) => {
-            _responses[code] = {
-                description: _element.responses[code].description,
-                content: {}
-            };
-            _responses[code].content[_mimeType] = {
-                schema: Object.assign({}, _element.responses[code].schema),
-            };
-        });
-
-        _responses.default = {
-            description: "unexpected error",
-            content: {}
-        };
-        _responses.default.content[_mimeType] = {
-            schema: {
-                type: "object",
-                required: [
-                    "code",
-                    "message"
-                ],
-                properties: {
-                    code: {
-                        type: "integer",
-                        format: "int32"
-                    },
-                    message: {
-                        type: "string"
-                    }
-                }
-            }
-        };
-
-        _element.responses = _responses;
-        return _element;
-    }
 }

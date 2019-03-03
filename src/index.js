@@ -1,7 +1,6 @@
 import __defaults__ from "./defaults";
 import createNS from "./namespace";
 import assign from "lodash.assign";
-import OpenAPIv2 from "./schemas/OpenAPIv2";
 import OpenAPIv3 from "./schemas/OpenAPIv3";
 import {RxVO} from "rxvo";
 import {default as jisty} from "./schemas/jisty.schema";
@@ -44,7 +43,7 @@ const __init = (() => {
     return app = {
         init(config) {
             const _rxvo = new RxVO({
-                meta: [jsonSchema, OpenAPIv2, OpenAPIv3],
+                meta: [jsonSchema, OpenAPIv3],
                 schemas:  [jisty],
                 use: "http://webfreshener.com/v1/jisty.json#",
             });

@@ -24,9 +24,9 @@ export const traitsTests = (nsSchema) => {
 
             it("should FETCH from server", (done) => {
                 // attempts to derive model schema from GET response
-                const pathKey = Object.keys(_col.$schema.modelPaths)
+                const pathKey = Object.keys(_col.$schema.childPaths)
                     .find((k) => k.match(/^\{+[a-z0-9_\-]{1,}\}+$/i));
-                console.log(`_col.$schema: ${JSON.stringify(_col.$schema.modelPaths[pathKey])}`);
+                console.log(`_col.$schema: ${JSON.stringify(_col.$schema.childPaths[pathKey])}`);
                 let schema = Utils.derivefromElement(_col.$schema);
                 // console.log(Utils.deriveSchema(schema, _col.$scope.schema), null, 2);
                 done();
@@ -36,7 +36,7 @@ export const traitsTests = (nsSchema) => {
                 //         expect(_model.data.id).toEqual("27");
                 //         expect(_model.data.type).toEqual("Iguana");
                 //         expect(_model.data.price).toEqual(100);
-                //         expect(_model.$collection.models.length).toEqual(1);
+                //         expect(_model.$parent.models.length).toEqual(1);
                 //         _sub.unsubscribe();
                 //         done();
                 //     },
@@ -163,7 +163,7 @@ export const traitsTests = (nsSchema) => {
                                 done(e);
                             },
                             complete: () => {
-                                expect(_model.$collection.models.length).toEqual(0);
+                                expect(_model.$parent.models.length).toEqual(0);
                                 done()
                             }
                         });

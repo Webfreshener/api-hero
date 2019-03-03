@@ -1,11 +1,9 @@
 export const _namespaces = new WeakMap();
-export const _nsCollections = new WeakMap();
+export const _nsElements = new WeakMap();
 export const _cids = new WeakMap();
 export const _requests = new WeakMap();
 export const _traits = new WeakMap();
-export const _traitTargets = new WeakMap();
 export const _models = new WeakMap();
-export const _modelClassRefs = new WeakMap();
 export const _modelStats = new WeakMap();
-export const _collectionSubjects = new WeakMap();
+export const _subjects = new WeakMap();
 export const _modelRefs = new WeakMap();

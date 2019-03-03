@@ -1,16 +1,16 @@
 import {RxVO} from "rxvo";
-import {_cids, _modelStats, _modelRefs} from "./_references";
-import {NSElement} from "./ns_element";
-import {default as jsonSchema} from "./schemas/json-schema-draft04";
-import {default as OpenAPIv3} from "./schemas/OpenAPIv3";
-import {default as jistySchema} from "./schemas/jisty.schema";
-import {default as OpenAPIv2} from "./schemas/OpenAPIv2";
-import {default as CollectionSchema} from "./schemas/collection.schema";
+import {_cids, _modelStats, _modelRefs} from "../src/_references";
+import {NSElement} from "../src/ns_element";
+import {default as jsonSchema} from "../src/schemas/json-schema-draft04";
+import {default as OpenAPIv3} from "../src/schemas/OpenAPIv3";
+import {default as jistySchema} from "../src/schemas/jisty.schema";
+import {default as OpenAPIv2} from "../src/schemas/OpenAPIv2";
+import {default as CollectionSchema} from "../src/schemas/collection.schema";
 import deepEqual from "deep-equal";
 import foreach from "lodash.foreach";
 import uniqueid from "lodash.uniqueid";
 import {assignTraits} from "./traits";
-import {Utils} from "./utils";
+import {Utils} from "../src/utils";
 const _stateRefs = new WeakMap();
 
 export class Model extends NSElement {
@@ -155,7 +155,7 @@ export class Model extends NSElement {
      * @returns {boolean}
      */
     get isValid() {
-        return _cids.get(this.$collection)[this.$cid].$model.isValid;
+        return _cids.get(this.$parent)[this.$cid].$model.isValid;
     }
 
     get isNew() {
@@ -164,7 +164,8 @@ export class Model extends NSElement {
 
     get isDirty() {
         const _states = [].concat(_stateRefs.get(this));
-        return _states.length > 0 && !deepEqual(_states.pop(), this.toJSON());
+        console.log(`_states: ${_states}`);
+        return void(0); //_states.length > 0 && !deepEqual(_states[0], this.toJSON());
     }
 
     toJSON() {
@@ -182,7 +183,7 @@ export class Model extends NSElement {
  */
 const assignGetters = (target, collection) => {
     // defines getter for owner Collection reference
-    Object.defineProperty(target, "$collection", {
+    Object.defineProperty(target, "$parent", {
         get: () => collection,
         enumerable: false,
     });

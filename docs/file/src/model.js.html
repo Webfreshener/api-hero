@@ -52,7 +52,7 @@ const _modelRefs = new WeakMap();
 export default class {
     constructor(collection) {
         // defines getter for owner Collection reference
-        Object.defineProperty(this, &quot;$collection&quot;, {
+        Object.defineProperty(this, &quot;$parent&quot;, {
             get: () =&gt; collection,
             enumerable: false,
         });
@@ -71,7 +71,7 @@ export default class {
      * returns data from RxVO Document
      */
     get data() {
-        return _cids.get(this.$collection)[this.$cid];
+        return _cids.get(this.$parent)[this.$cid];
     }
 
     /**

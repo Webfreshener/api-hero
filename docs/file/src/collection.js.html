@@ -66,8 +66,8 @@ class Collection {
         const _self = this;
         const _q = new Query();
 
-        // define read-only $collection property on Query
-        Object.defineProperty(_q, &quot;$collection&quot;, {
+        // define read-only $parent property on Query
+        Object.defineProperty(_q, &quot;$parent&quot;, {
             get: () =&gt; _self,
         });
 
@@ -219,7 +219,7 @@ class Collection {
     fetch() {
         let _req = {
             method: this.$scope.options.CRUD_METHODS.read,
-            id: uniqueid(`${this.$collectionName}-read-`),
+            id: uniqueid(`${this.$parentName}-read-`),
         };
         _requests.set(this, _req);
         return this.$scope.sync(_req.method, this, {}).then((res) =&gt; {

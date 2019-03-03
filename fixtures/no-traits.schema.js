@@ -13,18 +13,18 @@ const schema = {
     paths: {
         "/nada": {},
     },
-    "components": {
-        "schemas": {
-            "Nada": {
-                "required": [
+    components: {
+        schemas: {
+            Nada: {
+                required: [
                     "name"
                 ],
-                "properties": {
-                    "name": {
-                        "type": "string"
+                properties: {
+                    name: {
+                        type: "string"
                     },
-                    "tag": {
-                        "type": "string"
+                    tag: {
+                        type: "string"
                     }
                 }
             },
@@ -38,7 +38,8 @@ let _nsSchema = {
             name: "NoTraits",
             schema: schema
         },
-    }
+    },
+    options: {},
 };
 
 export {_nsSchema as NoTraitsSchema};
