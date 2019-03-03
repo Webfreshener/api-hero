@@ -1,7 +1,6 @@
 import {Utils} from "./utils";
 import {_nsSchema} from "../fixtures/_schemas";
 import deepEqual from "deep-equal";
-
 const _schema = {
     "allOf": [{"$ref": "#/components/schemas/NewPet"}, {
         "required": ["id"],
