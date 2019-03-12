@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "docs": "./node_modules/.bin/esdoc"
+    "docs": "./node_modules/.bin/esdoc",
+    "cover": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage --token \"$CODACY_ID\""
   },
   "repository": {
     "type": "git",
@@ -60,6 +61,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.18.0",
     "chai": "^4.1.2",
+    "codacy-coverage": "^3.4.0",
     "cross-fetch": "^2.1.0",
     "deep-equal": "^1.0.1",
     "es6-weak-map": "^2.0.1",

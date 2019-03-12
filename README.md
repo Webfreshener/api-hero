@@ -2,6 +2,13 @@ API Hero
 =============
 Portable OpenAPI REST Client with Observable Data Models
 
+[![Build Status](https://travis-ci.org/Webfreshener/api-hero.svg?branch=master)](https://travis-ci.org/Webfreshener/api-hero)
+[![Dependency Status](https://david-dm.org/webfreshener/api-hero/status.svg)](https://david-dm.org/webfreshener/api-hero)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9d6b6eeb67974bce8481d2207db701b5)](https://www.codacy.com/app/vanschroeder/RxVO?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Webfreshener/RxVO&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/9d6b6eeb67974bce8481d2207db701b5)](https://www.codacy.com/app/vanschroeder/RxVO?utm_source=github.com&utm_medium=referral&utm_content=Webfreshener/RxVO&utm_campaign=Badge_Coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b8dbef9c704e963f392b/maintainability)](https://codeclimate.com/github/Webfreshener/api-hero/maintainability)
+
+
 [Online Developer Documentation](https://webfreshener.github.io/api-hero/)
  
 ### Goals 
