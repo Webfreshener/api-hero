@@ -5,6 +5,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# deprecated dirs
+defunct
+shared-tests
+
 # Runtime data
 pids
 *.pid
