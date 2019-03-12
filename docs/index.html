@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl">
-  <title data-ice="title">Home | hero</title>
+  <title data-ice="title">Home | api-hero</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
-<meta name="description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="hero"><meta property="twitter:description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"></head>
+<meta name="description" content="Reactive OpenApi Client"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="api-hero"><meta property="twitter:description" content="Reactive OpenApi Client"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -24,30 +24,376 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/hero"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/api-hero"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection-proxy.js~CollectionProxy.html">CollectionProxy</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/model.js~model.html">model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/ns-options.js~NSOptions.html">NSOptions</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-inflections">inflections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-request.js~RestRequest.html">RestRequest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-response.js~RestResponse.html">RestResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema-builder.js~SchemaBuilder.html">SchemaBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils.js~Utils.html">Utils</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createElementClass">createElementClass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelRefs">_modelRefs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelStats">_modelStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_models">_models</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsCollections">_nsCollections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsElements">_nsElements</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_requests">_requests</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_subjects">_subjects</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_traits">_traits</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#params">params</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/params-item.js~ParamsItem.html">ParamsItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/request-params.js~RequestParams.html">RequestParams</a></span></span></li>
 </ul>
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="hero">Jisty</h1><p>Schema Based OXM (ORM + ODM) RESTful Client Library</p>
-</div>
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="api-hero">API Hero</h1><p>Portable OpenAPI REST Client with Observable Data Models</p>
+<p><a href="https://webfreshener.github.io/api-hero/">Online Developer Documentation</a></p>
+<h3 id="goals">Goals</h3><ul>
+<li>Simplify setup and maintenance of API Connectors in the App Layer </li>
+<li>Be framework agnostic and portable across frameworks and environments </li>
+<li>Provide observable and validating data models for all data i/o</li>
+</ul>
+<h3 id="table-of-contents">Table of Contents</h3><p><strong><a href="#installation-instructions">Installation Instructions</a></strong></p>
+<p><strong><a href="#usage-example">Usage Example</a></strong></p>
+<p><strong><a href="#developer-guide">Developer Guide</a></strong></p>
+<h4 id="installation-instructions">Installation Instructions</h4><pre><code><code class="source-code prettyprint">$ npm i api-hero </code>
+</code></pre><h4 id="usage-example">Usage Example</h4><p>The example below defines a single API Client </p>
+<pre><code><code class="source-code prettyprint">// OpenAPI spec for our service 
+const schema = {
+    namespaces: {
+        &quot;HelloWorld&quot;: {
+            name: &quot;hello&quot;,
+            schema: ... embed or $ref openapi spec here ... 
+        },
+    },
+};
+
+// initialize and make _hero.HelloWorld accessable
+const _hero = ApiHero.init(_nsSchema);
+
+
+// create a new instance of a `pets` item
+const _pet = _hero.HelloWorld.pets.new({
+    type: &quot;dog&quot;,
+    price: 123.00,
+})
+
+// initialize an observer that will perform a REST `save`
+// ... whenever the model changes
+const _petSub = _pet.subscribe({
+    next: (pet) =&gt; _pet.save(),
+    error: (e) =&gt; console.log(e),
+});
+
+// this will log an error because `price` requires a number
+_pet.model.price = &quot;160.00&quot;;
+
+// this will validate and be saved to the server
+_pet.model.price = 160.00;
+
+// will output {id:n,type:&quot;dog&quot;,price:160.00}
+// `id` was assigned by `save` operation on model change
+console.log(`${_pet}`);
+</code>
+</code></pre><h2 id="developer-guide">Developer Guide</h2><h3 id="initializer">Initializer</h3><p>Initializes ApiHero </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Arguments</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ApiHero.init</td>
+<td style="text-align:left">config: object</td>
+<td style="text-align:left">returns </td>
+</tr>
+</tbody>
+</table>
+<p>Usage Example:</p>
+<pre><code><code class="source-code prettyprint">const _hero = ApiHero.init({namespaces:[]});</code>
+</code></pre><h3 id="apihero-model">ApiHero Model</h3><p>Initializes ApiHero </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Arguments</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">addNamespace</td>
+<td style="text-align:left">object</td>
+<td style="text-align:left">returns </td>
+</tr>
+<tr>
+<td style="text-align:left">errors</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns array of schema validation errors</td>
+</tr>
+<tr>
+<td style="text-align:left">namespaces</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">getter returns array of namespace ids</td>
+</tr>
+<tr>
+<td style="text-align:left">{namespace_id}</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">each OpenApi schema is assigned a getter that returns the API <code>namespace</code></td>
+</tr>
+</tbody>
+</table>
+<p>Usage Example:</p>
+<pre><code><code class="source-code prettyprint">const _hero = ApiHero.init({namespaces:[{
+    pets: {... pets openapi schema ...},
+}]});
+
+// output of list of namespaces: &quot;pets&quot;
+console.log(`${_hero.namespaces}`);
+
+// output JSON-Schema for the namespace
+console.log(JSON.stringify(_hero.pets.schema, null, 2);</code>
+</code></pre><h2 id="trait-mixins">Trait Mixins</h2><p>Traits are assigned to Namespace Elements based on the available REST Operations for the element&apos;s <code>path</code></p>
+<h4 id="creatable-trait">Creatable Trait</h4><p>Elements that have a <code>post</code> operation creatable </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Arguments</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">newModel</td>
+<td style="text-align:left">data: object</td>
+<td style="text-align:left">creates new model instance for schema at path</td>
+</tr>
+<tr>
+<td style="text-align:left">create</td>
+<td style="text-align:left">data: object, immediate: bool</td>
+<td style="text-align:left">creates new model, applies it to collection and if immediate is true saves to server</td>
+</tr>
+</tbody>
+</table>
+<p>Usage Example:</p>
+<pre><code><code class="source-code prettyprint"></code>
+</code></pre><h4 id="deletable-trait">Deletable Trait</h4><p>Elements that have a <code>delete</code> operation are deletable </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Arguments</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">destroy</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">sends <code>delete</code> request to server</td>
+</tr>
+</tbody>
+</table>
+<p>Usage Example:</p>
+<pre><code><code class="source-code prettyprint"></code>
+</code></pre><h4 id="fetchable-trait">Fetchable Trait</h4><p>Elements that have a <code>get</code> operation are fetchable</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Arguments</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">fetch</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">fetchById</td>
+</tr>
+</tbody>
+</table>
+<p>Usage Example:</p>
+<pre><code><code class="source-code prettyprint"></code>
+</code></pre><h4 id="listable-trait">Listable Trait</h4><p>Elements that have a <code>get</code> operation and return an array are listable </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Arguments</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">getModels</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns curretly loaded models</td>
+</tr>
+<tr>
+<td style="text-align:left">setModels</td>
+<td style="text-align:left">data: array[object]</td>
+<td style="text-align:left">sets models directly onto collection</td>
+</tr>
+<tr>
+<td style="text-align:left">add</td>
+<td style="text-align:left">data: object</td>
+<td style="text-align:left">sets single model into collection</td>
+</tr>
+<tr>
+<td style="text-align:left">at</td>
+<td style="text-align:left">idx: number</td>
+<td style="text-align:left">retrieved model at given index</td>
+</tr>
+<tr>
+<td style="text-align:left">findById</td>
+<td style="text-align:left">id: string or number</td>
+<td style="text-align:left">retrieves loaded model with given id</td>
+</tr>
+<tr>
+<td style="text-align:left">reset</td>
+<td style="text-align:left">clears loaded models from collection (client side only)</td>
+</tr>
+<tr>
+<td style="text-align:left">valueOf</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns native value of data</td>
+</tr>
+<tr>
+<td style="text-align:left">toString</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns stringified version of data</td>
+</tr>
+<tr>
+<td style="text-align:left">toJSON</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns data as JSON object</td>
+</tr>
+</tbody>
+</table>
+<p>Usage Example:</p>
+<pre><code><code class="source-code prettyprint"></code>
+</code></pre><h4 id="savable-trait">Savable Trait</h4><p>Elements that have a <code>post</code> or <code>put</code> operation are savable </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Arguments</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">save</td>
+<td style="text-align:left">params: object</td>
+<td style="text-align:left">performs <code>post</code> or <code>put</code> to save models to server</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Save Params Object</strong> </p>
+<p>Usage Example:</p>
+<pre><code><code class="source-code prettyprint"></code>
+</code></pre><h4 id="updatable-trait">Updatable Trait</h4><p>Elements that have a <code>put</code> operation are updatable </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Arguments</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">update</td>
+<td style="text-align:left">data: object</td>
+</tr>
+</tbody>
+</table>
+<p>Usage Example:</p>
+<pre><code><code class="source-code prettyprint"></code>
+</code></pre><h3 id="element-mixins">Element Mixins</h3><h4 id="collection-mixin">Collection Mixin</h4><p>Elements that constitute an <code>array</code> are models </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Arguments</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">validate</td>
+<td style="text-align:left">data</td>
+<td style="text-align:left">performs validation of data against schema for path</td>
+</tr>
+<tr>
+<td style="text-align:left">valueOf</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns native value of data</td>
+</tr>
+<tr>
+<td style="text-align:left">toString</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns stringified version of data</td>
+</tr>
+<tr>
+<td style="text-align:left">toJSON</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns data as JSON object</td>
+</tr>
+</tbody>
+</table>
+<p>Usage Example:</p>
+<pre><code><code class="source-code prettyprint"></code>
+</code></pre><h5 id="model-mixin">Model Mixin</h5><p>Elements that constitute an <code>object</code> are models </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Arguments</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">valueOf</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns native value of data</td>
+</tr>
+<tr>
+<td style="text-align:left">toString</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns stringified version of data</td>
+</tr>
+<tr>
+<td style="text-align:left">toJSON</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">returns data as JSON object</td>
+</tr>
+</tbody>
+</table>
+<p>Usage Example:</p>
+<pre><code><code class="source-code prettyprint"></code>
+</code></pre></div>
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
 </footer>
 
 <script src="script/search_index.js"></script>

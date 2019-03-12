@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/ns_schema.js | hero</title>
+  <title data-ice="title">src/ns_schema.js | api-hero</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
-<meta name="description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="hero"><meta property="twitter:description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"></head>
+<meta name="description" content="Reactive OpenApi Client"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="api-hero"><meta property="twitter:description" content="Reactive OpenApi Client"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -24,94 +24,105 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/hero"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/api-hero"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection-proxy.js~CollectionProxy.html">CollectionProxy</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/model.js~model.html">model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/ns-options.js~NSOptions.html">NSOptions</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-inflections">inflections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-request.js~RestRequest.html">RestRequest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-response.js~RestResponse.html">RestResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema-builder.js~SchemaBuilder.html">SchemaBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils.js~Utils.html">Utils</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createElementClass">createElementClass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelRefs">_modelRefs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelStats">_modelStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_models">_models</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsCollections">_nsCollections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsElements">_nsElements</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_requests">_requests</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_subjects">_subjects</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_traits">_traits</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#params">params</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/params-item.js~ParamsItem.html">ParamsItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/request-params.js~RequestParams.html">RequestParams</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/ns_schema.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default {
-    type: &quot;Object&quot;,
+    type: &quot;object&quot;,
     extensible: false,
+    required: [&quot;collections&quot;],
     properties: {
         collections: {
-            type: &quot;Object&quot;,
-            required: true,
-            properties: {
-                &quot;*&quot;: {
-                    type: &quot;Object&quot;,
+            type: &quot;object&quot;,
+            patternProperties: {
+                &quot;.*&quot;: {
+                    type: &quot;object&quot;,
+                    required: [&quot;name&quot;, &quot;properties&quot;],
                     properties: {
                         name: {
-                            type: &quot;String&quot;,
-                            required: true,
-                            restrict: &quot;^[a-zA-Z0-9_]+$&quot;,
+                            type: &quot;string&quot;,
+                            pattern: &quot;^[a-zA-Z0-9_]+$&quot;,
                         },
                         description: {
-                            type: &quot;String&quot;,
-                            required: false,
-                            default: &quot; &quot;,
-                            restrict: &quot;^[\\w\\s\\W]+$&quot;,
+                            type: &quot;string&quot;,
+                            pattern: &quot;^[\\w\\s\\W]+$&quot;,
                         },
                         plural: {
-                            type: &quot;String&quot;,
-                            required: false,
-                            restrict: &quot;^[a-zA-Z0-9_]+$&quot;,
+                            type: &quot;string&quot;,
+                            pattern: &quot;^[a-zA-Z0-9_]+$&quot;,
                         },
                         properties: {
-                            type: &quot;Object&quot;,
-                            required: true,
+                            type: &quot;object&quot;,
                             extensible: false,
-                            properties: {
-                                &quot;*&quot;: {
-                                    type: &quot;Object&quot;,
+                            patternProperties: {
+                                &quot;.*&quot;: {
+                                    type: &quot;object&quot;,
+                                    required: [&quot;type&quot;],
                                     properties: {
                                         default: {
-                                            type: &quot;*&quot;,
-                                            required: false,
+                                            anyOf: [
+                                                {type: &quot;string&quot;},
+                                                {type: &quot;number&quot;},
+                                                {type: &quot;object&quot;},
+                                                {type: &quot;boolean&quot;},
+                                            ],
                                         },
                                         defaultFn: {
-                                            type: &quot;String&quot;,
-                                            required: false,
-                                            restrict: &quot;^(guid|uuid|uuidv4|now)+$&quot;,
+                                            type: &quot;string&quot;,
+                                            pattern: &quot;^(guid|uuid|uuidv4|now)+$&quot;,
                                         },
                                         description: {
-                                            type: &quot;String&quot;,
-                                            required: false,
-                                            restrict: &quot;^((?!\&quot;|\\b|\\f|\\n|\\r|\\t|\\u).)*$&quot;,
+                                            type: &quot;string&quot;,
+                                            pattern: &quot;^((?!\&quot;|\\b|\\f|\\n|\\r|\\t|\\u).)*$&quot;,
                                         },
                                         id: {
-                                            required: false,
                                             polymorphic: [
                                                 {
-                                                    type: &quot;Boolean&quot;,
+                                                    type: &quot;boolean&quot;,
                                                 },
                                                 {
-                                                    type: &quot;Object&quot;,
+                                                    type: &quot;object&quot;,
                                                     properties: {
                                                         type: {
-                                                            type: &quot;String&quot;,
+                                                            type: &quot;string&quot;,
                                                             required: true,
-                                                            restrict: &quot;^(String|Number)+$&quot;,
+                                                            pattern: &quot;^(string|integer)+$&quot;,
                                                         },
                                                         id: {
-                                                            type: &quot;Boolean&quot;,
+                                                            type: &quot;boolean&quot;,
                                                             required: true,
                                                         },
                                                         generated: {
-                                                            type: &quot;Boolean&quot;,
+                                                            type: &quot;boolean&quot;,
                                                             required: false,
                                                         },
                                                     },
@@ -119,32 +130,26 @@
                                             ],
                                         },
                                         index: {
-                                            type: &quot;Boolean&quot;,
-                                            required: false,
+                                            type: &quot;boolean&quot;,
                                         },
                                         type: {
-                                            type: &quot;String&quot;,
-                                            required: true,
-                                            restrict: &quot;^(any|Array|Boolean|Buffer|Date|GeoPoint|Number|Object|String)+$&quot;,
+                                            type: &quot;string&quot;,
+                                            pattern: &quot;^(any|array|boolean|Buffer|Date|GeoPoint|integer|object|string)+$&quot;,
                                         },
                                         required: {
-                                            type: &quot;Boolean&quot;,
-                                            required: false,
+                                            type: &quot;boolean&quot;,
                                             default: false,
                                         },
                                         length: {
-                                            type: &quot;Number&quot;,
-                                            required: false,
+                                            type: &quot;integer&quot;,
                                             default: null,
                                         },
                                         precision: {
-                                            type: &quot;Number&quot;,
-                                            required: false,
+                                            type: &quot;integer&quot;,
                                             default: null,
                                         },
                                         scale: {
-                                            type: &quot;Number&quot;,
-                                            required: false,
+                                            type: &quot;integer&quot;,
                                             default: null,
                                         },
                                     },
@@ -156,154 +161,142 @@
             },
         },
         options: {
-            type: &quot;Object&quot;,
-            required: true,
+            type: &quot;object&quot;,
+            required: [&quot;ALLOWED&quot;, &quot;SESSION_KEY&quot;, &quot;REST_KEY&quot;,
+                &quot;APP_ID&quot;, &quot;API_VERSION&quot;, &quot;CRUD_METHODS&quot;],
+            default: {
+                CRUD_METHODS: {
+                    create: &quot;POST&quot;,
+                    read: &quot;GET&quot;,
+                    update: &quot;PUT&quot;,
+                    patch: &quot;PATCH&quot;,
+                    destroy: &quot;DELETE&quot;,
+                    options: &quot;OPTIONS&quot;,
+                },
+            },
             properties: {
                 ALLOWED: {
-                    type: &quot;Array&quot;,
-                    required: true,
-                    properties: [{
-                        type: &quot;String&quot;,
-                        required: false,
-                    }],
+                    type: &quot;array&quot;,
+                    items: {
+                        type: &quot;string&quot;,
+                    },
                 },
                 VERSION: {
-                    type: &quot;String&quot;,
-                    required: false,
-                    restrict: [&quot;\\\\bv?(?:0|[1-9]\\\\d*)\\\\.(?:0|[1-9]\\\\d*)\\\\.(?:0|[1-9]\\\\d*)(?:-[\\\\da-z\\\\-]+(?:\\\\.[\\\\da-z\\\\-]+)*)?(?:\\\\+[\\\\da-z\\\\-]+(?:\\\\.[\\\\da-z\\\\-]+)*)?\\\\b&quot;, &quot;ig&quot;],
+                    type: &quot;string&quot;,
+                    default: &quot;1&quot;,
+                    // pattern: &quot;\\\\bv?(?:0|[1-9]\\\\d*)\\\\.(?:0|[1-9]\\\\d*)\\\\.(?:0|[1-9]\\\\d*)(?:-[\\\\da-z\\\\-]+(?:\\\\.[\\\\da-z\\\\-]+)*)?(?:\\\\+[\\\\da-z\\\\-]+(?:\\\\.[\\\\da-z\\\\-]+)*)?\\\\b&quot;,
                 },
                 APP_ID: {
-                    type: &quot;String&quot;,
-                    required: true,
-                    restrict: &quot;^[a-zA-Z0-9]{16,32}$&quot;
+                    type: &quot;string&quot;,
+                    pattern: &quot;^[a-zA-Z0-9]{16,32}$&quot;
                 },
                 APP_ID_PARAM_NAME: {
-                    type: &quot;String&quot;,
-                    required: false,
+                    type: &quot;string&quot;,
                 },
-                REST_KEY: {
-                    type: &quot;String&quot;,
-                    required: true,
-                    restrict: &quot;^[a-zA-Z0-9]{16,32}$&quot;,
+                REST_KEYREST_KEY: {
+                    type: &quot;string&quot;,
+                    pattern: &quot;^[a-zA-Z0-9]{16,32}$&quot;,
                 },
                 REST_KEY_PARAM_NAME: {
-                    type: &quot;String&quot;,
-                    required: false,
+                    type: &quot;string&quot;,
                 },
                 SESSION_TOKEN: {
-                    type: &quot;String&quot;,
-                    required: false,
+                    type: &quot;string&quot;,
                 },
                 SESSION_KEY: {
-                    type: &quot;String&quot;,
-                    required: true,
-                    restrict: &quot;^[a-zA-Z0-9]{16,32}$&quot;,
+                    type: &quot;string&quot;,
+                    pattern: &quot;^[a-zA-Z0-9]{16,32}$&quot;,
                 },
                 CSRF_TOKEN: {
-                    type: &quot;String&quot;,
-                    required: false,
-                    restrict: &quot;^[a-zA-Z0-9]{16,32}$&quot;,
+                    type: &quot;string&quot;,
+                    pattern: &quot;^[a-zA-Z0-9]{16,32}$&quot;,
                 },
                 API_VERSION: {
-                    type: &quot;String&quot;,
-                    required: true,
+                    type: &quot;string&quot;,
                 },
                 MAX_BATCH_SIZE: {
-                    type: &quot;Number&quot;,
-                    required: false,
+                    type: &quot;integer&quot;,
                     default: 50,
                 },
                 DEFAULT_FETCH_LIMIT_OVERRIDE: {
-                    type: &quot;Number&quot;,
-                    required: false,
+                    type: &quot;integer&quot;,
                     default: 50000,
                 },
                 UNDEFINED_CLASSNAME: {
-                    type: &quot;String&quot;,
-                    required: false,
+                    type: &quot;string&quot;,
                     default: &quot;__UNDEFINED_CLASSNAME__&quot;,
-                    restrict: &quot;^[a-zA-Z0-9_]+$&quot;,
+                    pattern: &quot;^[a-zA-Z0-9_]+$&quot;,
                 },
                 API_URI: {
-                    type: &quot;String&quot;,
-                    required: false,
+                    type: &quot;string&quot;,
                     default: &quot;/api&quot;,
-                    restrict: &quot;^[a-zA-Z0-9_]+$&quot;,
+                    pattern: &quot;^\\/?[a-zA-Z0-9_]+\\/?$&quot;,
                 },
                 CORS: {
-                    type: &quot;Boolean&quot;,
-                    required: false,
+                    type: &quot;boolean&quot;,
                     default: false,
                 },
                 PROTOCOL: {
-                    type: &quot;String&quot;,
-                    required: false,
+                    type: &quot;string&quot;,
                     default: &quot;http&quot;,
-                    restrict: &quot;^(HTTP|http)+(S|s)?$&quot;,
+                    pattern: &quot;^(HTTP|http)+(S|s)?$&quot;,
                 },
                 HOST: {
-                    type: &quot;String&quot;,
-                    required: false,
+                    type: &quot;string&quot;,
                     default: &quot;127.0.0.1&quot;,
-                    restrict: &quot;^(?:[0-9]{1,3}\\\\.){3}[0-9]{1,3}$&quot;,
+                    pattern: &quot;^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$&quot;,
                 },
                 PORT: {
-                    type: &quot;Number&quot;,
-                    required: false,
+                    type: &quot;integer&quot;,
                     default: 3000,
                 },
                 BASE_PATH: {
-                    type: &quot;String&quot;,
-                    required: false,
+                    type: &quot;string&quot;,
                     default: &quot;/api&quot;,
-                    restrict: &quot;^\\\\/+[a-zA-Z0-9_\\\\/\\\\.\\\\-]+$&quot;,
+                    pattern: &quot;^\\/+[a-zA-Z0-9_\\/\\.\\-]+$&quot;,
                 },
                 CAPITALIZE_CLASSNAMES: {
-                    type: &quot;Boolean&quot;,
-                    required: false,
+                    type: &quot;boolean&quot;,
                     default: true,
                 },
                 CRUD_METHODS: {
-                    type: &quot;Object&quot;,
-                    required: true,
-                    extensible: true,
+                    type: &quot;object&quot;,
                     properties: {
                         create: {
-                            type: &quot;String&quot;,
-                            required: false,
-                            restrict: &quot;^POST+$&quot;,
+                            type: &quot;string&quot;,
+                            pattern: &quot;^POST+$&quot;,
+                            default: &quot;POST&quot;,
                         },
                         read: {
-                            type: &quot;String&quot;,
-                            required: false,
-                            restrict: &quot;^GET+$&quot;,
+                            type: &quot;string&quot;,
+                            pattern: &quot;^GET+$&quot;,
+                            default: &quot;GET&quot;,
                         },
                         update: {
-                            type: &quot;String&quot;,
-                            required: false,
-                            restrict: &quot;^PUT+$&quot;,
+                            type: &quot;string&quot;,
+                            pattern: &quot;^PUT+$&quot;,
+                            default: &quot;PUT&quot;,
                         },
                         destroy: {
-                            type: &quot;String&quot;,
-                            required: false,
-                            restrict: &quot;^DELETE+$&quot;,
+                            type: &quot;string&quot;,
+                            pattern: &quot;^DELETE+$&quot;,
+                            default: &quot;DELETE&quot;,
                         },
                         patch: {
-                            type: &quot;String&quot;,
-                            required: false,
-                            restrict: &quot;^PATCH+$&quot;,
+                            type: &quot;string&quot;,
+                            pattern: &quot;^PATCH+$&quot;,
+                            default: &quot;PATCH&quot;,
                         },
                         options: {
-                            type: &quot;String&quot;,
-                            required: false,
-                            restrict: &quot;^OPTIONS+$&quot;,
+                            type: &quot;string&quot;,
+                            pattern: &quot;^OPTIONS+$&quot;,
+                            default: &quot;OPTIONS&quot;,
                         }
                     },
                 },
                 QUERY_PARAM: {
-                    type: &quot;String&quot;,
-                    required: false,
-                    restrict: &quot;^[a-zA-Z0-9_]+$&quot;,
+                    type: &quot;string&quot;,
+                    pattern: &quot;^[a-zA-Z0-9_]+$&quot;,
                 },
             },
         },
@@ -314,7 +307,7 @@
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
 </footer>
 
 <script src="script/search_index.js"></script>

@@ -1089,7 +1089,7 @@
                                       "column": 23
                                     }
                                   },
-                                  "properties": []
+                                  "elements": []
                                 }
                               },
                               {
@@ -2095,7 +2095,7 @@
                                     "column": 51
                                   }
                                 },
-                                "properties": []
+                                "elements": []
                               },
                               {
                                 "type": "CallExpression",
@@ -10179,7 +10179,7 @@
                                     "column": 68
                                   }
                                 },
-                                "properties": []
+                                "elements": []
                               },
                               "extra": {
                                 "parenthesized": true,

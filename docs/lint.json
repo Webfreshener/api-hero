@@ -1,1 +1,177 @@
-[]
+[
+  {
+    "name": "deleteTrap",
+    "filePath": "src/collection-proxy.js",
+    "lines": [
+      {
+        "lineNumber": 68,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 69,
+        "line": " * Handles Proxy Delete Trap for Array elements"
+      },
+      {
+        "lineNumber": 70,
+        "line": " * @param model"
+      },
+      {
+        "lineNumber": 71,
+        "line": " * @param t"
+      },
+      {
+        "lineNumber": 72,
+        "line": " * @param idx"
+      },
+      {
+        "lineNumber": 73,
+        "line": " * @returns {boolean}"
+      },
+      {
+        "lineNumber": 74,
+        "line": " */"
+      },
+      {
+        "lineNumber": 75,
+        "line": "const deleteTrap = (target, t, idx) => {"
+      }
+    ],
+    "codeParams": [
+      "target",
+      "t",
+      "idx"
+    ],
+    "docParams": [
+      "model",
+      "t",
+      "idx"
+    ]
+  },
+  {
+    "name": "applyMethod",
+    "filePath": "src/collection-proxy.js",
+    "lines": [
+      {
+        "lineNumber": 128,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 129,
+        "line": " * Handles proxy get for Array proto methods"
+      },
+      {
+        "lineNumber": 130,
+        "line": " * @param model"
+      },
+      {
+        "lineNumber": 131,
+        "line": " * @param t"
+      },
+      {
+        "lineNumber": 132,
+        "line": " * @param idx"
+      },
+      {
+        "lineNumber": 133,
+        "line": " * @returns {function(...[*]=)}"
+      },
+      {
+        "lineNumber": 134,
+        "line": " */"
+      },
+      {
+        "lineNumber": 135,
+        "line": "const applyMethod = (target, t, idx) => {"
+      }
+    ],
+    "codeParams": [
+      "target",
+      "t",
+      "idx"
+    ],
+    "docParams": [
+      "model",
+      "t",
+      "idx"
+    ]
+  },
+  {
+    "name": "NS#addElement",
+    "filePath": "src/namespace.js",
+    "lines": [
+      {
+        "lineNumber": 238,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 239,
+        "line": "     * Adds NSElement to Namespace"
+      },
+      {
+        "lineNumber": 240,
+        "line": "     * @param name"
+      },
+      {
+        "lineNumber": 241,
+        "line": "     * @param el<NSElement>"
+      },
+      {
+        "lineNumber": 242,
+        "line": "     * @returns {NS}"
+      },
+      {
+        "lineNumber": 243,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 244,
+        "line": "    addElement(name, el) {"
+      }
+    ],
+    "codeParams": [
+      "name",
+      "el"
+    ],
+    "docParams": [
+      "name",
+      "el<NSElement>"
+    ]
+  },
+  {
+    "name": "getRefDefType",
+    "filePath": "src/ns_element.js",
+    "lines": [
+      {
+        "lineNumber": 23,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 24,
+        "line": " *"
+      },
+      {
+        "lineNumber": 25,
+        "line": " * @param schema"
+      },
+      {
+        "lineNumber": 26,
+        "line": " * @returns {*}"
+      },
+      {
+        "lineNumber": 27,
+        "line": " */"
+      },
+      {
+        "lineNumber": 28,
+        "line": "const getRefDefType = (scope, schema) => {"
+      }
+    ],
+    "codeParams": [
+      "scope",
+      "schema"
+    ],
+    "docParams": [
+      "schema"
+    ]
+  }
+]

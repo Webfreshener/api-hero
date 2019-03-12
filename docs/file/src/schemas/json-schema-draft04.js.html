@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/schemas/json-schema-draft04.js | api-hero</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Reactive OpenApi Client"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="api-hero"><meta property="twitter:description" content="Reactive OpenApi Client"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/api-hero"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection-proxy.js~CollectionProxy.html">CollectionProxy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/ns-options.js~NSOptions.html">NSOptions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-request.js~RestRequest.html">RestRequest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-response.js~RestResponse.html">RestResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema-builder.js~SchemaBuilder.html">SchemaBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createElementClass">createElementClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelRefs">_modelRefs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelStats">_modelStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_models">_models</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsElements">_nsElements</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_requests">_requests</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_subjects">_subjects</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_traits">_traits</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#params">params</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/params-item.js~ParamsItem.html">ParamsItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/request-params.js~RequestParams.html">RequestParams</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/schemas/json-schema-draft04.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default {
+  id: &quot;http://json-schema.org/draft-04/schema#&quot;,
+  $schema: &quot;http://json-schema.org/draft-04/schema#&quot;,
+  description: &quot;Core schema meta-schema&quot;,
+  definitions: {
+    schemaArray: {
+      type: &quot;array&quot;,
+      minItems: 1,
+      items: { $ref: &quot;#&quot; }
+    },
+    positiveInteger: {
+      type: &quot;integer&quot;,
+      minimum: 0
+    },
+    positiveIntegerDefault0: {
+      allOf: [ { $ref: &quot;#/definitions/positiveInteger&quot; }, { default: 0 } ]
+    },
+    simpleTypes: {
+      enum: [ &quot;array&quot;, &quot;boolean&quot;, &quot;integer&quot;, &quot;null&quot;, &quot;number&quot;, &quot;object&quot;, &quot;string&quot; ]
+    },
+    stringArray: {
+      type: &quot;array&quot;,
+      items: { type: &quot;string&quot; },
+      minItems: 1,
+      uniqueItems: true
+    }
+  },
+  type: &quot;object&quot;,
+  properties: {
+    id: {
+      type: &quot;string&quot;
+    },
+    $schema: {
+      type: &quot;string&quot;
+    },
+    title: {
+      type: &quot;string&quot;
+    },
+    description: {
+      type: &quot;string&quot;
+    },
+    default: {},
+    multipleOf: {
+      type: &quot;number&quot;,
+      minimum: 0,
+      exclusiveMinimum: true
+    },
+    maximum: {
+      type: &quot;number&quot;
+    },
+    exclusiveMaximum: {
+      type: &quot;boolean&quot;,
+      default: false
+    },
+    minimum: {
+      type: &quot;number&quot;
+    },
+    exclusiveMinimum: {
+      type: &quot;boolean&quot;,
+      default: false
+    },
+    maxLength: { $ref: &quot;#/definitions/positiveInteger&quot; },
+    minLength: { $ref: &quot;#/definitions/positiveIntegerDefault0&quot; },
+    pattern: {
+      type: &quot;string&quot;,
+      format: &quot;regex&quot;
+    },
+    additionalItems: {
+      anyOf: [
+        { type: &quot;boolean&quot; },
+        { $ref: &quot;#&quot; }
+      ],
+      default: {}
+    },
+    items: {
+      anyOf: [
+        { $ref: &quot;#&quot; },
+        { $ref: &quot;#/definitions/schemaArray&quot; }
+      ],
+      default: {}
+    },
+    maxItems: { $ref: &quot;#/definitions/positiveInteger&quot; },
+    minItems: { $ref: &quot;#/definitions/positiveIntegerDefault0&quot; },
+    uniqueItems: {
+      type: &quot;boolean&quot;,
+      default: false
+    },
+    maxProperties: { $ref: &quot;#/definitions/positiveInteger&quot; },
+    minProperties: { $ref: &quot;#/definitions/positiveIntegerDefault0&quot; },
+    required: { $ref: &quot;#/definitions/stringArray&quot; },
+    additionalProperties: {
+      anyOf: [
+        { type: &quot;boolean&quot; },
+        { $ref: &quot;#&quot; }
+      ],
+      default: {}
+    },
+    definitions: {
+      type: &quot;object&quot;,
+      additionalProperties: { $ref: &quot;#&quot; },
+      default: {}
+    },
+    properties: {
+      type: &quot;object&quot;,
+      additionalProperties: { $ref: &quot;#&quot; },
+      default: {}
+    },
+    patternProperties: {
+      type: &quot;object&quot;,
+      additionalProperties: { $ref: &quot;#&quot; },
+      default: {}
+    },
+    dependencies: {
+      type: &quot;object&quot;,
+      additionalProperties: {
+        anyOf: [
+          { $ref: &quot;#&quot; },
+          { $ref: &quot;#/definitions/stringArray&quot; }
+        ]
+      }
+    },
+    enum: {
+      type: &quot;array&quot;,
+      minItems: 1,
+      uniqueItems: true
+    },
+    type: {
+      anyOf: [
+        { $ref: &quot;#/definitions/simpleTypes&quot; },
+        {
+          type: &quot;array&quot;,
+          items: { $ref: &quot;#/definitions/simpleTypes&quot; },
+          minItems: 1,
+          uniqueItems: true
+        }
+      ]
+    },
+    format: { type: &quot;string&quot; },
+    allOf: { $ref: &quot;#/definitions/schemaArray&quot; },
+    anyOf: { $ref: &quot;#/definitions/schemaArray&quot; },
+    oneOf: { $ref: &quot;#/definitions/schemaArray&quot; },
+    not: { $ref: &quot;#&quot; }
+  },
+  dependencies: {
+    exclusiveMaximum: [ &quot;maximum&quot; ],
+    exclusiveMinimum: [ &quot;minimum&quot; ]
+  },
+  default: {}
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

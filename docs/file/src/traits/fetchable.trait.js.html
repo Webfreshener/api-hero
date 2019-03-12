@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/traits/fetchable.trait.js | api-hero</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Reactive OpenApi Client"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="api-hero"><meta property="twitter:description" content="Reactive OpenApi Client"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/api-hero"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection-proxy.js~CollectionProxy.html">CollectionProxy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/ns-options.js~NSOptions.html">NSOptions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-request.js~RestRequest.html">RestRequest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-response.js~RestResponse.html">RestResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema-builder.js~SchemaBuilder.html">SchemaBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createElementClass">createElementClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelRefs">_modelRefs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelStats">_modelStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_models">_models</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsElements">_nsElements</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_requests">_requests</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_subjects">_subjects</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_traits">_traits</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#params">params</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/params-item.js~ParamsItem.html">ParamsItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/request-params.js~RequestParams.html">RequestParams</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/traits/fetchable.trait.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {_requests, _traits,} from &quot;../_references&quot;;
+import {BehaviorSubject} from &quot;rxjs/Rx&quot;;
+import {RestRequest} from &quot;../rest-request&quot;;
+
+/**
+ *
+ * @param _self
+ * @param _params
+ * @returns {*}
+ * @private
+ */
+const _doFetch = (_self, _params) =&gt; {
+    let _req = {
+        method: &quot;GET&quot;,
+        id: _self.$scope.$utils.createRequestId(_self, &quot;read&quot;),
+    };
+
+    const _subj = new BehaviorSubject(_self).skip(1);
+    _requests.set(_self, _req);
+
+    const _rest = new RestRequest(_req.method, _self, _params);
+    const _sub = _rest.exec().subscribe({
+        next: (res) =&gt; {
+            _subj.next(res);
+            res.json().then((_json) =&gt; {
+                if (_self[&quot;isListable&quot;]) {
+                    const _sIdx = _self.models.length &gt;= 0 ? _self.models.length - 1 : 0;
+                    let _idx = 0;
+                    _self[&quot;setModels&quot;](_json);
+                    const _ids = (Array.isArray(_json) ? _json : [_json]).map((itm) =&gt; itm.id);
+                    const _fetchedModels = _self.models.filter((m) =&gt; {
+                        return _ids.find((id) =&gt; id === m.id) !== void (0);
+                    });
+                    // _fetchedModels.forEach((m) =&gt; {
+                    //     if (_idx &gt;= _sIdx) {
+                    //         _paramsStats.set(m, {
+                    //             isDirty: false,
+                    //             isNew: false
+                    //         });
+                    //         _idx++;
+                    //     }
+                    // });
+                } else {
+                    _self.data = _json;
+                    // _paramsStats.set(_self, {isDirty: false, isNew: false});
+                }
+                _requests.delete(_self);
+                _sub.unsubscribe();
+                _subj.complete();
+            });
+        },
+        error: (e) =&gt; {
+            _subj.error(e);
+            _sub.unsubscribe();
+        }
+    });
+    return _subj;
+};
+
+/**
+ *
+ * @param superclass
+ * @returns Class&lt;Trait&gt;
+ */
+const trait = (superclass) =&gt; {
+    return class extends superclass {
+        constructor() {
+            super();
+            _traits.get(this).push(trait.Name);
+        }
+
+        /**
+         * Performs `GET` Operation to populate collection
+         * @param params
+         * @returns {*}
+         */
+        fetch(params) {
+            return _doFetch(this, params);
+        }
+
+        /**
+         * Performs GET Operation to retrieve model from remote collection
+         * @returns {*}
+         */
+        fetchById(id, options = {}) {
+            const _subj = new BehaviorSubject({}).skip(1);
+            const _model = this[&quot;createModelRef&quot;]({id: id});
+            const _pathParams = {path: {}};
+            // _pathParams.path[this.pathIDKey] = id;
+            _pathParams.path[&quot;petId&quot;] = id;
+            const _params = Object.assign({}, options, _pathParams);
+            setTimeout(() =&gt; {
+                const _fSub = _doFetch(_model, _params).subscribe({
+                    error: (e) =&gt; {
+                        _subj.error(e);
+                        _fSub.unsubscribe();
+                    },
+                    complete: () =&gt; {
+                        _subj.next(_model);
+                        _fSub.unsubscribe();
+                    }
+                });
+            }, 10);
+            return _subj;
+        }
+    }
+};
+
+/**
+ * defines static Name getter for trait
+ */
+Object.defineProperty(trait, &quot;Name&quot;, {
+    get: () =&gt; &quot;FetchableTrait&quot;,
+    enumerable: true,
+    configurable: false,
+});
+
+export {trait as FetchableTrait};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

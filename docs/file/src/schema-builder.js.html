@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/schema-builder.js | api-hero</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Reactive OpenApi Client"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="api-hero"><meta property="twitter:description" content="Reactive OpenApi Client"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/api-hero"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection-proxy.js~CollectionProxy.html">CollectionProxy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/ns-options.js~NSOptions.html">NSOptions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-request.js~RestRequest.html">RestRequest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-response.js~RestResponse.html">RestResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema-builder.js~SchemaBuilder.html">SchemaBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createElementClass">createElementClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelRefs">_modelRefs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelStats">_modelStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_models">_models</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsElements">_nsElements</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_requests">_requests</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_subjects">_subjects</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_traits">_traits</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#params">params</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/params-item.js~ParamsItem.html">ParamsItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/request-params.js~RequestParams.html">RequestParams</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/schema-builder.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Utils} from &quot;./utils&quot;;
+const _namespaces = new WeakMap();
+
+export class SchemaBuilder {
+    constructor(ns) {
+        _namespaces.set(this, ns);
+    }
+
+    /**
+     *
+     * @returns {any}
+     */
+    get namespace() {
+        return _namespaces.get(this);
+    }
+
+    /**
+     *
+     * @param schemaPathElement
+     */
+    getOperations(schemaPathElement) {
+        const _ops = {};
+        const _s = (this.namespace.schemaType.type === &quot;openapi&quot;) ?
+            schemaPathElement : schemaPathElement.operations;
+        Object.keys(_s).forEach((op) =&gt; {
+            const _opSchema = _s[op];
+            _ops[op] = (this.namespace.schemaType.type === &quot;openapi&quot;) ?
+                _opSchema :
+                Utils.reformatV2Response(_s[op]);
+        });
+
+        return _ops;
+    };
+
+
+
+    /**
+     *
+     * @param forPath
+     */
+    schemaForPath(forPath) {
+        const _schema = this.namespace.schema.$model.toJSON();
+
+        const _rx = new RegExp(`^${forPath}+`);
+        const _p = {};
+        let elName;
+
+        // creates a sorted array of matching paths/subpaths
+        const _pKeys = Object.keys(_schema.paths).filter((pK) =&gt; _rx.exec(pK) !== null);
+        _pKeys.sort();
+
+        // traverses paths to build schema object
+        _pKeys.forEach((path) =&gt; {
+            elName = forPath.split(&quot;/&quot;).pop();
+            const _parts = path.split(&quot;/&quot;);
+            const _op = this.getOperations({operations: _schema.paths[path]});
+            if (path === forPath) {
+                _p[elName] = {
+                    name: elName,
+                    operations: _op.hasOwnProperty(&quot;operations&quot;) ? _op.operations : {},
+                    path: path,
+                    components: this.namespace.schema.components,
+                    childPaths: {}
+                }
+            } else {
+                if (`${_parts}` !== &quot;&quot;) {
+                    const _mPathName = path.split(&quot;/&quot;).pop();
+                    if (!_p[elName].childPaths.hasOwnProperty(_mPathName)) {
+                        Object.defineProperty(_p[elName].childPaths, _mPathName, {
+                            value: Object.assign({}, {name: _mPathName, path: path}, _op),
+                            configurable: false,
+                            enumerable: true,
+                        });
+                    }
+                }
+            }
+        });
+        return _p.hasOwnProperty(elName) ? _p[elName] : {};
+    }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

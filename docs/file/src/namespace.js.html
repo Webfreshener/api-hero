@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/namespace.js | hero</title>
+  <title data-ice="title">src/namespace.js | api-hero</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
-<meta name="description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="hero"><meta property="twitter:description" content="Schema Based OXM (ORM + ODM) RESTful Client Library"></head>
+<meta name="description" content="Reactive OpenApi Client"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="api-hero"><meta property="twitter:description" content="Reactive OpenApi Client"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -24,37 +24,82 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/hero"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/api-hero"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection-proxy.js~CollectionProxy.html">CollectionProxy</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/model.js~model.html">model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/ns-options.js~NSOptions.html">NSOptions</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-inflections">inflections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-request.js~RestRequest.html">RestRequest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-response.js~RestResponse.html">RestResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema-builder.js~SchemaBuilder.html">SchemaBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils.js~Utils.html">Utils</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createElementClass">createElementClass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelRefs">_modelRefs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelStats">_modelStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_models">_models</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsCollections">_nsCollections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsElements">_nsElements</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_requests">_requests</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_subjects">_subjects</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_traits">_traits</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#params">params</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/params-item.js~ParamsItem.html">ParamsItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/request-params.js~RequestParams.html">RequestParams</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/namespace.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {RxVO} from &quot;rxvo&quot;;
-import map from &quot;lodash.map&quot;;
-import pairs from &quot;lodash.pairs&quot;;
-import foreach from &quot;lodash.foreach&quot;;
-import &quot;cross-fetch/polyfill&quot;;
-import {_namespaces, _nsCollections} from &quot;./_references&quot;;
-import Collection from &quot;./collection&quot;;
-import ns_schema from &quot;./ns_schema&quot;;
+import {_namespaces, _nsElements} from &quot;./_references&quot;;
+import {createElementClass} from &quot;./ns_element&quot;;
+import {default as heroSchema} from &quot;./schemas/api-hero.schema&quot;;
+import {default as jsonSchema} from &quot;./schemas/json-schema-draft04&quot;;
+import {default as nsSchema} from &quot;./schemas/namespace.schema&quot;;
+import {Utils} from &quot;./utils&quot;;
+import {mix} from &quot;../vendor/mixwith&quot;;
+import {SchemaBuilder} from &quot;./schema-builder&quot;;
+import {NSOptions} from &quot;./ns-options&quot;;
+
+// holds element class factories
+const _builders = new WeakMap();
+
+/**
+ * generates NameSpace Elements from schema
+ * @param ns
+ * @returns {function(*=, *=, *=): {new(*=): {}, prototype: {}}}
+ * @constructor
+ */
+const NSElementFactory = (ns) =&gt; {
+    return (name, schema, parent=null) =&gt; {
+        if (!name) {
+            throw &quot;Name is required at arguments[0]&quot;
+        }
+
+        if (!schema) {
+            throw &quot;Schema is required at arguments[1]&quot;
+        }
+
+        const NSElement = createElementClass(ns, name, schema, parent);
+        const _element = mix(NSElement);
+        const traits = NSElement[&quot;getTraitAssignments&quot;](ns, schema, parent);
+        return class extends _element.with.apply(_element, traits) {
+            constructor(__data) {
+                super(__data);
+            }
+        };
+    };
+};
 
 /**
  * Namespace
- * * Defines and Manages Collections
+ * * Defines and Manages Elements
  * * Initializes Options
  * * Provides utility methods
  */
@@ -63,42 +108,104 @@ class NS {
      * @constructor
      * @param config
      */
-    constructor(config) {
-        const _schema = new RxVO(ns_schema);
-        _schema.model = config;
+    constructor(config={}) {
+        const _schema = new RxVO({
+            meta: [jsonSchema, heroSchema],
+            schemas: [nsSchema],
+            use: &quot;http://api-hero.webfreshener.com/v1/schema/namespace.json#&quot;,
+        });
+
+        // retains user options if exists
+        const _opts = Object.assign({}, config.options || {});
+
+        // removes user options form namespace config
+        if (config.hasOwnProperty(&quot;options&quot;)) {
+            delete config.options;
+        }
+
+        const _options = new NSOptions(_opts);
+
+        // -- immutably sets `options` on NSElement
+        Object.defineProperty(this, &quot;options&quot;, {
+            get: () =&gt; _options,
+            enumerable: false,
+            configurable: false,
+        });
+
+        _schema.model = (typeof config === &quot;object&quot;) ? config : JSON.parse(config);
         _namespaces.set(this, _schema);
-        let _cols = {};
+
         const _self = this;
-        // defines utilies reference on Namespace
+        const _elFactory = NSElementFactory(_self);
+
+        // defines utilities reference on Namespace
         Object.defineProperty(this, &quot;$utils&quot;, {
-            value: new Utils(this),
+            value: new Utils(_self),
             enumerable: false,
             writable: false,
         });
 
-        let o = {};
-        // iterates through collections on Schema and defined Collections on NS
-        Object.keys(_schema.model.collections).forEach((col) =&gt; {
-            o[col] = class extends Collection {
-                constructor() {
-                    super(_schema.model.collections[col]);
-                    // defines className reference on Collection
-                    Object.defineProperty(this, &quot;$className&quot;, {
-                        get: () =&gt; col,
-                        enumerable: false,
-                    });
-                    // defines Namespace reference on Collection
-                    Object.defineProperty(this, &quot;$scope&quot;, {
-                        get: () =&gt; _self,
-                        enumerable: false,
-                    });
-                }
-            };
-            // applies Collection instance to Namespace
-            this.addCollection(col, o[col]);
+        // defines getter for namespace schema
+        Object.defineProperty(this, &quot;schema&quot;, {
+            get: () =&gt; _namespaces.get(this).model.schema,
+            enumerable: true,
+            configurable: false,
         });
 
-        _nsCollections.set(this, _cols);
+        // defines util method to create child element
+        Object.defineProperty(this, &quot;createElement&quot;, {
+            value: _elFactory,
+            enumerable: false,
+            configurable: false,
+        });
+
+        _builders.set(this, new SchemaBuilder(this));
+
+        let o = {};
+        // iterates through elements on Schema and defined Elements on NS
+        Object.keys(this.schema.paths).forEach((key) =&gt; {
+            if (key === &quot;/&quot;) {
+                return;
+            }
+
+            if (key.match(/[a-z0-9_\-\s%]+\/+\{[a-z0-9_]+\}$/i) === null) {
+                const _pathSchema = this.builder.schemaForPath(key);
+                o[_pathSchema.name] = this.createElement(_pathSchema.name, _pathSchema);
+                // applies Collection Class to Namespace
+                this.addElement(_pathSchema.name, o[_pathSchema.name]);
+            }
+        });
+        // stores reference to path elements
+        _nsElements.set(this, o);
+    }
+
+    /**
+     * Helper Method generates URL for REST Requests
+     * @returns {string|null}
+     */
+    get apiUrl() {
+        const _idx = this.options.serverIndex;
+        const _params = this.options.serverParameters;
+        let _url = null;
+        if (this.schema.servers.length &gt;= (_idx - 1)) {
+            _url = this.schema.servers[_idx].url || null;
+            if (_url !== null &amp;&amp; _params.length) {
+                _params.forEach((_pO) =&gt; {
+                    let _rx = new RegExp(`\{${_pO.name}\}+`);
+                    _url = _rx.replace(_url, _pO.value);
+                });
+            }
+        }
+
+        return _url;
+    }
+
+    /**
+     * returns validation errors for Namespace schema
+     * @returns {*}
+     */
+    get errors() {
+        return _namespaces.get(this).errors;
     }
 
     /**
@@ -110,13 +217,46 @@ class NS {
     }
 
     /**
+     * Getter for Schema type (openapi, swagger etc) and version
+     * @returns object | null
+     */
+    get schemaType() {
+        const _schema = _namespaces.get(this);
+        let _schemaData = null;
+        [&quot;openapi&quot;, &quot;swagger&quot;].forEach((type) =&gt; {
+            if (_schema.model.schema.hasOwnProperty(type)) {
+                _schemaData = {
+                    type: type,
+                    version: _schema.model.schema[type],
+                };
+            }
+        });
+
+        return _schemaData;
+    }
+
+    /**
+     * Getter for schema builder instance
+     * @returns {any}
+     */
+    get builder() {
+        return _builders.get(this);
+    }
+
+    /**
+     * Getter for Schema Info Element
+     * @returns object | null
+     */
+    get info() {
+        return this.schema.info || null
+    }
+
+    /**
      * Setter for Namespace API Options
      * @param value
-     * @returns {NS}
      */
     set options(value) {
         _namespaces.get(this).model.options = value;
-        return this;
     }
 
     /**
@@ -139,33 +279,32 @@ class NS {
     }
 
     /**
-     * Accessor for Schema Collections Map
+     * Accessor for Schema Elements Map
      * @returns {*}
      */
-    get collections() {
-        return _nsCollections.get(this);
+    get elements() {
+        return _nsElements.get(this);
     }
 
     /**
      * Retrieved list of registered Collection names
      * @returns {string[]}
      */
-    listCollections() {
-        return Object.keys(_namespaces.get(this));
+    listElements() {
+        return Object.keys(this.elements);
     }
 
     /**
-     * Adds Collection to Namespace
+     * Adds NSElement to Namespace
      * @param name
-     * @param col
+     * @param el&lt;NSElement&gt;
      * @returns {NS}
      */
-    addCollection(name, col) {
+    addElement(name, el) {
         if (!this.hasOwnProperty(name)) {
             Object.defineProperty(this, name, {
                 get: () =&gt; {
-                    let _s = _namespaces.get(this).document;
-                    return new col(_s.model.collections[name]);
+                    return new el();
                 },
                 enumerable: true,
             });
@@ -178,121 +317,14 @@ class NS {
      * @param name
      * @returns {NS}
      */
-    removeCollection(name) {
+    removeElement(name) {
         if (_namespaces.get(this).hasOwnProperty(name)) {
             Object.defineProperty(_namespaces.get(this), name, {
-                get: () =&gt; null,
+                value: null,
                 writable: false,
             });
         }
         return this;
-    }
-
-    sync(method, model, options = {}) {
-        let opts = this.$utils.apiOptions;
-        Object.assign(opts, {method: method});
-        return fetch(model.url, opts).then((res) =&gt; {
-            return res.json();
-        });
-    }
-}
-
-/**
- * Utility Methods
- */
-class Utils {
-    /**
-     *
-     * @param $scope
-     */
-    constructor($scope) {
-        Object.defineProperty(this, &quot;$scope&quot;, {
-            get: () =&gt; $scope,
-            enumerable: false,
-        });
-    }
-
-    /**
-     * Helper Method returns REST Request Headers from Config
-     * @returns {*}
-     */
-    get apiOptions() {
-        let o;
-        (o = {
-                contentType: &quot;application/json&quot;,
-                processData: false,
-                dataType: &quot;json&quot;,
-                data: null,
-                headers: {
-                    &quot;Content-Type&quot;: &quot;application/json&quot;,
-                    &quot;X-Application-Id&quot;: this.$scope.options.APP_ID || null,
-                    &quot;X-REST-API-Key&quot;: this.$scope.options.REST_KEY || null,
-                    &quot;X-CSRF-Token&quot;: this.$scope.options.CSRF_TOKEN || null,
-                    &quot;X-User-Email&quot;: this.$scope.options.USER_EMAIL || null,
-                },
-            }
-        );
-
-        if (this.$scope.options.SESSION_KEY) {
-            o.headers[this.$scope.options.SESSION_KEY] = this.$scope.options.SESSION_TOKEN;
-        }
-
-        return o;
-    }
-
-    /**
-     * Helper Method generates URL for REST Requests
-     * @returns {string}
-     */
-    get apiUrl() {
-        const _pcl = this.$scope.options.PROTOCOL.toLowerCase();
-        const _host = this.$scope.options.HOST;
-        const _port = this.$scope.options.PORT;
-        const _path = this.$scope.options.BASE_PATH.replace(/^\//, &quot;&quot;);
-        const _vers = this.$scope.options.API_VERSION;
-        return `${_pcl}://${_host}${_port !== 80 ? `:${_port}` : &quot;&quot;}/${_path}/${_vers}`;
-    }
-
-    /**
-     *
-     * @param route
-     * @returns {boolean}
-     */
-    validateRoute(route) {
-        const Rx = `^(${this.$scope.regEscape(this.getAPIUrl())}\/)+`;
-        // throws error if route does not pass validation
-        if (!route.match(new RegExp(Rx))) {
-            throw `Bad route: ${route}`;
-        }
-        // returns true if no error thrown
-        return true;
-    }
-
-    /**
-     * Implementation of Parse._parseDate used to parse iso8601 UTC formatted `datetime`
-     * @param iso8601
-     * @returns {*}
-     */
-    parseDate(iso8601) {
-        // returns null if `iso8601` argument fails `RegExp`
-        let t;
-        let Rx = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
-        if ((t = `${iso8601}`.match(Rx)) === null) {
-            return null;
-        }
-        t = t.map((i) =&gt; i &amp;&amp; i.match(/^[\d]+$/) !== null ? parseInt(i, 10) : null)
-            .filter((i) =&gt; i !== null);
-        t[1] = t[1] - 1;
-        return new Date(Date.UTC.apply(this, t));
-    }
-
-    /**
-     * Returns passes object as Key/Value paired string
-     * @param obj
-     * @returns {string}
-     */
-    static querify(obj) {
-        return (map(pairs(obj || {}), (v, k) =&gt; v.join(&quot;=&quot;))).join(&quot;&amp;&quot;);
     }
 }
 
@@ -303,12 +335,13 @@ class Utils {
  */
 export default (config) =&gt; {
     return new NS(config);
-}</code></pre>
+}
+</code></pre>
 
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
 </footer>
 
 <script src="script/search_index.js"></script>

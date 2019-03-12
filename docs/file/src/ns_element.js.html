@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/ns_element.js | api-hero</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Reactive OpenApi Client"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="api-hero"><meta property="twitter:description" content="Reactive OpenApi Client"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/api-hero"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection-proxy.js~CollectionProxy.html">CollectionProxy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/ns-options.js~NSOptions.html">NSOptions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-request.js~RestRequest.html">RestRequest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-response.js~RestResponse.html">RestResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema-builder.js~SchemaBuilder.html">SchemaBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createElementClass">createElementClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelRefs">_modelRefs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelStats">_modelStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_models">_models</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsElements">_nsElements</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_requests">_requests</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_subjects">_subjects</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_traits">_traits</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#params">params</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/params-item.js~ParamsItem.html">ParamsItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/request-params.js~RequestParams.html">RequestParams</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/ns_element.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {_cids, _modelStats, _subjects, _traits} from &quot;./_references&quot;;
+import {RxVO} from &quot;rxvo&quot;;
+import {Utils} from &quot;./utils&quot;;
+import {CreatableTrait} from &quot;./traits/creatable.trait&quot;;
+import {ListableTrait} from &quot;./traits/listable.trait&quot;;
+import {FetchableTrait} from &quot;./traits/fetchable.trait&quot;;
+import {UpdatableTrait} from &quot;./traits/updatable.trait&quot;;
+import {DeletableTrait} from &quot;./traits/deletable.trait&quot;;
+import {PatchableTrait} from &quot;./traits/patchable.trait&quot;;
+import {AccessibleTrait} from &quot;./traits/accessible.trait&quot;;
+import {SavableTrait} from &quot;./traits/savable.trait&quot;;
+import {CollectionMixin, ModelMixin} from &quot;./mixins&quot;;
+import {BehaviorSubject} from &quot;rxjs&quot;;
+import * as inflection from &quot;inflection&quot;;
+
+const _traitMap = {
+    get: [FetchableTrait, ListableTrait],
+    post: CreatableTrait,
+    put: UpdatableTrait,
+    patch: PatchableTrait,
+    options: AccessibleTrait,
+    delete: DeletableTrait,
+};
+/**
+ *
+ * @param schema
+ * @returns {*}
+ */
+const getRefDefType = (scope, schema) =&gt; {
+    let refDef;
+    let _refDefType;
+    const _content = schema.operations.get.responses[&quot;200&quot;].content[&quot;application/json&quot;].schema;
+
+    if (_content.hasOwnProperty(&quot;$ref&quot;)) {
+        refDef = Utils.getComponent(_content.$ref, scope.schema);
+    } else {
+        refDef = _content;
+    }
+
+    if ((_refDefType = refDef.type) === void (0)) {
+        const _type = Object.keys(refDef)[0];
+        // if ([&quot;allOf&quot;, &quot;anyOf&quot;, &quot;oneOf&quot;].indexOf(_type) &gt;= 0) {
+        _refDefType = &quot;object&quot;;
+        // }
+    }
+    return _refDefType;
+};
+
+const createElementClass = (_scope, _name, _schema, _parent = null) =&gt; {
+    return class {
+        constructor() {
+            _traits.set(this, []);
+            _cids.set(this, {});
+            _modelStats.set(this, {isDirty: false, isNew: false});
+            _subjects.set(this, new BehaviorSubject().skip(1));
+
+            /**
+             * FINAL Methods &amp; Properties
+             */
+
+            // defines schema getter on Collection
+            Object.defineProperty(this, &quot;$schema&quot;, {
+                get: () =&gt; _schema,
+                enumerable: false,
+                configurable: false,
+            });
+
+            Object.defineProperty(this, &quot;$className&quot;, {
+                get: () =&gt; {
+                    const __ = `${_name}${this.isModel &amp;&amp; (_name.match(/.*Model+$/) === null) ? &quot;Model&quot; : &quot;&quot;}`;
+                    return inflection.camelize(__);
+                    },
+                enumerable: false,
+                configurable: false,
+            });
+
+            // defines namespace reference as $scope
+            Object.defineProperty(this, &quot;$scope&quot;, {
+                get: () =&gt; _scope,
+                enumerable: true,
+                configurable: false,
+            });
+
+            // defines namespace reference as $scope
+            Object.defineProperty(this, &quot;$parent&quot;, {
+                get: () =&gt; _parent,
+                enumerable: true,
+                configurable: false,
+            });
+
+            Object.defineProperty(this, &quot;getChildSchema&quot;, {
+                value: (forPath) =&gt; {
+                    return this[&quot;$scope&quot;].builder.schemaForPath(forPath);
+                }
+            });
+
+            Object.defineProperty(this, &quot;createModelRef&quot;, {
+                value: (_data) =&gt; {
+                    // regexp to match model path item
+                    const _pathRx = new RegExp(`^${this.modelPath}\/\{[a-zA-Z0-9_]{1,}\}$`);
+                    // finds child path for model in paths object
+                    const _childPath = this.childPaths.find(p =&gt; _pathRx.exec(p) !== null);
+                    // collection schema
+                    const _cSchema = this.getChildSchema(_childPath);
+                    // model item schema
+                    const _modelSchema = Utils.deriveSchema(_cSchema, this.$scope.schema);
+                    // model class
+                    const _elRef = this.$scope.createElement(this.$className, _cSchema, this);
+                    // returns instance of model class
+                    return new _elRef(_data);
+                },
+                enumerable: false,
+                configurable: false,
+            })
+        }
+
+        /**
+         *
+         * @param handlers
+         * @returns {*}
+         */
+        subscribe(handlers) {
+            return _subjects.get(this).subscribe(handlers);
+        }
+
+        get childPaths() {
+            const _cPaths = this[&quot;$schema&quot;].childPaths;
+            return Object.keys(_cPaths).map(cKey =&gt; _cPaths[cKey].path);
+        }
+
+        get modelPath() {
+            return `${this[&quot;$schema&quot;].path}`;
+        }
+
+        get schemaPath() {
+            const _ownerPath = this[&quot;$owner&quot;] &amp;&amp; this[&quot;$owner&quot;] !== null ? this[&quot;$owner&quot;][&quot;schemaPath&quot;] : &quot;&quot;;
+            return `${_ownerPath}${this.modelPath}`;
+        }
+
+        /**
+         *
+         * @param {string} traitName
+         * @returns {boolean}
+         */
+        hasTrait(traitName) {
+            return this.traits.indexOf(traitName) &gt; -1;
+        }
+
+        /**
+         *
+         * @returns {string[]}
+         */
+        get traits() {
+            return _traits.get(this);
+        }
+
+        /**
+         *
+         * @returns {boolean}
+         */
+        get hasParent() {
+            return this.$parent !== null
+        }
+
+        /**
+         * todo: implement this
+         */
+        get pathParams() {
+
+        }
+
+        /**
+         * todo: implement this
+         */
+        get queryParams() {
+            console.log(this.$schema);
+        }
+
+        /**
+         * returns true if element has Accessible Trait
+         * @returns {boolean}
+         */
+        get isAccessible() {
+            return this.traits.indexOf(AccessibleTrait.Name) &gt; -1;
+        }
+
+        /**
+         * returns true if element has Creatable Trait
+         * @returns {boolean}
+         */
+        get isCreatable() {
+            return this.traits.indexOf(CreatableTrait.Name) &gt; -1;
+        }
+
+        /**
+         * returns true if element has Deletable Trait
+         * @returns {boolean}
+         */
+        get isDeletable() {
+            return this.traits.indexOf(DeletableTrait.Name) &gt; -1;
+        }
+
+        /**
+         * returns true if element has Fetchable Trait
+         * @returns {boolean}
+         */
+        get isFetchable() {
+            return this.traits.indexOf(FetchableTrait.Name) &gt; -1;
+        }
+
+        /**
+         * returns true if element has Listable Trait
+         * @returns {boolean}
+         */
+        get isListable() {
+            return this.traits.indexOf(ListableTrait.Name) &gt; -1;
+        }
+
+        /**
+         * returns true if element has Savable Trait
+         * @returns {boolean}
+         */
+        get isSavable() {
+            return this.traits.indexOf(SavableTrait.Name) &gt; -1;
+        }
+
+        /**
+         * returns true if element has Updatable Trait
+         * @returns {boolean}
+         */
+        get isUpdatable() {
+            return this.traits.indexOf(UpdatableTrait.Name) &gt; -1;
+        }
+
+        /**
+         * returns true if element has Collection Mixin
+         * @returns {boolean}
+         */
+        get isCollection() {
+            return this.traits.indexOf(CollectionMixin.Name) &gt; -1;
+        }
+
+        /**
+         * returns true if element has Model Mixin
+         * @returns {boolean}
+         */
+        get isModel() {
+            return this.traits.indexOf(ModelMixin.Name) &gt; -1;
+        }
+
+        /**
+         * returns path key for id lookup key
+         * @returns string|null
+         */
+        get pathIDKey() {
+            if (!this.isModel) {
+                return null;
+            }
+            const _matched = this.schemaPath.match(/[a-z0-9_%\/]*\/+\{+([a-z0-9_]*)\}+$/i);
+            return _matched !== null ? _matched[1] : null
+        }
+
+        /**
+         *
+         * @param scope
+         * @param schema
+         * @param parent
+         * @returns {Array}
+         */
+        static getTraitAssignments(scope, schema, parent) {
+            if (parent !== null &amp;&amp;
+                !schema.operations.hasOwnProperty(&quot;post&quot;)) {
+                if (parent.$schema.operations.hasOwnProperty(&quot;post&quot;)) {
+                    schema.operations.post = parent.$schema.operations.post;
+                }
+            }
+            const traits = [];
+            let _addedSavable = false;
+            Object.keys(schema.operations).forEach((key) =&gt; {
+                if (key === &quot;get&quot;) {
+                    if (schema.operations.get.hasOwnProperty(&quot;responses&quot;)
+                        &amp;&amp; schema.operations.get.responses.hasOwnProperty(&quot;200&quot;)) {
+                        const _refDefType = getRefDefType(scope, schema);
+                        switch (_refDefType) {
+                            case &quot;object&quot;:
+                                traits.push(_traitMap.get[0]);
+                                break;
+                            case &quot;array&quot;:
+                                traits.push(_traitMap.get[0]);
+                                traits.push(ListableTrait);
+                                break;
+                            default:
+                                throw `Invalid Response Type for ${key}`;
+                                break;
+                        }
+                    }
+                } else {
+                    // Adds Savable Dependency to Create and Edit Methods
+                    // TODO: investigate adding Dependency directly onto MIXIN class
+                    if ((key.match(/^(post|put|patch)+$/) !== null) &amp;&amp; !_addedSavable) {
+                        traits.push(SavableTrait);
+                        _addedSavable = true;
+                    }
+                    const _t = _traitMap[key];
+
+                    if (_t &amp;&amp; _t !== null) {
+                        traits.push(_t);
+                    }
+
+                }
+            });
+            const _names = traits.map((t) =&gt; t.Name);
+            if (traits.length) {
+                // tests for ListableTrait
+                if (_names.indexOf(ListableTrait.Name) &gt;= 0) {
+                    traits.push(CollectionMixin);
+                } else {
+                    traits.push(ModelMixin);
+                }
+            }
+
+            return traits;
+        };
+
+        static get $scope() {
+            return _scope;
+        }
+
+        static get $schema() {
+            return _schema;
+        }
+
+        static get $className() {
+            return _name;
+        }
+    };
+};
+
+export {createElementClass};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

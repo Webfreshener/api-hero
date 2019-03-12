@@ -1,56 +1,134 @@
 window.esdocSearchIndex = [
   [
-    "hero/src/collection.js~collection",
-    "class/src/collection.js~Collection.html",
-    "<span>Collection</span> <span class=\"search-result-import-path\">hero/src/collection.js</span>",
+    "api-hero/src/collection-proxy.js~collectionproxy",
+    "class/src/collection-proxy.js~CollectionProxy.html",
+    "<span>CollectionProxy</span> <span class=\"search-result-import-path\">api-hero/src/collection-proxy.js</span>",
     "class"
   ],
   [
-    "hero/src/_references.js~_cids",
+    "api-hero/src/ns-options.js~nsoptions",
+    "class/src/ns-options.js~NSOptions.html",
+    "<span>NSOptions</span> <span class=\"search-result-import-path\">api-hero/src/ns-options.js</span>",
+    "class"
+  ],
+  [
+    "api-hero/src/params/params-item.js~paramsitem",
+    "class/src/params/params-item.js~ParamsItem.html",
+    "<span>ParamsItem</span> <span class=\"search-result-import-path\">api-hero/src/params/params-item.js</span>",
+    "class"
+  ],
+  [
+    "api-hero/src/request.js~request",
+    "class/src/request.js~Request.html",
+    "<span>Request</span> <span class=\"search-result-import-path\">api-hero/src/request.js</span>",
+    "class"
+  ],
+  [
+    "api-hero/src/params/request-params.js~requestparams",
+    "class/src/params/request-params.js~RequestParams.html",
+    "<span>RequestParams</span> <span class=\"search-result-import-path\">api-hero/src/params/request-params.js</span>",
+    "class"
+  ],
+  [
+    "api-hero/src/rest-request.js~restrequest",
+    "class/src/rest-request.js~RestRequest.html",
+    "<span>RestRequest</span> <span class=\"search-result-import-path\">api-hero/src/rest-request.js</span>",
+    "class"
+  ],
+  [
+    "api-hero/src/rest-response.js~restresponse",
+    "class/src/rest-response.js~RestResponse.html",
+    "<span>RestResponse</span> <span class=\"search-result-import-path\">api-hero/src/rest-response.js</span>",
+    "class"
+  ],
+  [
+    "api-hero/src/schema-builder.js~schemabuilder",
+    "class/src/schema-builder.js~SchemaBuilder.html",
+    "<span>SchemaBuilder</span> <span class=\"search-result-import-path\">api-hero/src/schema-builder.js</span>",
+    "class"
+  ],
+  [
+    "api-hero/src/utils.js~utils",
+    "class/src/utils.js~Utils.html",
+    "<span>Utils</span> <span class=\"search-result-import-path\">api-hero/src/utils.js</span>",
+    "class"
+  ],
+  [
+    "api-hero/src/_references.js~_cids",
     "variable/index.html#static-variable-_cids",
-    "<span>_cids</span> <span class=\"search-result-import-path\">hero/src/_references.js</span>",
+    "<span>_cids</span> <span class=\"search-result-import-path\">api-hero/src/_references.js</span>",
     "variable"
   ],
   [
-    "hero/src/_references.js~_namespaces",
+    "api-hero/src/_references.js~_modelrefs",
+    "variable/index.html#static-variable-_modelRefs",
+    "<span>_modelRefs</span> <span class=\"search-result-import-path\">api-hero/src/_references.js</span>",
+    "variable"
+  ],
+  [
+    "api-hero/src/_references.js~_modelstats",
+    "variable/index.html#static-variable-_modelStats",
+    "<span>_modelStats</span> <span class=\"search-result-import-path\">api-hero/src/_references.js</span>",
+    "variable"
+  ],
+  [
+    "api-hero/src/_references.js~_models",
+    "variable/index.html#static-variable-_models",
+    "<span>_models</span> <span class=\"search-result-import-path\">api-hero/src/_references.js</span>",
+    "variable"
+  ],
+  [
+    "api-hero/src/_references.js~_namespaces",
     "variable/index.html#static-variable-_namespaces",
-    "<span>_namespaces</span> <span class=\"search-result-import-path\">hero/src/_references.js</span>",
+    "<span>_namespaces</span> <span class=\"search-result-import-path\">api-hero/src/_references.js</span>",
     "variable"
   ],
   [
-    "hero/src/_references.js~_nscollections",
-    "variable/index.html#static-variable-_nsCollections",
-    "<span>_nsCollections</span> <span class=\"search-result-import-path\">hero/src/_references.js</span>",
+    "api-hero/src/_references.js~_nselements",
+    "variable/index.html#static-variable-_nsElements",
+    "<span>_nsElements</span> <span class=\"search-result-import-path\">api-hero/src/_references.js</span>",
     "variable"
   ],
   [
-    "hero/src/inflections.js~inflections",
-    "function/index.html#static-function-inflections",
-    "<span>inflections</span> <span class=\"search-result-import-path\">hero/src/inflections.js</span>",
+    "api-hero/src/_references.js~_requests",
+    "variable/index.html#static-variable-_requests",
+    "<span>_requests</span> <span class=\"search-result-import-path\">api-hero/src/_references.js</span>",
+    "variable"
+  ],
+  [
+    "api-hero/src/_references.js~_subjects",
+    "variable/index.html#static-variable-_subjects",
+    "<span>_subjects</span> <span class=\"search-result-import-path\">api-hero/src/_references.js</span>",
+    "variable"
+  ],
+  [
+    "api-hero/src/_references.js~_traits",
+    "variable/index.html#static-variable-_traits",
+    "<span>_traits</span> <span class=\"search-result-import-path\">api-hero/src/_references.js</span>",
+    "variable"
+  ],
+  [
+    "api-hero/src/ns_element.js~createelementclass",
+    "function/index.html#static-function-createElementClass",
+    "<span>createElementClass</span> <span class=\"search-result-import-path\">api-hero/src/ns_element.js</span>",
     "function"
   ],
   [
-    "hero/src/metadata.js~metadata",
+    "api-hero/src/metadata.js~metadata",
     "class/src/metadata.js~metadata.html",
-    "<span>metadata</span> <span class=\"search-result-import-path\">hero/src/metadata.js</span>",
+    "<span>metadata</span> <span class=\"search-result-import-path\">api-hero/src/metadata.js</span>",
     "class"
   ],
   [
-    "hero/src/model.js~model",
-    "class/src/model.js~model.html",
-    "<span>model</span> <span class=\"search-result-import-path\">hero/src/model.js</span>",
-    "class"
-  ],
-  [
-    "hero/src/namespace.js~namespace",
+    "api-hero/src/namespace.js~namespace",
     "function/index.html#static-function-namespace",
-    "<span>namespace</span> <span class=\"search-result-import-path\">hero/src/namespace.js</span>",
+    "<span>namespace</span> <span class=\"search-result-import-path\">api-hero/src/namespace.js</span>",
     "function"
   ],
   [
-    "hero/src/query.js~query",
+    "api-hero/src/query.js~query",
     "class/src/query.js~query.html",
-    "<span>query</span> <span class=\"search-result-import-path\">hero/src/query.js</span>",
+    "<span>query</span> <span class=\"search-result-import-path\">api-hero/src/query.js</span>",
     "class"
   ],
   [
@@ -342,135 +420,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/collection.js",
-    "file/src/collection.js.html",
-    "src/collection.js",
+    "src/collection-proxy.js",
+    "file/src/collection-proxy.js.html",
+    "src/collection-proxy.js",
     "file"
   ],
   [
-    "src/collection.js~collection#add",
-    "class/src/collection.js~Collection.html#instance-method-add",
-    "src/collection.js~Collection#add",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#at",
-    "class/src/collection.js~Collection.html#instance-method-at",
-    "src/collection.js~Collection#at",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#constructor",
-    "class/src/collection.js~Collection.html#instance-constructor-constructor",
-    "src/collection.js~Collection#constructor",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#count",
-    "class/src/collection.js~Collection.html#instance-method-count",
-    "src/collection.js~Collection#count",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#create",
-    "class/src/collection.js~Collection.html#instance-method-create",
-    "src/collection.js~Collection#create",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#entries",
-    "class/src/collection.js~Collection.html#instance-method-entries",
-    "src/collection.js~Collection#entries",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#fetch",
-    "class/src/collection.js~Collection.html#instance-method-fetch",
-    "src/collection.js~Collection#fetch",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#keys",
-    "class/src/collection.js~Collection.html#instance-method-keys",
-    "src/collection.js~Collection#keys",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#length",
-    "class/src/collection.js~Collection.html#instance-get-length",
-    "src/collection.js~Collection#length",
-    "member"
-  ],
-  [
-    "src/collection.js~collection#modelclass",
-    "class/src/collection.js~Collection.html#instance-get-modelClass",
-    "src/collection.js~Collection#modelClass",
-    "member"
-  ],
-  [
-    "src/collection.js~collection#modelid",
-    "class/src/collection.js~Collection.html#instance-method-modelId",
-    "src/collection.js~Collection#modelId",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#models",
-    "class/src/collection.js~Collection.html#instance-set-models",
-    "src/collection.js~Collection#models",
-    "member"
-  ],
-  [
-    "src/collection.js~collection#models",
-    "class/src/collection.js~Collection.html#instance-get-models",
-    "src/collection.js~Collection#models",
-    "member"
-  ],
-  [
-    "src/collection.js~collection#reset",
-    "class/src/collection.js~Collection.html#instance-method-reset",
-    "src/collection.js~Collection#reset",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#save",
-    "class/src/collection.js~Collection.html#instance-method-save",
-    "src/collection.js~Collection#save",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#subscribe",
-    "class/src/collection.js~Collection.html#instance-method-subscribe",
-    "src/collection.js~Collection#subscribe",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#tojson",
-    "class/src/collection.js~Collection.html#instance-method-toJSON",
-    "src/collection.js~Collection#toJSON",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#tostring",
-    "class/src/collection.js~Collection.html#instance-method-toString",
-    "src/collection.js~Collection#toString",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#url",
-    "class/src/collection.js~Collection.html#instance-get-url",
-    "src/collection.js~Collection#url",
-    "member"
-  ],
-  [
-    "src/collection.js~collection#valueof",
-    "class/src/collection.js~Collection.html#instance-method-valueOf",
-    "src/collection.js~Collection#valueOf",
-    "method"
-  ],
-  [
-    "src/collection.js~collection#values",
-    "class/src/collection.js~Collection.html#instance-method-values",
-    "src/collection.js~Collection#values",
+    "src/collection-proxy.js~collectionproxy.create",
+    "class/src/collection-proxy.js~CollectionProxy.html#static-method-create",
+    "src/collection-proxy.js~CollectionProxy.create",
     "method"
   ],
   [
@@ -483,12 +441,6 @@ window.esdocSearchIndex = [
     "src/index.js",
     "file/src/index.js.html",
     "src/index.js",
-    "file"
-  ],
-  [
-    "src/inflections.js",
-    "file/src/inflections.js.html",
-    "src/inflections.js",
     "file"
   ],
   [
@@ -516,136 +468,22 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/model.js",
-    "file/src/model.js.html",
-    "src/model.js",
+    "src/mixins/collection.mixin.js",
+    "file/src/mixins/collection.mixin.js.html",
+    "src/mixins/collection.mixin.js",
     "file"
   ],
   [
-    "src/model.js~model#attrs",
-    "class/src/model.js~model.html#instance-set-attrs",
-    "src/model.js~model#attrs",
-    "member"
+    "src/mixins/index.js",
+    "file/src/mixins/index.js.html",
+    "src/mixins/index.js",
+    "file"
   ],
   [
-    "src/model.js~model#attrs",
-    "class/src/model.js~model.html#instance-get-attrs",
-    "src/model.js~model#attrs",
-    "member"
-  ],
-  [
-    "src/model.js~model#constructor",
-    "class/src/model.js~model.html#instance-constructor-constructor",
-    "src/model.js~model#constructor",
-    "method"
-  ],
-  [
-    "src/model.js~model#data",
-    "class/src/model.js~model.html#instance-get-data",
-    "src/model.js~model#data",
-    "member"
-  ],
-  [
-    "src/model.js~model#data",
-    "class/src/model.js~model.html#instance-set-data",
-    "src/model.js~model#data",
-    "member"
-  ],
-  [
-    "src/model.js~model#destroy",
-    "class/src/model.js~model.html#instance-method-destroy",
-    "src/model.js~model#destroy",
-    "method"
-  ],
-  [
-    "src/model.js~model#fetch",
-    "class/src/model.js~model.html#instance-method-fetch",
-    "src/model.js~model#fetch",
-    "method"
-  ],
-  [
-    "src/model.js~model#get",
-    "class/src/model.js~model.html#instance-method-get",
-    "src/model.js~model#get",
-    "method"
-  ],
-  [
-    "src/model.js~model#isvalid",
-    "class/src/model.js~model.html#instance-get-isValid",
-    "src/model.js~model#isValid",
-    "member"
-  ],
-  [
-    "src/model.js~model#modelcreatedon",
-    "class/src/model.js~model.html#instance-get-modelCreatedOn",
-    "src/model.js~model#modelCreatedOn",
-    "member"
-  ],
-  [
-    "src/model.js~model#modelupdatedon",
-    "class/src/model.js~model.html#instance-get-modelUpdatedOn",
-    "src/model.js~model#modelUpdatedOn",
-    "member"
-  ],
-  [
-    "src/model.js~model#reset",
-    "class/src/model.js~model.html#instance-method-reset",
-    "src/model.js~model#reset",
-    "method"
-  ],
-  [
-    "src/model.js~model#save",
-    "class/src/model.js~model.html#instance-method-save",
-    "src/model.js~model#save",
-    "method"
-  ],
-  [
-    "src/model.js~model#set",
-    "class/src/model.js~model.html#instance-method-set",
-    "src/model.js~model#set",
-    "method"
-  ],
-  [
-    "src/model.js~model#subscribe",
-    "class/src/model.js~model.html#instance-method-subscribe",
-    "src/model.js~model#subscribe",
-    "method"
-  ],
-  [
-    "src/model.js~model#sync",
-    "class/src/model.js~model.html#instance-method-sync",
-    "src/model.js~model#sync",
-    "method"
-  ],
-  [
-    "src/model.js~model#tojson",
-    "class/src/model.js~model.html#instance-method-toJSON",
-    "src/model.js~model#toJSON",
-    "method"
-  ],
-  [
-    "src/model.js~model#tostring",
-    "class/src/model.js~model.html#instance-method-toString",
-    "src/model.js~model#toString",
-    "method"
-  ],
-  [
-    "src/model.js~model#url",
-    "class/src/model.js~model.html#instance-get-url",
-    "src/model.js~model#url",
-    "member"
-  ],
-  [
-    "src/model.js~model#validate",
-    "class/src/model.js~model.html#instance-method-validate",
-    "src/model.js~model#validate",
-    "method"
-  ],
-  [
-    "src/model.js~model#valueof",
-    "class/src/model.js~model.html#instance-method-valueOf",
-    "src/model.js~model#valueOf",
-    "method"
+    "src/mixins/model.mixin.js",
+    "file/src/mixins/model.mixin.js.html",
+    "src/mixins/model.mixin.js",
+    "file"
   ],
   [
     "src/namespace.js",
@@ -654,10 +492,130 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/ns-options.js",
+    "file/src/ns-options.js.html",
+    "src/ns-options.js",
+    "file"
+  ],
+  [
+    "src/ns-options.js~nsoptions#constructor",
+    "class/src/ns-options.js~NSOptions.html#instance-constructor-constructor",
+    "src/ns-options.js~NSOptions#constructor",
+    "method"
+  ],
+  [
+    "src/ns-options.js~nsoptions#datakey",
+    "class/src/ns-options.js~NSOptions.html#instance-get-dataKey",
+    "src/ns-options.js~NSOptions#dataKey",
+    "member"
+  ],
+  [
+    "src/ns-options.js~nsoptions#idkey",
+    "class/src/ns-options.js~NSOptions.html#instance-get-idKey",
+    "src/ns-options.js~NSOptions#idKey",
+    "member"
+  ],
+  [
+    "src/ns-options.js~nsoptions#serverindex",
+    "class/src/ns-options.js~NSOptions.html#instance-get-serverIndex",
+    "src/ns-options.js~NSOptions#serverIndex",
+    "member"
+  ],
+  [
+    "src/ns-options.js~nsoptions#serverparameters",
+    "class/src/ns-options.js~NSOptions.html#instance-get-serverParameters",
+    "src/ns-options.js~NSOptions#serverParameters",
+    "member"
+  ],
+  [
+    "src/ns_element.js",
+    "file/src/ns_element.js.html",
+    "src/ns_element.js",
+    "file"
+  ],
+  [
     "src/ns_schema.js",
     "file/src/ns_schema.js.html",
     "src/ns_schema.js",
     "file"
+  ],
+  [
+    "src/params/params-item.js",
+    "file/src/params/params-item.js.html",
+    "src/params/params-item.js",
+    "file"
+  ],
+  [
+    "src/params/params-item.js~paramsitem#constructor",
+    "class/src/params/params-item.js~ParamsItem.html#instance-constructor-constructor",
+    "src/params/params-item.js~ParamsItem#constructor",
+    "method"
+  ],
+  [
+    "src/params/params-item.js~paramsitem#data",
+    "class/src/params/params-item.js~ParamsItem.html#instance-get-data",
+    "src/params/params-item.js~ParamsItem#data",
+    "member"
+  ],
+  [
+    "src/params/params-item.js~paramsitem#data",
+    "class/src/params/params-item.js~ParamsItem.html#instance-set-data",
+    "src/params/params-item.js~ParamsItem#data",
+    "member"
+  ],
+  [
+    "src/params/params-item.js~paramsitem#getvalue",
+    "class/src/params/params-item.js~ParamsItem.html#instance-method-getValue",
+    "src/params/params-item.js~ParamsItem#getValue",
+    "method"
+  ],
+  [
+    "src/params/params-item.js~paramsitem#setvalue",
+    "class/src/params/params-item.js~ParamsItem.html#instance-method-setValue",
+    "src/params/params-item.js~ParamsItem#setValue",
+    "method"
+  ],
+  [
+    "src/params/params-item.js~paramsitem#subscribe",
+    "class/src/params/params-item.js~ParamsItem.html#instance-method-subscribe",
+    "src/params/params-item.js~ParamsItem#subscribe",
+    "method"
+  ],
+  [
+    "src/params/params-item.js~paramsitem#tojson",
+    "class/src/params/params-item.js~ParamsItem.html#instance-method-toJSON",
+    "src/params/params-item.js~ParamsItem#toJSON",
+    "method"
+  ],
+  [
+    "src/params/params-item.js~paramsitem#tostring",
+    "class/src/params/params-item.js~ParamsItem.html#instance-method-toString",
+    "src/params/params-item.js~ParamsItem#toString",
+    "method"
+  ],
+  [
+    "src/params/params-item.js~paramsitem#valueof",
+    "class/src/params/params-item.js~ParamsItem.html#instance-method-valueOf",
+    "src/params/params-item.js~ParamsItem#valueOf",
+    "method"
+  ],
+  [
+    "src/params/request-params.js",
+    "file/src/params/request-params.js.html",
+    "src/params/request-params.js",
+    "file"
+  ],
+  [
+    "src/params/request-params.js~requestparams#constructor",
+    "class/src/params/request-params.js~RequestParams.html#instance-constructor-constructor",
+    "src/params/request-params.js~RequestParams#constructor",
+    "method"
+  ],
+  [
+    "src/params/request-params.js~requestparams#path",
+    "class/src/params/request-params.js~RequestParams.html#instance-get-path",
+    "src/params/request-params.js~RequestParams#path",
+    "member"
   ],
   [
     "src/query.js",
@@ -885,6 +843,300 @@ window.esdocSearchIndex = [
     "src/query.js~query.or",
     "class/src/query.js~query.html#static-method-or",
     "src/query.js~query.or",
+    "method"
+  ],
+  [
+    "src/request.js",
+    "file/src/request.js.html",
+    "src/request.js",
+    "file"
+  ],
+  [
+    "src/request.js~request#constructor",
+    "class/src/request.js~Request.html#instance-constructor-constructor",
+    "src/request.js~Request#constructor",
+    "method"
+  ],
+  [
+    "src/request.js~request.getheaders",
+    "class/src/request.js~Request.html#static-method-getHeaders",
+    "src/request.js~Request.getHeaders",
+    "method"
+  ],
+  [
+    "src/rest-request.js",
+    "file/src/rest-request.js.html",
+    "src/rest-request.js",
+    "file"
+  ],
+  [
+    "src/rest-request.js~restrequest#constructor",
+    "class/src/rest-request.js~RestRequest.html#instance-constructor-constructor",
+    "src/rest-request.js~RestRequest#constructor",
+    "method"
+  ],
+  [
+    "src/rest-request.js~restrequest#exec",
+    "class/src/rest-request.js~RestRequest.html#instance-method-exec",
+    "src/rest-request.js~RestRequest#exec",
+    "method"
+  ],
+  [
+    "src/rest-request.js~restrequest#pathvalues",
+    "class/src/rest-request.js~RestRequest.html#instance-get-pathValues",
+    "src/rest-request.js~RestRequest#pathValues",
+    "member"
+  ],
+  [
+    "src/rest-request.js~restrequest#url",
+    "class/src/rest-request.js~RestRequest.html#instance-get-url",
+    "src/rest-request.js~RestRequest#url",
+    "member"
+  ],
+  [
+    "src/rest-response.js",
+    "file/src/rest-response.js.html",
+    "src/rest-response.js",
+    "file"
+  ],
+  [
+    "src/rest-response.js~restresponse#constructor",
+    "class/src/rest-response.js~RestResponse.html#instance-constructor-constructor",
+    "src/rest-response.js~RestResponse#constructor",
+    "method"
+  ],
+  [
+    "src/schema-builder.js",
+    "file/src/schema-builder.js.html",
+    "src/schema-builder.js",
+    "file"
+  ],
+  [
+    "src/schema-builder.js~schemabuilder#constructor",
+    "class/src/schema-builder.js~SchemaBuilder.html#instance-constructor-constructor",
+    "src/schema-builder.js~SchemaBuilder#constructor",
+    "method"
+  ],
+  [
+    "src/schema-builder.js~schemabuilder#getoperations",
+    "class/src/schema-builder.js~SchemaBuilder.html#instance-method-getOperations",
+    "src/schema-builder.js~SchemaBuilder#getOperations",
+    "method"
+  ],
+  [
+    "src/schema-builder.js~schemabuilder#namespace",
+    "class/src/schema-builder.js~SchemaBuilder.html#instance-get-namespace",
+    "src/schema-builder.js~SchemaBuilder#namespace",
+    "member"
+  ],
+  [
+    "src/schema-builder.js~schemabuilder#schemaforpath",
+    "class/src/schema-builder.js~SchemaBuilder.html#instance-method-schemaForPath",
+    "src/schema-builder.js~SchemaBuilder#schemaForPath",
+    "method"
+  ],
+  [
+    "src/schemas/openapiv3.js",
+    "file/src/schemas/OpenAPIv3.js.html",
+    "src/schemas/OpenAPIv3.js",
+    "file"
+  ],
+  [
+    "src/schemas/api-hero.schema.js",
+    "file/src/schemas/api-hero.schema.js.html",
+    "src/schemas/api-hero.schema.js",
+    "file"
+  ],
+  [
+    "src/schemas/collection.schema.js",
+    "file/src/schemas/collection.schema.js.html",
+    "src/schemas/collection.schema.js",
+    "file"
+  ],
+  [
+    "src/schemas/json-schema-draft04.js",
+    "file/src/schemas/json-schema-draft04.js.html",
+    "src/schemas/json-schema-draft04.js",
+    "file"
+  ],
+  [
+    "src/schemas/namespace.schema.js",
+    "file/src/schemas/namespace.schema.js.html",
+    "src/schemas/namespace.schema.js",
+    "file"
+  ],
+  [
+    "src/schemas/options.schema.js",
+    "file/src/schemas/options.schema.js.html",
+    "src/schemas/options.schema.js",
+    "file"
+  ],
+  [
+    "src/schemas/patch.schema.js",
+    "file/src/schemas/patch.schema.js.html",
+    "src/schemas/patch.schema.js",
+    "file"
+  ],
+  [
+    "src/traits/accessible.trait.js",
+    "file/src/traits/accessible.trait.js.html",
+    "src/traits/accessible.trait.js",
+    "file"
+  ],
+  [
+    "src/traits/batchable.trait.js",
+    "file/src/traits/batchable.trait.js.html",
+    "src/traits/batchable.trait.js",
+    "file"
+  ],
+  [
+    "src/traits/creatable.trait.js",
+    "file/src/traits/creatable.trait.js.html",
+    "src/traits/creatable.trait.js",
+    "file"
+  ],
+  [
+    "src/traits/deletable.trait.js",
+    "file/src/traits/deletable.trait.js.html",
+    "src/traits/deletable.trait.js",
+    "file"
+  ],
+  [
+    "src/traits/fetchable.trait.js",
+    "file/src/traits/fetchable.trait.js.html",
+    "src/traits/fetchable.trait.js",
+    "file"
+  ],
+  [
+    "src/traits/listable.trait.js",
+    "file/src/traits/listable.trait.js.html",
+    "src/traits/listable.trait.js",
+    "file"
+  ],
+  [
+    "src/traits/patchable.trait.js",
+    "file/src/traits/patchable.trait.js.html",
+    "src/traits/patchable.trait.js",
+    "file"
+  ],
+  [
+    "src/traits/queryable.trait.js",
+    "file/src/traits/queryable.trait.js.html",
+    "src/traits/queryable.trait.js",
+    "file"
+  ],
+  [
+    "src/traits/savable.trait.js",
+    "file/src/traits/savable.trait.js.html",
+    "src/traits/savable.trait.js",
+    "file"
+  ],
+  [
+    "src/traits/updatable.trait.js",
+    "file/src/traits/updatable.trait.js.html",
+    "src/traits/updatable.trait.js",
+    "file"
+  ],
+  [
+    "src/utils.js",
+    "file/src/utils.js.html",
+    "src/utils.js",
+    "file"
+  ],
+  [
+    "src/utils.js~utils#apioptions",
+    "class/src/utils.js~Utils.html#instance-get-apiOptions",
+    "src/utils.js~Utils#apiOptions",
+    "member"
+  ],
+  [
+    "src/utils.js~utils#constructor",
+    "class/src/utils.js~Utils.html#instance-constructor-constructor",
+    "src/utils.js~Utils#constructor",
+    "method"
+  ],
+  [
+    "src/utils.js~utils#createrequestid",
+    "class/src/utils.js~Utils.html#instance-method-createRequestId",
+    "src/utils.js~Utils#createRequestId",
+    "method"
+  ],
+  [
+    "src/utils.js~utils#isfetchpolyfill",
+    "class/src/utils.js~Utils.html#instance-get-isFetchPolyfill",
+    "src/utils.js~Utils#isFetchPolyfill",
+    "member"
+  ],
+  [
+    "src/utils.js~utils#parsedate",
+    "class/src/utils.js~Utils.html#instance-method-parseDate",
+    "src/utils.js~Utils#parseDate",
+    "method"
+  ],
+  [
+    "src/utils.js~utils#querify",
+    "class/src/utils.js~Utils.html#instance-method-querify",
+    "src/utils.js~Utils#querify",
+    "method"
+  ],
+  [
+    "src/utils.js~utils#validateroute",
+    "class/src/utils.js~Utils.html#instance-method-validateRoute",
+    "src/utils.js~Utils#validateRoute",
+    "method"
+  ],
+  [
+    "src/utils.js~utils.createreference",
+    "class/src/utils.js~Utils.html#static-method-createReference",
+    "src/utils.js~Utils.createReference",
+    "method"
+  ],
+  [
+    "src/utils.js~utils.deriveschema",
+    "class/src/utils.js~Utils.html#static-method-deriveSchema",
+    "src/utils.js~Utils.deriveSchema",
+    "method"
+  ],
+  [
+    "src/utils.js~utils.derivefromelement",
+    "class/src/utils.js~Utils.html#static-method-derivefromElement",
+    "src/utils.js~Utils.derivefromElement",
+    "method"
+  ],
+  [
+    "src/utils.js~utils.getcomponent",
+    "class/src/utils.js~Utils.html#static-method-getComponent",
+    "src/utils.js~Utils.getComponent",
+    "method"
+  ],
+  [
+    "src/utils.js~utils.getlookupquery",
+    "class/src/utils.js~Utils.html#static-method-getLookupQuery",
+    "src/utils.js~Utils.getLookupQuery",
+    "method"
+  ],
+  [
+    "src/utils.js~utils.getrequestparamsschema",
+    "class/src/utils.js~Utils.html#static-method-getRequestParamsSchema",
+    "src/utils.js~Utils.getRequestParamsSchema",
+    "method"
+  ],
+  [
+    "src/utils.js~utils.getrequestschema",
+    "class/src/utils.js~Utils.html#static-method-getRequestSchema",
+    "src/utils.js~Utils.getRequestSchema",
+    "method"
+  ],
+  [
+    "src/utils.js~utils.getresponseschema",
+    "class/src/utils.js~Utils.html#static-method-getResponseSchema",
+    "src/utils.js~Utils.getResponseSchema",
+    "method"
+  ],
+  [
+    "src/utils.js~utils.getschemaref",
+    "class/src/utils.js~Utils.html#static-method-getSchemaRef",
+    "src/utils.js~Utils.getSchemaRef",
     "method"
   ]
 ]

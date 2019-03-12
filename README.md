@@ -2,7 +2,7 @@ API Hero
 =============
 Portable OpenAPI REST Client with Observable Data Models
 
-[Online Developer Documentation](https://webfreshener.github.io/ApiHero/)
+[Online Developer Documentation](https://webfreshener.github.io/api-hero/)
  
 ### Goals 
  * Simplify setup and maintenance of API Connectors in the App Layer 
@@ -220,7 +220,6 @@ Elements that constitute an `object` are models
 
 | Method        | Arguments | Description  |
 |:--------------|:----------|:-------|
-| 
 | valueOf | | returns native value of data
 | toString | | returns stringified version of data
 | toJSON | | returns data as JSON object

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/collection-proxy.js | api-hero</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Reactive OpenApi Client"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="api-hero"><meta property="twitter:description" content="Reactive OpenApi Client"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Webfreshener/api-hero"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection-proxy.js~CollectionProxy.html">CollectionProxy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/metadata.js~metadata.html">metadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/ns-options.js~NSOptions.html">NSOptions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/query.js~query.html">query</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-request.js~RestRequest.html">RestRequest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/rest-response.js~RestResponse.html">RestResponse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema-builder.js~SchemaBuilder.html">SchemaBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-namespace">namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createElementClass">createElementClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_cids">_cids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelRefs">_modelRefs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_modelStats">_modelStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_models">_models</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_namespaces">_namespaces</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_nsElements">_nsElements</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_requests">_requests</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_subjects">_subjects</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-_traits">_traits</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#params">params</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/params-item.js~ParamsItem.html">ParamsItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/params/request-params.js~RequestParams.html">RequestParams</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/collection-proxy.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {NSElement} from &quot;./ns_element&quot;;
+import {_subjects} from &quot;./_references&quot;;
+
+const _subs = new WeakMap();
+
+export class CollectionProxy {
+    /**
+     * @returns {Array}
+     */
+    static create(collectionInstance) {
+        _subs.set(collectionInstance, {});
+        return new Proxy([], proxyHandler(collectionInstance));
+    }
+}
+
+/**
+ *
+ * @param target
+ * @returns Proxy
+ */
+const proxyHandler = (target) =&gt; {
+    const _base = {
+        setPrototypeOf: () =&gt; false,
+        isExtensible: (t) =&gt; Object.isExtensible(t),
+        preventExtensions: (t) =&gt; Object.preventExtensions(t),
+        getOwnPropertyDescriptor: (t, key) =&gt; Object.getOwnPropertyDescriptor(t, key),
+        defineProperty: (t, key, desc) =&gt; Object.defineProperty(t, key, desc),
+        has: (t, key) =&gt; key in t,
+        ownKeys: (t) =&gt; Reflect.ownKeys(t),
+        apply: () =&gt; false,
+    };
+
+    return Object.assign(_base, {
+        get: (t, idx) =&gt; {
+            if (idx === &quot;length&quot;) {
+                return t.length;
+            }
+
+            if (idx in Array.prototype) {
+                // only handle methods that modify the reference array
+                if ([&quot;fill&quot;, &quot;pop&quot;, &quot;push&quot;, &quot;shift&quot;, &quot;splice&quot;, &quot;unshift&quot;].indexOf(idx) &gt; -1) {
+                    return applyMethod(target, t, idx);
+                } else {
+                    return t[idx];
+                }
+            }
+
+            if (idx === &quot;$model&quot;) {
+                return this;
+            }
+
+            return t[idx];
+        },
+        set: (t, idx, value) =&gt; {
+            if (idx in Array.prototype) {
+                // do nothing against proto props
+                return true;
+            }
+            t[idx] = value;
+            return true;
+        },
+
+        deleteProperty: (t, idx) =&gt; {
+            return deleteTrap(target, t, idx);
+        }
+    });
+};
+
+/**
+ * Handles Proxy Delete Trap for Array elements
+ * @param model
+ * @param t
+ * @param idx
+ * @returns {boolean}
+ */
+const deleteTrap = (target, t, idx) =&gt; {
+    const _s = _subjects.get(target);
+    // creates mock of future Model state for evaluation
+    let _o = [].concat(t);
+    try {
+        // attempts splice method to
+        // remove item at given index index
+        _o.splice(idx, 1);
+    } catch (e) {
+        return false;
+    }
+
+    // applies operation
+    t.splice(idx, 1).forEach((itm) =&gt; {
+        _s[itm.$cid].unsubscribe();
+    });
+
+    return true;
+};
+
+/**
+ * subscribes to NSElement&apos;s BehaviorSubject
+ * @param target
+ * @param item
+ */
+const subscribeToItem = (target, item) =&gt; {
+    const _s = _subjects.get(target);
+    _subs.get(target)[item.$cid] = item.subscribe({
+        next: (m) =&gt; {
+            _s.next(m)
+        },
+        error: (e) =&gt; {
+            _s.error(e)
+        },
+        complete: () =&gt; _s.complete(),
+    });
+};
+
+/**
+ * unsubscribes from NSElement&apos;s BehaviorSubject
+ * @param target
+ * @param arr
+ * @param idx
+ */
+const unsubAtIdx = (target, arr, idx) =&gt; {
+    if (arr.length) {
+        const _m = _subs.get(target)[arr[idx].$cid];
+        if (_m.hasOwnProperty(&quot;unsubscribe&quot;)) {
+            _m.unsubscribe();
+        }
+    }
+};
+
+/**
+ * Handles proxy get for Array proto methods
+ * @param model
+ * @param t
+ * @param idx
+ * @returns {function(...[*]=)}
+ */
+const applyMethod = (target, t, idx) =&gt; {
+    const isModel = (m) =&gt; m.hasOwnProperty(&quot;$className&quot;);
+    // returns closure analog to referenced method
+    return (...args) =&gt; {
+        // mocks current model state
+        const _arr = [].concat(t);
+        if (idx.match(/^(push|pop|unshift|fill|splice)$/)) {
+            switch (idx) {
+                case &quot;push&quot;:
+                case &quot;pop&quot;:
+                case &quot;unshift&quot;:
+                case &quot;fill&quot;:
+                    try {
+                        args.forEach((m) =&gt; {
+                            if (!isModel(m)) {
+                                throw Error(&quot;not a model&quot;);
+                            } else {
+                                subscribeToItem(target, m);
+                            }
+                        });
+                    } catch (e) {
+                        return false;
+                    }
+                    break;
+                case &quot;splice&quot;:
+                    try {
+                        let _spArgs = [];
+                        if (args[2] !== void(0)) {
+                            _spArgs = Array.isArray(args[2]) ? args[2] : [args[2]];
+                        }
+                        _spArgs.forEach((m) =&gt; {
+                            if (!isModel(m)) {
+                                throw Error(&quot;not a model&quot;);
+                            } else {
+                                subscribeToItem(target, m);
+                            }
+                        });
+                    } catch (e) {
+                        return false;
+                    }
+                    break;
+                default:
+                    throw &quot;Unknown Operation&quot;;
+                    break;
+            }
+        }
+
+        if (idx.match(/^(pop|shift)$/)) {
+            switch (idx) {
+                case &quot;pop&quot;:
+                    unsubAtIdx(target, t, t.length - 1);
+                    break;
+                case &quot;shift&quot;:
+                    unsubAtIdx(target, t, 0);
+                    break;
+            }
+        }
+
+        // applies method to model state
+        const _r = t[idx].apply(t, args);
+        _subjects.get(target).next(target.models);
+        return _r;
+    }
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
