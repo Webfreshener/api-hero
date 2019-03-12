@@ -9,6 +9,9 @@ yarn-error.log*
 defunct
 shared-tests
 
+# settings
+environment.sh
+
 # Runtime data
 pids
 *.pid
