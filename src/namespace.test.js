@@ -1,8 +1,9 @@
 import {_nsSchema} from "../fixtures/_schemas";
 import {EmptySchema} from "../fixtures/empty.schema";
 import Namespace from "./namespace";
-import {namespaceTests} from "../shared-tests/namespace-tests.shared";
+import {default as nsSchema} from "./schemas/namespace.schema";
 import {SchemaBuilder} from "./schema-builder";
+import deepEqual from "deep-equal";
 
 describe("Namespace Class Tests", () => {
     describe("Namespace Method Tests", () => {
@@ -28,11 +29,30 @@ describe("Namespace Class Tests", () => {
             expect(typeof _builder).toEqual("object");
             expect(_builder instanceof SchemaBuilder).toBe(true);
         });
+
+        it("should provide $utils", () => {
+            expect(ns.$utils).toBeTruthy();
+            expect(ns.$utils.$scope === ns).toBe(true);
+        });
+
+        it("should provide schema", () => {
+            expect(ns.schema).toBeTruthy();
+            expect(deepEqual(ns.schema, EmptySchema.namespaces.Empty.schema)).toBe(true);
+        });
     });
 
-    // describe("Swagger Schema Tests", () => {
-    //     namespaceTests(_nsSchema.namespaces.PetStoreV2);
-    // });
+
+    describe("createElement Tests", () => {
+        const emptyNS = Namespace(EmptySchema.namespaces.Empty);
+        // const endpointNS = Namespace(EmptySchema.namespaces.EndPointSchema);
+        // const petsNS = Namespace(EmptySchema.namespaces.PetStoreV3);
+
+        it("should not create elements unless they are present", () => {
+            expect(() => emptyNS.createElement()).toThrow("Name is required at arguments[0]");
+            expect(() => emptyNS.createElement("Name")).toThrow("Schema is required at arguments[1]");
+            expect(() => emptyNS.createElement("Name", {})).toThrow("Cannot convert undefined or null to object");
+        });
+    });
 
     describe("OpenAPI Schema Tests", () => {
         const ns = new Namespace(_nsSchema.namespaces.PetStoreV3);

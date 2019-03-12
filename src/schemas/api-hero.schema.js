@@ -1,28 +1,56 @@
 export default {
-    title: "A JSON Schema for Jisty API Client 1.0.",
-    id: "http://webfreshener.com/v1/jisty.json#",
+    title: "ApiHero API Client 1.0",
+    description: "Configuration Schema for NameSpaces and Framework Options",
+    id: "http://api-hero.webfreshener.com/v1/schema.json#",
     $schema: "http://json-schema.org/draft-04/schema#",
     required: ["namespaces"],
     properties: {
         namespaces: {
             type: "object",
             patternProperties: {
-                "/\"?[a-zA-Z0-9_\-\s]+\"?$/": {
+                "^[a-zA-Z0-9_$]+$": {
                     $ref: "#/definitions/namespace",
                 },
             },
-            default: {},
         },
         options: {
             type: "object",
-            properties: {},
+            properties: {
+                plugins: {
+                    type: "array",
+                    items: {
+                        $ref: "#/definitions/plugin",
+                    },
+                },
+                callbacks: {
+                    type: "array",
+                    items: {
+                        $ref: "#/definitions/plugin",
+                    },
+                },
+            },
+            patternProperties: {
+                "^[xX]{1}\-[a-zA-Z0-9\-_$]+": {},
+            }
         },
     },
     definitions: {
-        openAPIv2: {
-            allOf: [{
-                $schema: "http://swagger.io/v2/schema.json#",
-            }],
+        ajvOptions: {
+
+        },
+        callback: {
+            type: "object",
+            required: ["scope"],
+            properties: {
+                scope: {
+                   $ref: "#/definitions/nsName",
+                }
+            }
+        },
+        nsName: {
+            description: "url safe accessor for use in the namespace",
+            type: "string",
+            pattern: "^[a-zA-Z0-9_\$]+$",
         },
         openAPIv3: {
             allOf: [{
@@ -38,6 +66,9 @@ export default {
             allOf: [{
                 $schema: "http://swagger.io/v2/schema.json#/definition/paths",
             }],
+        },
+        plugin: {
+            type: "object",
         },
         collection: {
             type: "object",
@@ -58,7 +89,7 @@ export default {
             },
         },
         collections: {
-            id: "http://webfreshener.com/v1/jisty.json#/collections",
+            id: "http://api-hero.webfreshener.com/v1/schema.json#/collections",
             type: "array",
             items: {
                 $ref: "#/definitions/collection",
@@ -66,8 +97,6 @@ export default {
         },
         schema: {
             anyOf: [{
-                $ref: "#/definitions/openAPIv2"
-            }, {
                 $ref: "#/definitions/openAPIv3"
             }]
         },
@@ -80,11 +109,7 @@ export default {
             required: ["name", "schema"],
             properties: {
                 name: {
-                    type: "string",
-                    // pattern: "^[a-zA-Z0-9_\-\s]+",
-                },
-                collections: {
-                    $ref: "#/definitions/collections",
+                    $ref: "#/definitions/nsName",
                 },
                 schema: {
                     $ref: "#/definitions/schema",
@@ -92,7 +117,20 @@ export default {
                 options: {
                     $ref: "#/definitions/options",
                 },
+                description: {
+                    description: "a user provided description of the namespace (optional)",
+                    type: "string",
+                }
             },
         },
-    }
-}
+    },
+    examples: [{
+        namespaces: {
+            name: "NS1",
+            schema: {
+                $ref: "$SCHEMA_ID"
+            },
+        },
+        options: {},
+    }],
+};

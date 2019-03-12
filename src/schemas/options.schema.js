@@ -1,6 +1,7 @@
 export default {
-    id: "http://webfreshener.com/v1/jisty/options.json#",
+    id: "http://api-hero.webfreshener.com/v1/schema/options.json#",
     $schema: "http://json-schema.org/draft-04/schema#",
+    required: ["server"],
     properties: {
         server: {
             type: "object",
@@ -16,12 +17,15 @@ export default {
                 },
             },
         },
+        dataKey: {
+            type: "string",
+            default: "",
+        },
         idKey: {
             type: "string",
-            default: "id"
+            default: "id",
         }
     },
-    required: ["server"],
     definitions: {
         Value: {
             type: "object",

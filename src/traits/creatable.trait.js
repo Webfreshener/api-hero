@@ -16,6 +16,11 @@ const trait = (superclass) => {
             _traits.get(this).push(trait.Name);
         }
 
+        /**
+         * creates new model for path
+         * @param data
+         * @returns {*|string}
+         */
         newModel(data) {
             if (data.hasOwnProperty("id")) {
                 const _idx = this.models.findIndex((el) => {

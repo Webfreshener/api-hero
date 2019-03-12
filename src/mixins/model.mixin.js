@@ -53,8 +53,7 @@ const isInitialState = (model) => {
 /**
  *
  * @param superclass
- * @param collection
- * @returns Class<ModelMixin>
+ * @returns Class
  */
 const mixin = (superclass) => {
     return class extends superclass {
@@ -208,7 +207,7 @@ const mixin = (superclass) => {
          * @returns {boolean|string}
          */
         validate(data) {
-            return this.data.$model.validate(data);
+            return this.data["$model"].validate(data);
         }
 
         /**
@@ -243,7 +242,7 @@ const mixin = (superclass) => {
             return _states.length && !deepEqual(_states.pop() || {}, this.toJSON());
         }
 
-        // -- NS_ELEMENT Overides
+        // -- Overrides
 
         /**
          * overrides ns_element `isCollection`

@@ -1,18 +1,18 @@
 import {RxVO} from "rxvo";
-import * as jsonSchema from "../schemas/json-schema-draft04";
-import * as jisty from "../schemas/jisty.schema";
+import {default as jsonSchema} from "../schemas/json-schema-draft04";
+import {default as hero} from "../schemas/api-hero.schema";
 const _params = new WeakMap();
 
 export class ParamsItem {
     /**
      *
      * @param schema
-     * @param config
+     * @param values
      */
-    constructor(schema, values = null) {
+    constructor(schema, values=null) {
         const _rxvo = new RxVO({
             meta: [jsonSchema],
-            schemas: [jisty, schema],
+            schemas: [hero, schema],
             use: "reqParams#",
         });
 

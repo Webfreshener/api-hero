@@ -17,7 +17,7 @@ export class NSOptions {
         const _schema = new RxVO({
             meta: [jsonSchema],
             schemas: [_optionsSchema],
-            use: "http://webfreshener.com/v1/jisty/options.json#",
+            use: "http://api-hero.webfreshener.com/v1/schema/options.json#",
         });
 
         _schema.model = merge({}, _defaultOptions, config);
@@ -27,6 +27,10 @@ export class NSOptions {
         }
 
         _opts.set(this, _schema);
+    }
+
+    get dataKey() {
+        return _opts.get(this).model.dataKey;
     }
 
     get idKey() {

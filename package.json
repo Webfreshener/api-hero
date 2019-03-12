@@ -1,7 +1,7 @@
 {
-  "name": "jisty",
+  "name": "api-hero",
   "version": "1.0.0",
-  "description": "Schema Based OXM (ORM + ODM) RESTful Client Library",
+  "description": "Reactive OpenApi Client",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -9,24 +9,32 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Webfreshener/jisty.git"
+    "url": "git+https://github.com/Webfreshener/api-hero.git"
   },
   "keywords": [
-    "ORM",
-    "ODM",
+    "OpenApi",
+    "JSON-Schema",
     "REST",
     "Model",
     "Collection",
     "Data",
     "API",
-    "Client"
+    "Client",
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "POST",
+    "PUT",
+    "reactive",
+    "rxjs",
+    "json"
   ],
   "author": "Van Schroeder <van@webfreshener.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Webfreshener/jisty/issues"
+    "url": "https://github.com/Webfreshener/api-hero/issues"
   },
-  "homepage": "https://github.com/Webfreshener/jisty#readme",
+  "homepage": "https://github.com/Webfreshener/api-hero#readme",
   "dependencies": {
     "inflection": "^1.12.0",
     "lodash.assign": "^4.2.0",
@@ -40,8 +48,8 @@
     "lodash.uniqueid": "^4.0.1",
     "lodash.uniqwith": "^4.5.0",
     "ofs-utils": "^1.0.0",
-    "rxjs": "^6.2.1",
-    "rxvo": "^1.0.0",
+    "rxjs": "^6.4.0",
+    "rxvo": "^1.0.1",
     "url-template": "^2.0.8"
   },
   "devDependencies": {

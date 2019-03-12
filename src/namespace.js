@@ -1,17 +1,33 @@
 import {RxVO} from "rxvo";
 import {_namespaces, _nsElements} from "./_references";
 import {createElementClass} from "./ns_element";
-import {default as jistySchema} from "./schemas/jisty.schema";
-import {default as nsSchema} from "./schemas/namespace.schema";
+import {default as heroSchema} from "./schemas/api-hero.schema";
 import {default as jsonSchema} from "./schemas/json-schema-draft04";
+import {default as nsSchema} from "./schemas/namespace.schema";
 import {Utils} from "./utils";
 import {mix} from "../vendor/mixwith";
 import {SchemaBuilder} from "./schema-builder";
 import {NSOptions} from "./ns-options";
 
+// holds element class factories
 const _builders = new WeakMap();
+
+/**
+ * generates NameSpace Elements from schema
+ * @param ns
+ * @returns {function(*=, *=, *=): {new(*=): {}, prototype: {}}}
+ * @constructor
+ */
 const NSElementFactory = (ns) => {
     return (name, schema, parent=null) => {
+        if (!name) {
+            throw "Name is required at arguments[0]"
+        }
+
+        if (!schema) {
+            throw "Schema is required at arguments[1]"
+        }
+
         const NSElement = createElementClass(ns, name, schema, parent);
         const _element = mix(NSElement);
         const traits = NSElement["getTraitAssignments"](ns, schema, parent);
@@ -36,9 +52,9 @@ class NS {
      */
     constructor(config={}) {
         const _schema = new RxVO({
-            meta: [jsonSchema, jistySchema],
+            meta: [jsonSchema, heroSchema],
             schemas: [nsSchema],
-            use: "http://webfreshener.com/v1/jisty/namespace.json#",
+            use: "http://api-hero.webfreshener.com/v1/schema/namespace.json#",
         });
 
         // retains user options if exists
@@ -51,6 +67,7 @@ class NS {
 
         const _options = new NSOptions(_opts);
 
+        // -- immutably sets `options` on NSElement
         Object.defineProperty(this, "options", {
             get: () => _options,
             enumerable: false,
@@ -97,18 +114,12 @@ class NS {
                 const _pathSchema = this.builder.schemaForPath(key);
                 o[_pathSchema.name] = this.createElement(_pathSchema.name, _pathSchema);
                 // applies Collection Class to Namespace
-                this.addCollection(_pathSchema.name, o[_pathSchema.name]);
+                this.addElement(_pathSchema.name, o[_pathSchema.name]);
             }
-
-
         });
         // stores reference to path elements
         _nsElements.set(this, o);
     }
-
-    //
-    // GETTERS
-    //
 
     /**
      * Helper Method generates URL for REST Requests
@@ -120,7 +131,6 @@ class NS {
         let _url = null;
         if (this.schema.servers.length >= (_idx - 1)) {
             _url = this.schema.servers[_idx].url || null;
-
             if (_url !== null && _params.length) {
                 _params.forEach((_pO) => {
                     let _rx = new RegExp(`\{${_pO.name}\}+`);
@@ -133,7 +143,7 @@ class NS {
     }
 
     /**
-     *
+     * returns validation errors for Namespace schema
      * @returns {*}
      */
     get errors() {
@@ -227,16 +237,16 @@ class NS {
     }
 
     /**
-     * Adds Collection to Namespace
+     * Adds NSElement to Namespace
      * @param name
-     * @param col<NSElement>
+     * @param el<NSElement>
      * @returns {NS}
      */
-    addCollection(name, col) {
+    addElement(name, el) {
         if (!this.hasOwnProperty(name)) {
             Object.defineProperty(this, name, {
                 get: () => {
-                    return new col();
+                    return new el();
                 },
                 enumerable: true,
             });
@@ -249,10 +259,10 @@ class NS {
      * @param name
      * @returns {NS}
      */
-    removeCollection(name) {
+    removeElement(name) {
         if (_namespaces.get(this).hasOwnProperty(name)) {
             Object.defineProperty(_namespaces.get(this), name, {
-                get: () => null,
+                value: null,
                 writable: false,
             });
         }

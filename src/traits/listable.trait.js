@@ -55,6 +55,9 @@ const trait = (superclass) => {
          * @returns {Collection}
          */
         setModels(data) {
+            if (!Array.isArray(data)) {
+                throw "setModels requires array";
+            }
             foreach(data, m => this.add(m));
             return this;
         }

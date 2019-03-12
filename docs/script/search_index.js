@@ -1,56 +1,56 @@
 window.esdocSearchIndex = [
   [
-    "jisty/src/collection.js~collection",
+    "hero/src/collection.js~collection",
     "class/src/collection.js~Collection.html",
-    "<span>Collection</span> <span class=\"search-result-import-path\">jisty/src/collection.js</span>",
+    "<span>Collection</span> <span class=\"search-result-import-path\">hero/src/collection.js</span>",
     "class"
   ],
   [
-    "jisty/src/_references.js~_cids",
+    "hero/src/_references.js~_cids",
     "variable/index.html#static-variable-_cids",
-    "<span>_cids</span> <span class=\"search-result-import-path\">jisty/src/_references.js</span>",
+    "<span>_cids</span> <span class=\"search-result-import-path\">hero/src/_references.js</span>",
     "variable"
   ],
   [
-    "jisty/src/_references.js~_namespaces",
+    "hero/src/_references.js~_namespaces",
     "variable/index.html#static-variable-_namespaces",
-    "<span>_namespaces</span> <span class=\"search-result-import-path\">jisty/src/_references.js</span>",
+    "<span>_namespaces</span> <span class=\"search-result-import-path\">hero/src/_references.js</span>",
     "variable"
   ],
   [
-    "jisty/src/_references.js~_nscollections",
+    "hero/src/_references.js~_nscollections",
     "variable/index.html#static-variable-_nsCollections",
-    "<span>_nsCollections</span> <span class=\"search-result-import-path\">jisty/src/_references.js</span>",
+    "<span>_nsCollections</span> <span class=\"search-result-import-path\">hero/src/_references.js</span>",
     "variable"
   ],
   [
-    "jisty/src/inflections.js~inflections",
+    "hero/src/inflections.js~inflections",
     "function/index.html#static-function-inflections",
-    "<span>inflections</span> <span class=\"search-result-import-path\">jisty/src/inflections.js</span>",
+    "<span>inflections</span> <span class=\"search-result-import-path\">hero/src/inflections.js</span>",
     "function"
   ],
   [
-    "jisty/src/metadata.js~metadata",
+    "hero/src/metadata.js~metadata",
     "class/src/metadata.js~metadata.html",
-    "<span>metadata</span> <span class=\"search-result-import-path\">jisty/src/metadata.js</span>",
+    "<span>metadata</span> <span class=\"search-result-import-path\">hero/src/metadata.js</span>",
     "class"
   ],
   [
-    "jisty/src/model.js~model",
+    "hero/src/model.js~model",
     "class/src/model.js~model.html",
-    "<span>model</span> <span class=\"search-result-import-path\">jisty/src/model.js</span>",
+    "<span>model</span> <span class=\"search-result-import-path\">hero/src/model.js</span>",
     "class"
   ],
   [
-    "jisty/src/namespace.js~namespace",
+    "hero/src/namespace.js~namespace",
     "function/index.html#static-function-namespace",
-    "<span>namespace</span> <span class=\"search-result-import-path\">jisty/src/namespace.js</span>",
+    "<span>namespace</span> <span class=\"search-result-import-path\">hero/src/namespace.js</span>",
     "function"
   ],
   [
-    "jisty/src/query.js~query",
+    "hero/src/query.js~query",
     "class/src/query.js~query.html",
-    "<span>query</span> <span class=\"search-result-import-path\">jisty/src/query.js</span>",
+    "<span>query</span> <span class=\"search-result-import-path\">hero/src/query.js</span>",
     "class"
   ],
   [

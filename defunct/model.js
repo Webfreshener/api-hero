@@ -3,7 +3,7 @@ import {_cids, _modelStats, _modelRefs} from "../src/_references";
 import {NSElement} from "../src/ns_element";
 import {default as jsonSchema} from "../src/schemas/json-schema-draft04";
 import {default as OpenAPIv3} from "../src/schemas/OpenAPIv3";
-import {default as jistySchema} from "../src/schemas/jisty.schema";
+import {default as heroSchema} from "../src/schemas/api-hero.schema";
 import {default as OpenAPIv2} from "../src/schemas/OpenAPIv2";
 import {default as CollectionSchema} from "../src/schemas/collection.schema";
 import deepEqual from "deep-equal";
@@ -37,7 +37,7 @@ export class Model extends NSElement {
         // creates RxVO and subscribes to events on root
         try {
             const _rxvo = new RxVO({
-                meta: [jsonSchema, OpenAPIv3, jistySchema],
+                meta: [jsonSchema, OpenAPIv3, heroSchema],
                 schemas: [OpenAPIv2, CollectionSchema, _ajvSchema],
                 use: "collectionSchema#"
             }, {
